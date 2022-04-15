@@ -3,6 +3,8 @@
 //lunch chatdowns
 import InputLine from './InputLine';
 import Button from './Button';
+import Register from './Register';
+
 
 const logins = { a: 1, b: 2 }
 const Login = () => {
@@ -24,12 +26,23 @@ const Login = () => {
 
             <div class="buttons">
                 <Button label='Login' classy="btn btn-primary" onClick={logBu} id='login_button' />
-                <Button label='Sign Up' classy="btn btn-secondary btn-sm" onClick={logBu} id='register_button' />
+                <button class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal" >Sign Up</button>
             </div>
 
+
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <Register />
+                    </div>
+                </div>
+            </div>
         </div>
     )
 }
+
+
+
 const logBu = function loginButton() {
     console.log("Click")
     var myCollapseS = document.getElementById('success')
