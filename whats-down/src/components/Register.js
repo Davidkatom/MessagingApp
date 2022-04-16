@@ -2,6 +2,7 @@
 //save user
 //return to login
 import InputLine from "./InputLine"
+import { useState } from "react"
 import Button from "./Button"
 
 
@@ -12,6 +13,13 @@ const Register = ({ user_list, addUser, checkUser }) => {
         user_list.map((user) => (
             alert('username: ' + user.user_name + ' password: ' + user.password)
         ))
+    }
+    const [profilePicture, setProfilePicture] = useState();
+    const handlePicture = (e) => {
+        //console.log(e.target.files[0])
+        setProfilePicture(URL.createObjectURL(e.target.files[0]))
+        // let picture = e.target.value
+        // document.getElementById('picture').value = picture
     }
     //password validation
     function validatePassword(p1, p2) {
@@ -53,10 +61,10 @@ const Register = ({ user_list, addUser, checkUser }) => {
             return
         }
         //check password
-        if(!validatePassword(p_word1, p_word2)){
+        if (!validatePassword(p_word1, p_word2)) {
             return
         }
-        
+
         //check display name
         if (d_name.length < 3) {
             alert("Display name must be at least 3 characters long")
@@ -71,35 +79,52 @@ const Register = ({ user_list, addUser, checkUser }) => {
             user_name: u_name,
             password: p_word1,
             display_name: d_name,
-            picture: document.getElementById('picture').value,
+            picture: profilePicture,
         })
         if (isRegisterded === "success") {
-            alert("Register Successful")
+            alert("Sign up Successful")
         } else {
-            alert("Register Failed")
+            alert("Sign up Failed")
         }
         //clear all form inputs
         document.getElementById('user_name').value = ''
         document.getElementById('password1').value = ''
         document.getElementById('password2').value = ''
         document.getElementById('display_name').value = ''
-        document.getElementById('picture').value = ''
+        //document.getElementById('picture').value = ''
     }
+
+    // function getImgUrl() {
+    //     return <img src="./Images/blank-profile-picture.png" />;
+    // }
     return (
-        <div>Register Form
+        //setProfilePicture(getImgUrl),
+        <div class='container-fluid'>
+            <h2 class='display-5'>Sign Up Form</h2>
             <form onSubmit={on_submit}>
                 <div class="form-group">
                     <InputLine label='UserName:' type='text' id='user_name' placeholder='Enter UserName' />
                     <InputLine label='Password:' type='password' id='password1' placeholder='Enter Password' />
                     <InputLine label='Confirm Password:' type='password' id='password2' placeholder='Confirm Password' />
                     <InputLine label='Display Name:' type='text' id='display_name' placeholder='Enter Display Name' />
-                    <InputLine label='Picture:' id='picture' placeholder='Enter a picture' />
+                    <div class="row">
+                        <div class="col-sm">
+                            <label class="input-group-text" for='picture'>Upload a Profile Picture:</label>
+                            <input type="file" class="form-control" id='picture' onChange={handlePicture}></input>
+                        </div>
+                        <div class="col-sm">
+                            <img src={profilePicture} alt="profile" class="img-thumbnail" width="140" height="140" />
+                        </div>
+                    </div>
+
                 </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
-                <Button label='Back' classy="btn btn-primary" />
+                <br />
+                <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+                <br />
+                <br />
             </form>
 
-            <Button label='show users' classy="btn btn-primary" onClick={showUsers} />
+            {/* <Button label='show users' classy="btn btn-primary" onClick={showUsers} /> */}
         </div>
 
 
