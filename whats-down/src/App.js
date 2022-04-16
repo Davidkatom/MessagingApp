@@ -38,7 +38,6 @@ function App() {
   return (
     <div className="App">
       <Login />
-      <Register user_list={user_list} checkUser={checkUser} addUser={addUser} />
     </div>
   );
 }
