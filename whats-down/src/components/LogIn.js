@@ -6,10 +6,8 @@ import Button from './Button';
 import Register from './Register';
 
 var user_list_local
-var checkUser_local
 const Login = ({ user_list, addUser, checkUser }) => {
     user_list_local = user_list;
-    checkUser_local = checkUser;
     return (
         <div class='container'>
             <InputLine label='Username' placeholder='Username' type='text' id='username' />
