@@ -1,6 +1,5 @@
 import './App.css';
 import Login from './components/Login';
-import Register from './components/Register';
 import { useState } from 'react';
 
 
@@ -37,8 +36,7 @@ function App() {
 
   return (
     <div className="App">
-      <Login />
-      <Register user_list={user_list} checkUser={checkUser} addUser={addUser} />
+      <Login user_list={user_list} checkUser={checkUser} addUser={addUser}/>
     </div>
   );
 }

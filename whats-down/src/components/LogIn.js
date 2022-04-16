@@ -7,7 +7,7 @@ import Register from './Register';
 
 
 const logins = { a: 1, b: 2 }
-const Login = () => {
+const Login = ({ user_list, addUser, checkUser }) => {
     return (
         <div class='container'>
             <InputLine label='Username' placeholder='Username' type='text' id='username' />
@@ -33,7 +33,7 @@ const Login = () => {
             <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
-                        <Register />
+                        <Register user_list={user_list} checkUser={checkUser} addUser={addUser} />
                     </div>
                 </div>
             </div>
@@ -48,7 +48,7 @@ const logBu = function loginButton() {
     var myCollapseS = document.getElementById('success')
     var myCollapseE = document.getElementById('error_message')
 
-    if (logins[document.getElementById('username').value] == document.getElementById('password').value) {
+    if (logins[document.getElementById('username').value] === document.getElementById('password').value) {
         console.log("suc")
         myCollapseE.classList.add('collapse');
         myCollapseS.classList.remove('collapse');
