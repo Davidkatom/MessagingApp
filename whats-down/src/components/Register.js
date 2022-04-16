@@ -3,14 +3,17 @@
 //return to login
 import InputLine from "./InputLine"
 import Button from "./Button"
+import { useState } from 'react';
 
 
 
 const Register = ({ user_list, addUser, checkUser }) => {
+    const [alert, setAlert] = useState(['', 'alert alert-danger'])
+
     //show all existing users for tests:
     const showUsers = () => {
         user_list.map((user) => (
-            alert('username: ' + user.user_name + ' password: ' + user.password)
+            setAlert(['username: ' + user.user_name + ' password: ' + user.password, 'alert alert-secondary'])
         ))
     }
     //password validation
@@ -23,13 +26,13 @@ const Register = ({ user_list, addUser, checkUser }) => {
             errors.push("Your password must be at least 8 characters");
         }
         if (p1.search(/[a-z]/i) < 0) {
-            errors.push("Your password must contain at least one letter.");
+            errors.push("Your password must contain at least one letter");
         }
         if (p1.search(/[0-9]/) < 0) {
-            errors.push("Your password must contain at least one digit.");
+            errors.push("Your password must contain at least one digit");
         }
         if (errors.length > 0) {
-            alert(errors.join("\n"));
+            setAlert([errors.join(". "), 'alert alert-danger']);
             return false;
         }
         return true;
@@ -37,6 +40,7 @@ const Register = ({ user_list, addUser, checkUser }) => {
 
     //user validation and registreation
     const on_submit = (e) => {
+
         //prevent default form submit - to prevent page reload
         e.preventDefault();
         let u_name = document.getElementById('user_name').value
@@ -45,11 +49,11 @@ const Register = ({ user_list, addUser, checkUser }) => {
         let d_name = document.getElementById('display_name').value
         //check username doesn't exist
         if (checkUser(u_name)) {
-            alert("Username already exists")
+            setAlert(["Username already exists", 'alert alert-danger'])
             return
         }
         if (u_name.length < 3) {
-            alert("Username must be at least 3 characters long")
+            setAlert(["Username must be at least 3 characters long", 'alert alert-danger'])
             return
         }
         //check password
@@ -59,7 +63,7 @@ const Register = ({ user_list, addUser, checkUser }) => {
         
         //check display name
         if (d_name.length < 3) {
-            alert("Display name must be at least 3 characters long")
+            setAlert(["Display name must be at least 3 characters long", 'alert alert-danger'])
             return
         }
         //check picture
@@ -74,9 +78,9 @@ const Register = ({ user_list, addUser, checkUser }) => {
             picture: document.getElementById('picture').value,
         })
         if (isRegisterded === "success") {
-            alert("Register Successful")
+            setAlert(["Register Successful", 'alert alert-success'])
         } else {
-            alert("Register Failed")
+            setAlert(["Register Failed", 'alert alert-danger'])
         }
         //clear all form inputs
         document.getElementById('user_name').value = ''
@@ -100,6 +104,12 @@ const Register = ({ user_list, addUser, checkUser }) => {
             </form>
 
             <Button label='show users' classy="btn btn-primary" onClick={showUsers} />
+
+            <div class="" id="error_message_reg">
+                    <div class={alert[1]} role="alert" id="alert">
+                        {alert[0]}
+                    </div>
+                </div>
         </div>
 
 

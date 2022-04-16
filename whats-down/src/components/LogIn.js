@@ -5,9 +5,11 @@ import InputLine from './InputLine';
 import Button from './Button';
 import Register from './Register';
 
-
-const logins = { a: 1, b: 2 }
+var user_list_local
+var checkUser_local
 const Login = ({ user_list, addUser, checkUser }) => {
+    user_list_local = user_list;
+    checkUser_local = checkUser;
     return (
         <div class='container'>
             <InputLine label='Username' placeholder='Username' type='text' id='username' />
@@ -48,20 +50,17 @@ const logBu = function loginButton() {
     var myCollapseS = document.getElementById('success')
     var myCollapseE = document.getElementById('error_message')
 
-    if (logins[document.getElementById('username').value] === document.getElementById('password').value) {
-        console.log("suc")
+    if (user_list_local.map((user) => (user.user_name === document.getElementById('username').value && user.password === document.getElementById('password').value)).includes(true)) {
         myCollapseE.classList.add('collapse');
         myCollapseS.classList.remove('collapse');
-
+        
     }
     else {
-        console.log("error")
         myCollapseE.classList.remove('collapse');
         myCollapseS.classList.add('collapse');
         //myCollapseS.classList.hide()
     }
+
 }
-
-
 
 export default Login
