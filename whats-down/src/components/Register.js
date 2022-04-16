@@ -8,7 +8,7 @@ import Button from "./Button"
 
 
 const Register = ({ user_list, addUser, checkUser }) => {
-    const [alert, setAlert] = useState(['', 'alert alert-danger'])
+    const [alert, setAlert] = useState(['', ''])
 
     //show all existing users for tests:
     const showUsers = () => {
