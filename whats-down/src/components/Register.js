@@ -8,13 +8,13 @@ import Button from "./Button"
 
 
 const Register = ({ user_list, addUser, checkUser }) => {
-    const [alert, setAlert] = useState(['', ''])
+    const [down_alert, setAlert] = useState(['', ''])
 
     //show all existing users for tests:
     const showUsers = () => {
-        user_list.map((user) => (
-            alert('username: ' + user.user_name + ' password: ' + user.password)
-        ))
+            user_list.map((user) => (
+                alert('username: ' + user.user_name + ' password: ' + user.password)
+            ))
     }
     const [profilePicture, setProfilePicture] = useState();
     const handlePicture = (e) => {
@@ -103,7 +103,7 @@ const Register = ({ user_list, addUser, checkUser }) => {
     //     return <img src="./Images/blank-profile-picture.png" />;
     // }
     return (
-        //setProfilePicture(getImgUrl),
+
         <div class='container-fluid'>
             <h2 class='display-5'>Sign Up Form</h2>
             <form onSubmit={on_submit}>
@@ -133,10 +133,10 @@ const Register = ({ user_list, addUser, checkUser }) => {
             <Button label='show users' classy="btn btn-primary" onClick={showUsers} />
 
             <div class="" id="error_message_reg">
-                    <div class={alert[1]} role="alert" id="alert">
-                        {alert[0]}
-                    </div>
+                <div class={down_alert[1]} role="alert" id="alert">
+                    {down_alert[0]}
                 </div>
+            </div>
         </div>
 
 

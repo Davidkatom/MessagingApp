@@ -1,7 +1,7 @@
 import './App.css';
 import Login from './components/LogIn';
 import { useState } from 'react';
-
+import ChatScreen from './components/ChatScreen';
 
 function App() {
   //user list
@@ -36,9 +36,9 @@ function App() {
 
   return (
     <div className="App">
-      <Login user_list={user_list} checkUser={checkUser} addUser={addUser}/>
-    
-    
+      {/* <Login user_list={user_list} checkUser={checkUser} addUser={addUser}/> */}
+      <ChatScreen />
+
     </div>
   );
 }
