@@ -3,9 +3,16 @@ import MiniContant from './MiniContant';
 import '../index.css';
 import { ImAttachment } from 'react-icons/im';
 import Button from './Button';
+import MessageElm from './MessageElm.js'
 
 const ChatScreen = () => {
+    const sendBut = function loginButton() {
+        let input = document.getElementById('message').value
+        var elm = (<MessageElm direction="send" text={input} />)
+        setMessages([...messages, elm])
 
+    }
+    const [messages, setMessages] = useState([]);
     const [contact_list, setContact_List] = useState([
         {
             contact_name: 'omer',
@@ -62,16 +69,15 @@ const ChatScreen = () => {
                     </div>
                 </div>
                 <div class="col-sm chat-space">
-                    <div class="chat-box">
-
+                    <div class="chat-box scrollable">
+                            {messages}
                     </div>
                     <div class="toolbar row row-cols-3">
                         <div class='col-1'>
                             <button class="btn btn-light" id="attach" ><ImAttachment /></button>
-
                         </div>
                         <div class='col-9'>
-                            <input type="text" class="form-control" placeholder="text" />
+                            <input type="text" class="form-control" placeholder="text" id='message' />
                         </div>
                         <div class='col-1'>
                             <Button label='Send' classy="btn btn-primary" onClick={sendBut} id='send_button' />
@@ -84,7 +90,8 @@ const ChatScreen = () => {
         </div>
 
     )
+
 }
-const sendBut = function loginButton() { }
+
 
 export default ChatScreen
