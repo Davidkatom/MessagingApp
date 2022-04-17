@@ -16,6 +16,17 @@ const ChatScreen = () => {
             contact_name: 'david',
             chat_history: ["good morning", "bye", "fuck you"],
             last_message: 'empty chat',
+        },
+        {
+            contact_name: 'joe',
+            chat_history: ["good morning", "bye", "fuck you"],
+            last_message: 'empty chat',
+            last_message_time: 'empty chat',
+        },
+        {
+            contact_name: 'yossi',
+            chat_history: ["good morning", "bye", "fuck you"],
+            last_message: 'empty chat',
         }
     ]);
 
