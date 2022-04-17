@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import MiniContant from './MiniContant';
-
+import '../index.css';
 import { ImAttachment } from 'react-icons/im';
 import Button from './Button';
 
@@ -27,6 +27,26 @@ const ChatScreen = () => {
             contact_name: 'yossi',
             chat_history: ["good morning", "bye", "fuck you"],
             last_message: 'empty chat',
+        },
+        {
+            contact_name: 'Hampti',
+            chat_history: ["good morning", "bye", "fuck you"],
+            last_message: 'empty chat',
+        },
+        {
+            contact_name: 'Dampti',
+            chat_history: ["good morning", "bye", "fuck you"],
+            last_message: 'empty chat',
+        },
+        {
+            contact_name: 'Tidididam',
+            chat_history: ["good morning", "bye", "fuck you"],
+            last_message: 'empty chat',
+        },
+        {
+            contact_name: 'UmcoolTum',
+            chat_history: ["good morning", "bye", "fuck you"],
+            last_message: 'empty chat',
         }
     ]);
 
@@ -34,11 +54,12 @@ const ChatScreen = () => {
         <div class='container large'>
             <div chat-screen>header</div>
             <div class="row row-chat">
-                <div class="col-sm">
-                    omer's side
-                    {contact_list.map((contactIndex) => (
-                        <MiniContant contact={contactIndex} />
-                    ))}
+                <div class="col-sm scrollable" >
+                    <div class='direction-fix'>
+                        {contact_list.map((contactIndex) => (
+                            <MiniContant contact={contactIndex} />
+                        ))}
+                    </div>
                 </div>
                 <div class="col-sm chat-space">
                     <div class="chat-box">
@@ -46,8 +67,8 @@ const ChatScreen = () => {
                     </div>
                     <div class="toolbar row row-cols-3">
                         <div class='col-1'>
-                        <button class="btn btn-light" id="attach" ><ImAttachment /></button>
-                            
+                            <button class="btn btn-light" id="attach" ><ImAttachment /></button>
+
                         </div>
                         <div class='col-9'>
                             <input type="text" class="form-control" placeholder="text" />
@@ -64,6 +85,6 @@ const ChatScreen = () => {
 
     )
 }
-const sendBut = function loginButton() {}
+const sendBut = function loginButton() { }
 
 export default ChatScreen
