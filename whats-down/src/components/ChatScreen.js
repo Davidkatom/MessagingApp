@@ -8,8 +8,11 @@ import MessageElm from './MessageElm.js'
 const ChatScreen = () => {
     const sendBut = function loginButton() {
         let input = document.getElementById('message').value
-        var elm = (<MessageElm direction="send" text={input} />)
-        setMessages([...messages, elm])
+        if (input != "") {
+            var elm = (<MessageElm direction="send" text={input} />)
+            setMessages([...messages, elm])
+        }
+        document.getElementById('message').value = ""
 
     }
     const [messages, setMessages] = useState([]);
@@ -66,7 +69,6 @@ const ChatScreen = () => {
 
     return (
         <div class='container large'>
-            <div chat-screen>header</div>
             <div class="row row-chat">
                 <div class="col-5 scrollable" >
                     <div class='direction-fix'>
@@ -77,7 +79,7 @@ const ChatScreen = () => {
                 </div>
                 <div class="col-sm chat-space">
                     <div class="chat-box scrollable">
-                            {messages}
+                        {messages}
                     </div>
                     <div class="toolbar row row-cols-3">
                         <div class='col-1'>

@@ -31,18 +31,18 @@ body {
     padding-right: 1%;
     padding-top: 1%;
     padding-bottom: 1%;
-    margin-top: 10%;
+    margin-top: 5%;
     border: 3px solid white;
     border-radius: 5px;
     background-color: whitesmoke;
 }
 
 .large {
-    margin-top: 5%;
+    margin-top: 1%;
     margin-bottom: 10%;
-    padding-bottom: 2%;
+    padding-bottom: 1%;
     width: 80%;
-    height: 600px;
+    height: 100%;
 }
 
 .row-chat {
@@ -113,4 +113,11 @@ code {
 
 #attach {
     border-radius: 50px;
+}
+
+.send {
+    background-color: #cbfdfd;
+    border-color: #b2dddd;
+    width: 50%;
+    margin-right: 2%;
 }
