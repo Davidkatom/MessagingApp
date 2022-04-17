@@ -1,14 +1,16 @@
 
 const ChatScreen = () => {
     return (
-        <div class='container'>
+        <div class='container large'>
             <div >header</div>
             <div class="row">
                 <div class="col-sm">
                     omer's side
                 </div>
                 <div class="col-sm ">
-                    david's side
+                    <div class="chat-box">
+                        
+                    </div>
                 </div>
             </div>
 
