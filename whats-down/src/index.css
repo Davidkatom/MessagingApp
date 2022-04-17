@@ -17,6 +17,10 @@ body {
     direction: ltr;
 }
 
+.low-padding {
+    padding: 2%;
+}
+
 .container {
     width: 30%;
     height: 100%;
