@@ -1,11 +1,29 @@
 import { useState } from 'react';
 import MiniContant from './MiniContant';
 import '../index.css';
-import { ImAttachment } from 'react-icons/im';
 import Button from './Button';
 import MessageElm from './MessageElm.js'
 
+import { ImAttachment } from 'react-icons/im';
+import { RiCloseCircleLine } from 'react-icons/ri';
+import { AiOutlineCamera } from 'react-icons/ai';
+import { GoLocation } from 'react-icons/go';
+import { BiMicrophone } from 'react-icons/bi';
+import { AiFillVideoCamera } from 'react-icons/ai';
+
+
+var checked = false
 const ChatScreen = () => {
+    const toggle = function attach() {
+        if (checked === false) {
+            setClasses("btn btn-light attachments")            
+        }
+        else {
+            setClasses("btn btn-light closing-atc")
+        }
+        checked = !checked
+    }
+
     const sendBut = function loginButton() {
         let input = document.getElementById('message').value
         if (input != "") {
@@ -15,6 +33,7 @@ const ChatScreen = () => {
         document.getElementById('message').value = ""
 
     }
+    const [classes, setClasses] = useState("btn btn-light collapse");
     const [messages, setMessages] = useState([]);
     const [contact_list, setContact_List] = useState([
         {
@@ -83,7 +102,14 @@ const ChatScreen = () => {
                     </div>
                     <div class="toolbar row row-cols-3">
                         <div class='col-1'>
-                            <button class="btn btn-light" id="attach" ><ImAttachment /></button>
+                            <button class="btn btn-light" id="attach" onClick={toggle}><ImAttachment />
+
+                                <button class={classes} type="checkbox" id='photo' ><AiOutlineCamera /></button>
+                                <button class={classes} type="checkbox" id='video'><AiFillVideoCamera /></button>
+                                <button class={classes} type="checkbox" id='audio'><BiMicrophone /></button>
+                                <button class={classes} type="checkbox" id='location'><GoLocation /></button>
+                                <button class={classes} type="checkbox" id='close'><RiCloseCircleLine /></button>
+                            </button>
                         </div>
                         <div class='col-9'>
                             <input type="text" class="form-control" placeholder="text" id='message' />
@@ -94,7 +120,6 @@ const ChatScreen = () => {
                     </div>
                 </div>
             </div>
-
 
         </div>
 

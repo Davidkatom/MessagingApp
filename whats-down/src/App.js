@@ -37,8 +37,7 @@ function App() {
   return (
     <div className="App">
       {/* <Login user_list={user_list} checkUser={checkUser} addUser={addUser}/> */}
-      <ChatScreen />
-      
+      <ChatScreen />    
 
 
     </div>

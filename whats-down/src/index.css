@@ -128,6 +128,7 @@ code {
 }
 
 .receive {
+    animation-name: "anim";
     text-align: end;
     padding-top: 0.5%;
     padding-bottom: 0.5%;
@@ -143,4 +144,63 @@ code {
 
 .send_cont {
     direction: rtl;
+}
+
+@keyframes fadein {
+    from {
+        left: 0%;
+        opacity: 0;
+    }
+    to {
+        left: 5%;
+        opacity: 1;
+    }
+}
+
+@keyframes fadeout {
+    from {
+        left: 5%;
+        opacity: 1;
+    }
+    to {
+        left: 0%;
+        opacity: 0;
+    }
+}
+
+.attachments {
+    animation: fadein 0.75s;
+    /* animation-iteration-count: infinite; */
+    border-radius: 60px;
+    opacity: 1;
+    left: 5%;
+    position: absolute;
+}
+
+.closing-atc {
+    animation: fadeout 0.4s;
+    border-radius: 60px;
+    opacity: 0;
+    left: 0%;
+    position: absolute;
+}
+
+#photo {
+    bottom: 60px;
+}
+
+#video {
+    bottom: 105px;
+}
+
+#audio {
+    bottom: 150px;
+}
+
+#location {
+    bottom: 195px;
+}
+
+#close {
+    bottom: 240px;
 }
