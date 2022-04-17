@@ -13,13 +13,14 @@ const Register = ({ user_list, addUser, checkUser }) => {
     //show all existing users for tests:
     const showUsers = () => {
         user_list.map((user) => (
-            setAlert(['username: ' + user.user_name + ' password: ' + user.password, 'alert alert-secondary'])
+            alert('username: ' + user.user_name + ' password: ' + user.password)
         ))
     }
     const [profilePicture, setProfilePicture] = useState();
     const handlePicture = (e) => {
         //console.log(e.target.files[0])
         setProfilePicture(URL.createObjectURL(e.target.files[0]))
+        document.getElementById('profile_mini_pic').classList.remove('collapse');
         // let picture = e.target.value
         // document.getElementById('picture').value = picture
     }
@@ -116,8 +117,9 @@ const Register = ({ user_list, addUser, checkUser }) => {
                             <label class="input-group-text" for='picture'>Upload a Profile Picture:</label>
                             <input type="file" class="form-control" id='picture' onChange={handlePicture}></input>
                         </div>
-                        <div class="col-sm">
+                        <div class="col-sm collapse" id='profile_mini_pic'>
                             <img src={profilePicture} alt="profile" class="img-thumbnail" width="140" height="140" />
+                            {/* <img src="../Images/blank-profile-picture.png" alt="profile" class="img-thumbnail" width="140" height="140" /> */}
                         </div>
                     </div>
 
@@ -135,7 +137,6 @@ const Register = ({ user_list, addUser, checkUser }) => {
                         {alert[0]}
                     </div>
                 </div>
-            {/* <Button label='show users' classy="btn btn-primary" onClick={showUsers} /> */}
         </div>
 
 
