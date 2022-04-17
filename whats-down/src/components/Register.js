@@ -12,9 +12,9 @@ const Register = ({ user_list, addUser, checkUser }) => {
 
     //show all existing users for tests:
     const showUsers = () => {
-            user_list.map((user) => (
-                alert('username: ' + user.user_name + ' password: ' + user.password)
-            ))
+        user_list.map((user) => (
+            alert('username: ' + user.user_name + ' password: ' + user.password)
+        ))
     }
     const [profilePicture, setProfilePicture] = useState();
     const handlePicture = (e) => {
