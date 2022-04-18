@@ -1,3 +1,5 @@
+import ReactDOM from 'react-dom';
+
 import { useState } from 'react';
 import MiniContant from './MiniContant';
 import '../index.css';
@@ -16,7 +18,7 @@ var checked = false
 const ChatScreen = () => {
     const toggle = function attach() {
         if (checked === false) {
-            setClasses("btn btn-light attachments")            
+            setClasses("btn btn-light attachments")
         }
         else {
             setClasses("btn btn-light closing-atc")
@@ -86,11 +88,30 @@ const ChatScreen = () => {
         }
     ]);
 
+    //add a new contact to the contact list
+    const addContact = (args) => {
+        setContact_List([...contact_list, {
+            contact_name: args.user_name,
+            chat_history: args.password,
+            last_message: args.display_name,
+            last_message_time: args.picture,
+        }])
+        return 'success'
+    }
+    var newGuy = {
+        contact_name: 'newGuy',
+        chat_history: ["good morning", "bye", "fuck you"],
+        last_message: 'empty chat',
+        last_message_time: 'empty time',
+    }
     return (
+
         <div class='container large'>
+
             <div class="row row-chat">
                 <div class="col-5 scrollable" >
                     <div class='direction-fix'>
+
                         {contact_list.map((contactIndex) => (
                             <MiniContant contact={contactIndex} />
                         ))}

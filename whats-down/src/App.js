@@ -1,3 +1,5 @@
+import ReactDOM from 'react-dom';
+
 import './App.css';
 import Login from './components/LogIn';
 import { useState } from 'react';
@@ -34,14 +36,12 @@ function App() {
     return isExists
   }
 
-  return (
-    <div className="App">
-      {/* <Login user_list={user_list} checkUser={checkUser} addUser={addUser}/> */}
-      <ChatScreen />    
 
-
-    </div>
+  ReactDOM.render(
+    <ChatScreen />,
+    document.getElementById('root')
   );
+  
 }
 
 export default App;
