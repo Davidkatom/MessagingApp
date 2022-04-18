@@ -3,27 +3,27 @@ import '../index.css';
 const MiniContant = ({ contact }) => {
   return (
     <div>
-      <div class="card mb-0" >
-        <div class="row g-0">
-          <div class="col-sm-2">
-            <img src="cake.jpg" class="img-fluid rounded-start" alt="..."/>
+      <div className="card mb-0" >
+        <div className="row g-0">
+          <div className="col-sm-2">
+            <img src="cake.jpg" className="img-fluid rounded-start" alt="..."/>
 
           </div>
-          <div class="col-sm-10">
-            <div class="card-body low-padding">
-              <div class="row">
-                <div class="col">
-                  <h4 class="card-title" style={{ textAlign: 'left' }}>{contact.contact_name}</h4>
+          <div className="col-sm-10">
+            <div className="card-body low-padding">
+              <div className="row">
+                <div className="col">
+                  <h4 className="card-title" style={{ textAlign: 'left' }}>{contact.contact_name}</h4>
                 </div>
-                <div class="col">
-                  <p class="card-text" style={{ textAlign: 'right'  }}><small class="text-muted">
+                <div className="col">
+                  <p className="card-text" style={{ textAlign: 'right'  }}><small className="text-muted">
                     {contact.last_message_time}
                     {/* {Date().toLocaleString()} */}
                     </small></p>
                 </div>
               </div>
 
-              <p class="card-text">{contact.last_message}</p>
+              <p className="card-text">{contact.last_message}</p>
 
             </div>
           </div>

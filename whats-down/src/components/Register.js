@@ -104,36 +104,36 @@ const Register = ({ user_list, addUser, checkUser }) => {
     // }
     return (
 
-        <div class='container-fluid'>
-            <h2 class='display-5'>Sign Up Form</h2>
+        <div className='container-fluid'>
+            <h2 className='display-5'>Sign Up Form</h2>
             <form onSubmit={on_submit}>
-                <div class="form-group">
+                <div className="form-group">
                     <InputLine label='UserName:' type='text' id='user_name' placeholder='Enter UserName' />
                     <InputLine label='Password:' type='password' id='password1' placeholder='Enter Password' />
                     <InputLine label='Confirm Password:' type='password' id='password2' placeholder='Confirm Password' />
                     <InputLine label='Display Name:' type='text' id='display_name' placeholder='Enter Display Name' />
-                    <div class="row">
-                        <div class="col-sm">
-                            <label class="input-group-text" for='picture'>Upload a Profile Picture:</label>
-                            <input type="file" class="form-control" id='picture' onChange={handlePicture}></input>
+                    <div className="row">
+                        <div className="col-sm">
+                            <label className="input-group-text" for='picture'>Upload a Profile Picture:</label>
+                            <input type="file" className="form-control" id='picture' onChange={handlePicture}></input>
                         </div>
-                        <div class="col-sm collapse" id='profile_mini_pic'>
-                            <img src={profilePicture} alt="profile" class="img-thumbnail" width="140" height="140" />
-                            {/* <img src="../Images/blank-profile-picture.png" alt="profile" class="img-thumbnail" width="140" height="140" /> */}
+                        <div className="col-sm collapse" id='profile_mini_pic'>
+                            <img src={profilePicture} alt="profile" className="img-thumbnail" width="140" height="140" />
+                            {/* <img src="../Images/blank-profile-picture.png" alt="profile" className="img-thumbnail" width="140" height="140" /> */}
                         </div>
                     </div>
 
                 </div>
                 <br />
-                <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+                <button type="submit" className="btn btn-primary btn-lg">Submit</button>
                 <br />
                 <br />
             </form>
 
             <Button label='show users' classy="btn btn-primary" onClick={showUsers} />
 
-            <div class="" id="error_message_reg">
-                <div class={down_alert[1]} role="alert" id="alert">
+            <div className="" id="error_message_reg">
+                <div className={down_alert[1]} role="alert" id="alert">
                     {down_alert[0]}
                 </div>
             </div>

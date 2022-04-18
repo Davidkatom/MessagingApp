@@ -9,30 +9,30 @@ var user_list_local
 const Login = ({ user_list, addUser, checkUser }) => {
     user_list_local = user_list;
     return (
-        <div class='container'>
+        <div className='container'>
             <InputLine label='Username' placeholder='Username' type='text' id='username' />
             <InputLine label='Password' placeholder='Password' type='password' id='password' />
-            <div class="collapse" id="error_message">
-                <div class="alert alert-danger" role="alert" id="alert">
+            <div className="collapse" id="error_message">
+                <div className="alert alert-danger" role="alert" id="alert">
                     Wrong username or password
                 </div>
             </div>
 
-            <div class="collapse" id="success">
-                <div class="alert alert-success" role="alert" id="alert">
+            <div className="collapse" id="success">
+                <div className="alert alert-success" role="alert" id="alert">
                     Login Successful
                 </div>
             </div>
 
-            <div class="buttons">
+            <div className="buttons">
                 <Button label='Login' classy="btn btn-primary" onClick={logBu} id='login_button' />
-                <button class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal" >Sign Up</button>
+                <button className="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal" >Sign Up</button>
             </div>
 
 
-            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
+            <div className="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div className="modal-dialog">
+                    <div className="modal-content">
                         <Register user_list={user_list} checkUser={checkUser} addUser={addUser} />
                     </div>
                 </div>

@@ -4,7 +4,7 @@ import MiniContant from './MiniContant';
 import '../index.css';
 import Button from './Button';
 import MessageElm from './MessageElm.js'
-
+import ContactSide from './ContactSide';
 import { ImAttachment } from 'react-icons/im';
 import { RiCloseCircleLine } from 'react-icons/ri';
 import { AiOutlineCamera } from 'react-icons/ai';
@@ -37,6 +37,8 @@ const ChatScreen = () => {
     const [classes, setClasses] = useState("btn btn-light collapse");
     const [messages, setMessages] = useState([]);
     const [contact_list1, setContact_List1] = useState([]);
+
+
 
 
     const [contact_list, setContact_List] = useState([
@@ -89,30 +91,23 @@ const ChatScreen = () => {
             last_message_time: 'empty time',
         }
     ]);
-
     //add a new contact to the contact list
     const addContact = (args) => {
         setContact_List([...contact_list, {
-            contact_name: args.contact_name,
+            contact_name: args.name,
             chat_history: args.chat_history,
             last_message: args.last_message,
             last_message_time: args.last_message_time,
         }])
     }
-
     return (
 
         <div className='container large'>
 
             <div className="row row-chat">
-                <div className="col-5 scrollable" >
-                {/* <button className='btn btn-light collapse' onClick={addContact({contact_name:"dasd"})}>dsad</button> */}
-                    <div className='direction-fix'>
-                        {contact_list.map((contactIndex) => (
-                            <MiniContant contact={contactIndex} />
-                        ))}
-                    </div>
-                </div>
+                {/* <button onClick={addContact({ name: 'oo' })} >dsad</button> */}
+
+                <ContactSide contact_list={contact_list} />
                 <div className="col-sm chat-space">
                     <div className="chat-box scrollable">
                         {messages}

@@ -1,7 +1,7 @@
 
 const Button = ({ color, label, onClick, classy }) => {
     return (
-        <button class={classy} onClick={onClick} type="button" style={{ backgroundColor: color }}> {label}</button >
+        <button className={classy} onClick={onClick} type="button" style={{ backgroundColor: color }}> {label}</button >
     )
 }
 
