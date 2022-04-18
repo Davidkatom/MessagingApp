@@ -105,7 +105,7 @@ const ChatScreen = () => {
         <div className='container large'>
 
             <div className="row row-chat">
-                {/* <button onClick={addContact({ name: 'oo' })} >dsad</button> */}
+                <button onClick={()=>addContact({ name: 'oo' })} >dsad</button>
 
                 <ContactSide contact_list={contact_list} />
                 <div className="col-sm chat-space">
