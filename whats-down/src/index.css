@@ -12,18 +12,21 @@ body {
 .align-center{
     text-align: center;
 }
-.right-padding-for-picture{
+.right-padding-for-picture {
     margin-right: 10px;
 }
-.contact-header{
-  font-family: 'Lobster', cursive;
-  font-size: 30px;
-  color: rgb(141, 168, 209);
-  text-align: left;
+
+.contact-header {
+    font-family: 'Lobster', cursive;
+    font-size: 30px;
+    color: rgb(141, 168, 209);
+    text-align: left;
 }
-.rounded-start{
+
+.rounded-start {
     max-height: 50px;
 }
+
 .selected-chat {
     background-color: #bdbdccb0;
 }
@@ -233,4 +236,18 @@ code {
 
 #close {
     bottom: 240px;
+}
+
+.btn-primary.recording {
+    color: #FFF;
+    background-color: red;
+    background-color: red;
+}
+
+.btn-primary:hover.recording,
+.btn-primary:focus.recording,
+.btn-primary:active.recording {
+    background-color: red;
+    color: #FFF;
+    background-color: red;
 }
