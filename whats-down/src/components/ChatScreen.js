@@ -100,59 +100,41 @@ const ChatScreen = () => {
             last_message_time: '',
         }
     ]);
+    const sendText = () => {
+        let input = document.getElementById('message').value
+        if (input != "") {
+            var elm = (<MessageElm direction="send" text={input} timeStamp={new Date()} />)
+            setMessages([...messages, elm])
+        }
+        document.getElementById('message').value = ""
+    }
 
     const sendMedia = (action) => {
-        switch (action) {
-            case 'messages':
-            case 'text':
-                return () => {
-                    let input = document.getElementById('message').value
-                    if (input != "") {
-                        var elm = (<MessageElm direction="send" text={input} timeStamp={new Date()} />)
-                        setMessages([...messages, elm])
-                    }
-                    document.getElementById('message').value = ""
-                }
-            case 'send_audio':
-                return () => {
-                    let element = document.getElementById('media-to-send')
-                    if (!element.classList.contains('full')) {
-                        let elm = (<AudioElm direction="send" recording={element.src} timeStamp={new Date()} />)
-                        setMessages([...messages, elm])
-                        document.getElementById('media-to-send').src = ""
-                    }
-                    element.classList.remove("full")
-                    document.getElementById('send_button').classList.add('collapse');
-                    document.getElementById('send_button').value = ""
-                }
-            case 'send_video':
-                return () => {
-                    let element = document.getElementById('media-to-send')
-                    if (!element.classList.contains('collapse')) {
-                        let elm = (<VideoElm direction="send" imgSrc={element.src} timeStamp={new Date()} />)
-                        setMessages([...messages, elm])
-                        document.getElementById('media-to-send').src = ""
-                    }
-                    element.classList.add("collapse")
-                    document.getElementById('send_button').classList.add('collapse');
-                    document.getElementById('send_button').value = ""
-                }
-            case 'send_location':
-                break;
-            case 'send_photo':
-                return () => {
-                    let element = document.getElementById('media-to-send')
-                    if (!element.classList.contains('collapse')) {
-                        let elm = (<ImageElm direction="send" imgSrc={element.src} timeStamp={new Date()} />)
-                        setMessages([...messages, elm])
-                        document.getElementById('media-to-send').src = ""
-                    }
-                    element.classList.add("collapse")
-                    document.getElementById('send_button').classList.add('collapse');
-                    document.getElementById('send_button').value = ""
-                }
+        return () => {
+            const element = document.getElementById('media-to-send')            
+            switch (action) {
+                case 'send_audio':
+                    var elm = (<AudioElm direction="send" Src={element.src} timeStamp={new Date()} />)
+                    break;
+                case 'send_video':
+                    var elm = (<VideoElm direction="send" Src={element.src} timeStamp={new Date()} />)
+                    console.log("send video")
+                    break;
+                case 'send_photo':
+                    var elm = (<ImageElm direction="send" Src={element.src} timeStamp={new Date()} />)
+                    console.log("send photo")
+                    break;
+            }
+            if (!element.classList.contains('collapse')) {
+                setMessages([...messages, elm])
+                document.getElementById('media-to-send').src = ""
+            }
+            element.classList.add("collapse")
+            document.getElementById('send_button').classList.add('collapse');
+            document.getElementById('send_button').value = ""
+            setsendingRef(null)
+        }      
 
-        }
     }
 
     useEffect(() => {
@@ -244,7 +226,6 @@ const ChatScreen = () => {
                                     setsendingRef((<SendAudio />))
                                     setButtonSend(() => sendMedia("send_audio"))
                                 }}><BiMicrophone /></button>
-                                <button className={classes} type="checkbox" id='location' data-bs-toggle="modal" data-bs-target="#PopupModal" onClick={sendLocation}><GoLocation /></button>
                                 <button className={classes} type="checkbox" id='close' onClick={toggle}><RiCloseCircleLine /></button>
                             </div>
                         </div>
@@ -252,7 +233,7 @@ const ChatScreen = () => {
                             <input type="text" className="form-control" placeholder="text" id='message' />
                         </div>
                         <div className='col-1'>
-                            <Button label='Send' classy="btn btn-primary" onClick={sendMedia("text")} id='send_button' />
+                            <Button label='Send' classy="btn btn-primary" onClick={sendText} id='send_button' />
                         </div>
                     </div>
                 </div>
