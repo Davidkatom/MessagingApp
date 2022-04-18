@@ -12,6 +12,8 @@ import { GoLocation } from 'react-icons/go';
 import { BiMicrophone } from 'react-icons/bi';
 import { AiFillVideoCamera } from 'react-icons/ai';
 import TimeStempCalc from '../functions/TimeStempCalc';
+import VideoElm from './VideoElm';
+import SendVideo from './SendVideo';
 
 var checked = false
 const ChatScreen = () => {
@@ -33,15 +35,6 @@ const ChatScreen = () => {
         checked = !checked
     }
 
-    const sendBut = () => {
-        let input = document.getElementById('message').value
-        if (input != "") {
-            var elm = (<MessageElm direction="send" text={input}  timeStamp={new Date()} />)
-            setMessages([...messages, elm])
-        }
-        document.getElementById('message').value = ""
-    }
-
 
     const [classes, setClasses] = useState("btn btn-light collapse");
     const [messages, setMessages] = useState([]);
@@ -54,13 +47,13 @@ const ChatScreen = () => {
     const [contact_list, setContact_List] = useState([
         {
             contact_name: 'omer',
-            chat_history: [(<MessageElm direction="send" text={'hellow'} timeStamp={date2} />), (<MessageElm direction="receive" text={'second hello'} timeStamp={date1}/>)],
+            chat_history: [(<MessageElm direction="send" text={'hellow'} timeStamp={date2} />), (<MessageElm direction="receive" text={'second hello'} timeStamp={date1} />)],
             last_message: 'second hello',
             last_message_time: TimeStempCalc(date1),
         },
         {
             contact_name: 'david',
-            chat_history: [(<MessageElm direction="send" text={'long live sparta'} timeStamp={date2}/>)],
+            chat_history: [(<MessageElm direction="send" text={'long live sparta'} timeStamp={date2} />)],
             last_message: 'long live sparta',
             last_message_time: TimeStempCalc(date2),
         },
@@ -104,19 +97,36 @@ const ChatScreen = () => {
 
     const sendMedia = (action) => {
         switch (action) {
-            case 'messages':
-                
+            case 'text':
+                return () => {
+                    let input = document.getElementById('message').value
+                    if (input != "") {
+                        var elm = (<MessageElm direction="send" text={input} timeStamp={new Date()} />)
+                        setMessages([...messages, elm])
+                    }
+                    document.getElementById('message').value = ""
+                }
             case 'send_audio':
                 break;
             case 'send_video':
-                break;
+                return () => {
+                    let element = document.getElementById('media-to-send')
+                    if (!element.classList.contains('collapse')) {
+                        let elm = (<VideoElm direction="send" imgSrc={element.src} timeStamp={new Date()} />)
+                        setMessages([...messages, elm])
+                        document.getElementById('media-to-send').src = ""
+                    }
+                    element.classList.add("collapse")
+                    document.getElementById('send_button').classList.add('collapse');
+                    document.getElementById('send_button').value = ""
+                }
             case 'send_location':
                 break;
             case 'send_photo':
                 return () => {
                     let element = document.getElementById('media-to-send')
                     if (!element.classList.contains('collapse')) {
-                        let elm = (<ImageElm direction="send" imgSrc={element.src} timeStamp={new Date()}/>)
+                        let elm = (<ImageElm direction="send" imgSrc={element.src} timeStamp={new Date()} />)
                         setMessages([...messages, elm])
                         document.getElementById('media-to-send').src = ""
                     }
@@ -143,7 +153,7 @@ const ChatScreen = () => {
             if (contact_item.contact_name === cahnged_contact) {
                 contact_item.last_message = (messages.length > 0 ? messages[messages.length - 1].props.text : 'empty chat')
                 contact_item.chat_history = messages
-                contact_item.last_message_time = (messages.length>0?  TimeStempCalc(messages[messages.length - 1].props.timeStamp) :'-')
+                contact_item.last_message_time = (messages.length > 0 ? TimeStempCalc(messages[messages.length - 1].props.timeStamp) : '-')
             }
         })
 
@@ -184,10 +194,13 @@ const ChatScreen = () => {
                             <div>
                                 <button className="btn btn-light" id="attach" onClick={toggle}><ImAttachment /></button>
                                 <button className={classes} type="checkbox" id='photo' data-bs-toggle="modal" data-bs-target="#PopupModal" onClick={() => {
-                                    setsendingRef((<SendPhoto sendIm />))
+                                    setsendingRef((<SendPhoto />))
                                     setButtonSend(() => sendMedia("send_photo"))
                                 }}  > <AiOutlineCamera /></button>
-                                <button className={classes} type="checkbox" id='video' data-bs-toggle="modal" data-bs-target="#PopupModal" onClick={sendVideo}><AiFillVideoCamera /></button>
+                                <button className={classes} type="checkbox" id='video' data-bs-toggle="modal" data-bs-target="#PopupModal" onClick={() => {
+                                    setsendingRef((<SendVideo />))
+                                    setButtonSend(() => sendMedia("send_video"))
+                                }}><AiFillVideoCamera /></button>
                                 <button className={classes} type="checkbox" id='audio' data-bs-toggle="modal" data-bs-target="#PopupModal" onClick={sendAudio}><BiMicrophone /></button>
                                 <button className={classes} type="checkbox" id='location' data-bs-toggle="modal" data-bs-target="#PopupModal" onClick={sendLocation}><GoLocation /></button>
                                 <button className={classes} type="checkbox" id='close' onClick={toggle}><RiCloseCircleLine /></button>
@@ -197,7 +210,7 @@ const ChatScreen = () => {
                             <input type="text" className="form-control" placeholder="text" id='message' />
                         </div>
                         <div className='col-1'>
-                            <Button label='Send' classy="btn btn-primary" onClick={sendBut} id='send_button' />
+                            <Button label='Send' classy="btn btn-primary" onClick={sendMedia("text")} id='send_button' />
                         </div>
                     </div>
                 </div>
