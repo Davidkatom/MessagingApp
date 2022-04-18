@@ -1,6 +1,6 @@
 import TimeStempCalc from "../functions/TimeStempCalc";
 
-const VideoElm = ({ direction, imgSrc, timeStamp }) => {
+const VideoElm = ({ direction, Src, timeStamp }) => {
 
     return (
 
@@ -8,8 +8,8 @@ const VideoElm = ({ direction, imgSrc, timeStamp }) => {
             <div className={"message-elm" + direction} >
                 <div className={"alert alert-primary " + direction}>
 
-                    <video src={imgSrc} controls alt="profile" className="img-thumbnail" width="400" height="400" type="video/mp4" >
-                        <source src={imgSrc} type="video/mp4"></source>
+                    <video src={Src} controls alt="profile" className="img-thumbnail" width="400" height="400" type="video/mp4" >
+                        <source src={Src} type="video/mp4"></source>
                     </video>
 
 

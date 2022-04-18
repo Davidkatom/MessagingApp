@@ -46,6 +46,7 @@ const SendAudio = () => {
                 await recorder.stop();
                 inProgress = false;
                 button.classList.remove("recording")
+                document.getElementById('media-to-send').classList.remove('collapse');
                 document.getElementById('send_button').classList.remove('collapse');
             }
         })();
@@ -54,14 +55,12 @@ const SendAudio = () => {
 
 
     return (
-        <div className="send-photo">
+        <div className="send-audio">
             <label className="input-group-text" id='audio'>Record voice message:</label>
             <button className="btn btn-primary" id="record-button" onClick={startRecording}>Record</button>
             <div>
-                <audio controls src={recording} id='media-to-send' className=''></audio>
+                <audio controls src={recording} id='media-to-send' className='collapse'></audio>
             </div>
-            {/* <input type="file" className="form-control" id='picture' onChange={handleVideo}></input> */}
-            {/* <video src={Video} alt="Pic" className="img-thumbnail collapse" width="140" height="140"  type="video/mp4" id = "media-to-send"/> */}
         </div>
     )
 }

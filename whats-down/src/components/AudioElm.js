@@ -1,6 +1,6 @@
 import TimeStempCalc from "../functions/TimeStempCalc";
 
-const AudioElm = ({ direction, recording, timeStamp }) => {
+const AudioElm = ({ direction, Src, timeStamp }) => {
 
     return (
 
@@ -8,7 +8,7 @@ const AudioElm = ({ direction, recording, timeStamp }) => {
             <div className={"message-elm" + direction} >
                 <div className={"alert alert-primary " + direction}>
                     <div>
-                        <audio controls src={recording}></audio>
+                        <audio controls src={Src}></audio>
                     </div>
 
 
