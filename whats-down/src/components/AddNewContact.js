@@ -1,5 +1,4 @@
 import InputLine from "./InputLine"
-import $ from 'jquery';
 import Modal from 'react-bootstrap/Modal'
 import { useState } from "react";
 

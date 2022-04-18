@@ -19,7 +19,7 @@ import AddNewContact from './AddNewContact';
 import AudioElm from './AudioElm';
 
 var checked = false
-const ChatScreen = () => {
+const ChatScreen = ({current_user}) => {
 
 
     const [buttonSend, setButtonSend] = useState(null)
@@ -195,7 +195,7 @@ const ChatScreen = () => {
                     <div className="row row-chat">
                         <div className="col-6">
                             <img className="float-start img-thumbnail rounded-start right-padding-for-picture" src={require('../../src/Images/blank-profile-picture.png')} alt="user-profile-picture" />
-                            <h2 className="card-title">User Name</h2>
+                            <h2 className="card-title">{current_user}</h2>
                         </div>
                         <div className="col-6 align-right">
                             <AddNewContact addContact={addContact} />
