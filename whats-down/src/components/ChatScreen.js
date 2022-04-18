@@ -24,7 +24,6 @@ const ChatScreen = () => {
     const sendLocation = () => { }
 
     const toggle = () => {
-        console.log("s")
         if (checked === false) {
             setClasses("btn btn-light attachments")
         }
@@ -43,27 +42,15 @@ const ChatScreen = () => {
         document.getElementById('message').value = ""
     }
 
-    const sendIm = () => {
-        let element = document.getElementById('media-to-send')
-        if (!element.classList.contains('collapse')) {
-            let elm = (<ImageElm direction="send" imgSrc={element.src} />)
-            setMessages([...messages, elm])
-            document.getElementById('media-to-send').src = ""
-        }
-        element.classList.add("collapse")
-        document.getElementById('send_button').classList.add('collapse');
-        document.getElementById('send_button').value = ""
-    }
+
     const [classes, setClasses] = useState("btn btn-light collapse");
     const [messages, setMessages] = useState([]);
 
-    const sendPhoto = () => {
-        setsendingRef((<SendPhoto sendIm />))
-        setButtonSend(() => sendIm)
-    }
+
     var date1 = new Date();
     var date2 = new Date();
     date2.setDate(date2.getDate() - 1);
+
     const [contact_list, setContact_List] = useState([
         {
             contact_name: 'omer',
@@ -114,6 +101,32 @@ const ChatScreen = () => {
             last_message_time: '',
         }
     ]);
+
+    const sendMedia = (action) => {
+        switch (action) {
+            case 'messages':
+                
+            case 'send_audio':
+                break;
+            case 'send_video':
+                break;
+            case 'send_location':
+                break;
+            case 'send_photo':
+                return () => {
+                    let element = document.getElementById('media-to-send')
+                    if (!element.classList.contains('collapse')) {
+                        let elm = (<ImageElm direction="send" imgSrc={element.src} timeStamp={new Date()}/>)
+                        setMessages([...messages, elm])
+                        document.getElementById('media-to-send').src = ""
+                    }
+                    element.classList.add("collapse")
+                    document.getElementById('send_button').classList.add('collapse');
+                    document.getElementById('send_button').value = ""
+                }
+
+        }
+    }
 
     useEffect(() => {
         if (messages) {
@@ -178,7 +191,10 @@ const ChatScreen = () => {
                         <div className='col-1'>
                             <div>
                                 <button className="btn btn-light" id="attach" onClick={toggle}><ImAttachment /></button>
-                                <button className={classes} type="checkbox" id='photo' data-bs-toggle="modal" data-bs-target="#PopupModal" onClick={sendPhoto} ><AiOutlineCamera /></button>
+                                <button className={classes} type="checkbox" id='photo' data-bs-toggle="modal" data-bs-target="#PopupModal" onClick={() => {
+                                    setsendingRef((<SendPhoto sendIm />))
+                                    setButtonSend(() => sendMedia("send_photo"))
+                                }}  > <AiOutlineCamera /></button>
                                 <button className={classes} type="checkbox" id='video' data-bs-toggle="modal" data-bs-target="#PopupModal" onClick={sendVideo}><AiFillVideoCamera /></button>
                                 <button className={classes} type="checkbox" id='audio' data-bs-toggle="modal" data-bs-target="#PopupModal" onClick={sendAudio}><BiMicrophone /></button>
                                 <button className={classes} type="checkbox" id='location' data-bs-toggle="modal" data-bs-target="#PopupModal" onClick={sendLocation}><GoLocation /></button>
