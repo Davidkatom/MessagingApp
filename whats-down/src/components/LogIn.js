@@ -44,7 +44,7 @@ const Login = ({ user_list, addUser, checkUser }) => {
 
 
 const logBu = function loginButton() {
-    console.log("Click")
+    // console.log("Click")
     var myCollapseS = document.getElementById('success')
     var myCollapseE = document.getElementById('error_message')
 

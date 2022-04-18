@@ -14,6 +14,7 @@ import TimeStempCalc from '../functions/TimeStempCalc';
 import CurrentContact from './CurrentContact';
 import VideoElm from './VideoElm';
 import SendVideo from './SendVideo';
+import AddNewContact from './AddNewContact';
 
 var checked = false
 const ChatScreen = () => {
@@ -149,7 +150,6 @@ const ChatScreen = () => {
     //update the contact list when a new message sent/recived
     const contact_chat_change = (cahnged_contact) => {
         contact_list.map((contact_item) => {
-            console.log('here')
             if (contact_item.contact_name === cahnged_contact) {
                 contact_item.last_message = (messages.length > 0 ? messages[messages.length - 1].props.text : 'empty chat')
                 contact_item.chat_history = messages
@@ -169,14 +169,26 @@ const ChatScreen = () => {
         setMessages(contact.chat_history)
     }
     //add a new contact to the contact list
-    const addContact = (args) => {
-        setContact_List([...contact_list, {
-            contact_name: args.name,
+    const addContact = (newContactName) => {
+        //check if newContactName is already in the contact list
+        if(newContactName.length <=3){ return 'Please enter a valid name'}
+        var isExists = false
+        contact_list.map((contact_item) => {
+            if (contact_item.contact_name === newContactName) {
+                isExists = true
+            }
+        })
+        if(isExists){return 'User already in contact list'}
+        let new_contact = {
+            contact_name: newContactName,
             chat_history: [],
-            last_message: args.last_message,
-            last_message_time: args.last_message_time,
-        }])
+            last_message: 'empty chat',
+            last_message_time: ''
+        }
+        setContact_List([...contact_list, new_contact])
+        return 'success'
     }
+
     return (
 
         <div className='container large'>
@@ -187,8 +199,9 @@ const ChatScreen = () => {
                             <img className="float-start img-thumbnail rounded-start right-padding-for-picture" src={require('../../src/Images/blank-profile-picture.png')} alt="user-profile-picture" />
                             <h2 className="card-title">User Name</h2>
                         </div>
-                        <div className="col-6">
-                            <button className="btn btn-light " title="add contact" onClick={() => addContact({ name: 'oo' })} ><RiContactsLine /></button>
+                        <div className="col-6 align-right">
+                            <AddNewContact addContact={addContact} />
+                            {/* <button className="btn btn-light " title="add contact" onClick={() => addContact({ name: 'oo' })} ><RiContactsLine /></button> */}
 
                         </div>
                     </div>
