@@ -1,6 +1,7 @@
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import MiniContant from './MiniContant';
+import SendPhoto from './SendPhoto'
 import '../index.css';
 import Button from './Button';
 import MessageElm from './MessageElm.js'
@@ -15,7 +16,17 @@ import { AiFillVideoCamera } from 'react-icons/ai';
 
 var checked = false
 const ChatScreen = () => {
-    const toggle = function attach() {
+    const [sendingRef, setsendingRef] = useState(null)
+    const sendPhoto = () => {
+        setsendingRef((<SendPhoto />))
+        console.log(sendingRef.current)
+    }
+    const sendAudio = () => { }
+    const sendVideo = () => { }
+    const sendLocation = () => { }
+
+    const toggle = () => {
+        console.log("s")
         if (checked === false) {
             setClasses("btn btn-light attachments")
         }
@@ -25,7 +36,7 @@ const ChatScreen = () => {
         checked = !checked
     }
 
-    const sendBut = function loginButton() {
+    const sendBut = () => {
         let input = document.getElementById('message').value
         if (input != "") {
             var elm = (<MessageElm direction="send" text={input} />)
@@ -33,6 +44,12 @@ const ChatScreen = () => {
         }
         document.getElementById('message').value = ""
 
+    }
+
+    const sendMed = () => {
+        var element = document.getElementById('media-to-send')
+        var elm = (<MessageElm direction="send" text={(element)} />)
+        setMessages([...messages, elm])        
     }
     const [classes, setClasses] = useState("btn btn-light collapse");
     const [messages, setMessages] = useState([]);
@@ -105,7 +122,7 @@ const ChatScreen = () => {
         <div className='container large'>
 
             <div className="row row-chat">
-                <button onClick={()=>addContact({ name: 'oo' })} >dsad</button>
+                <button onClick={() => addContact({ name: 'oo' })} >dsad</button>
 
                 <ContactSide contact_list={contact_list} />
                 <div className="col-sm chat-space">
@@ -114,14 +131,14 @@ const ChatScreen = () => {
                     </div>
                     <div className="toolbar row row-cols-3">
                         <div className='col-1'>
-                            <button className="btn btn-light" id="attach" onClick={toggle}><ImAttachment />
-
-                                <button className={classes} type="checkbox" id='photo' ><AiOutlineCamera /></button>
-                                <button className={classes} type="checkbox" id='video'><AiFillVideoCamera /></button>
-                                <button className={classes} type="checkbox" id='audio'><BiMicrophone /></button>
-                                <button className={classes} type="checkbox" id='location'><GoLocation /></button>
-                                <button className={classes} type="checkbox" id='close'><RiCloseCircleLine /></button>
-                            </button>
+                            <div>
+                                <button className="btn btn-light" id="attach" onClick={toggle}><ImAttachment /></button>
+                                <button className={classes} type="checkbox" id='photo' data-bs-toggle="modal" data-bs-target="#PopupModal" onClick={sendPhoto} ><AiOutlineCamera /></button>
+                                <button className={classes} type="checkbox" id='video' data-bs-toggle="modal" data-bs-target="#PopupModal" onClick={sendVideo}><AiFillVideoCamera /></button>
+                                <button className={classes} type="checkbox" id='audio' data-bs-toggle="modal" data-bs-target="#PopupModal" onClick={sendAudio}><BiMicrophone /></button>
+                                <button className={classes} type="checkbox" id='location' data-bs-toggle="modal" data-bs-target="#PopupModal" onClick={sendLocation}><GoLocation /></button>
+                                <button className={classes} type="checkbox" id='close' onClick={toggle}><RiCloseCircleLine /></button>
+                            </div>
                         </div>
                         <div className='col-9'>
                             <input type="text" className="form-control" placeholder="text" id='message' />
@@ -133,9 +150,19 @@ const ChatScreen = () => {
                 </div>
             </div>
 
+            <div className="modal fade" id="PopupModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div className="modal-dialog">
+                    <div className="modal-content">
+                        {sendingRef}
+                        <Button label='Send' classy="btn btn-primary" onClick={sendMed} id='send_button' />
+                    </div>
+                </div>
+            </div>
+
         </div>
 
     )
+
 
 }
 
