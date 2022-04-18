@@ -1,6 +1,5 @@
 
-import { useState, useRef } from 'react';
-import MiniContant from './MiniContant';
+import { useState, useRefm, useEffect } from 'react';
 import SendPhoto from './SendPhoto'
 import ImageElm from './ImageElm';
 import '../index.css';
@@ -43,7 +42,6 @@ const ChatScreen = () => {
             setMessages([...messages, elm])
         }
         document.getElementById('message').value = ""
-
     }
 
     const sendIm = () => {
@@ -66,17 +64,18 @@ const ChatScreen = () => {
     }
 
 
+
     const [contact_list, setContact_List] = useState([
         {
             contact_name: 'omer',
             chat_history: [(<MessageElm direction="send" text={'hellow'} />), (<MessageElm direction="receive" text={'second hello'} />)],
-            last_message: 'Omer like to talk about his life',
+            last_message: 'second hello',
             last_message_time: '2 minutes ago',
         },
         {
             contact_name: 'david',
             chat_history: [(<MessageElm direction="send" text={'long live sparta'} />)],
-            last_message: 'David loves to eat food and drink beer',
+            last_message: 'long live sparta',
             last_message_time: 'empty time',
         },
         {
@@ -117,17 +116,38 @@ const ChatScreen = () => {
         }
     ]);
 
+    useEffect(() => {
+        if (messages) {
+            console.log('update in messages')
+            contact_chat_change(curernt_Contact_name)
+
+        }
+    }, [messages]);
+
+    const [curernt_Contact_name, set_contact_name] = useState("-");
+
+
+
+    //update the contact list when a new message sent/recived
+    const contact_chat_change = (cahnged_contact) => {
+        contact_list.map((contact_item) => {
+            if (contact_item.contact_name === cahnged_contact) {
+                contact_item.last_message = (messages.length>0?  messages[messages.length - 1].props.text :'empty chat')
+                contact_item.chat_history = messages
+                contact_item.last_message_time = 'empty time'
+            }
+        })
+
+        setContact_List(contact_list)
+    }
     //select a spescific contact, update current chat history and last message
     const selectContact = (contact) => {
-        //loop through contact list and deselect all contacts
-        var contact_elements = document.getElementsByClassName("contact_selection");
-        for (var i = 0, len = contact_elements.length; i < len; i++) {
-            contact_elements[i].classList.remove('selected-chat');
+        if (curernt_Contact_name != '-') {
+            document.getElementById(curernt_Contact_name).classList.remove('selected-chat')
         }
-        //select the new current contact
         document.getElementById(contact.contact_name).classList.add('selected-chat')
-
-
+        set_contact_name(contact.contact_name)
+        // contact_chat_change(curernt_Contact_name)
 
         setMessages(contact.chat_history)
     }
@@ -135,7 +155,7 @@ const ChatScreen = () => {
     const addContact = (args) => {
         setContact_List([...contact_list, {
             contact_name: args.name,
-            chat_history: args.chat_history,
+            chat_history: [],
             last_message: args.last_message,
             last_message_time: args.last_message_time,
         }])
@@ -173,7 +193,7 @@ const ChatScreen = () => {
                 </div>
             </div>
 
-            <div className="modal fade" id="PopupModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div className="modal fade" id="PopupModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div className="modal-dialog">
                     <div className="modal-content">
                         {sendingRef}
