@@ -6,7 +6,12 @@ body {
     background-image: url("./Images/background.jpg");
     background-size: cover;
 }
-
+.align-right{
+    text-align: right;
+}
+.align-center{
+    text-align: center;
+}
 .right-padding-for-picture {
     margin-right: 10px;
 }
