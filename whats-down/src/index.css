@@ -6,6 +6,9 @@ body {
     background-image: url("./Images/background.jpg");
     background-size: cover;
 }
+.selected-chat {
+    background-color: #c4c4e9;
+}
 
 .scrollable {
     overflow-y: scroll;

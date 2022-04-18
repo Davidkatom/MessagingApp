@@ -12,7 +12,7 @@ const MiniContant = ( {args} ) => {
             <img src="cake.jpg" className="img-fluid rounded-start" alt="..." />
 
           </div>
-          <div className="col-sm-10">
+          <div className="col-sm-10 contact_selection" id={args.contact.contact_name}>
             <div className="card-body low-padding">
               <div className="row">
                 <div className="col">

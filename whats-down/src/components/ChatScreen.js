@@ -91,8 +91,18 @@ const ChatScreen = () => {
         }
     ]);
 
-    //select a spescific contact
+    //select a spescific contact, update current chat history and last message
     const selectContact = (contact) => {
+        //loop through contact list and deselect all contacts
+        var contact_elements = document.getElementsByClassName("contact_selection");
+        for (var i = 0, len = contact_elements.length; i < len; i++) {
+            contact_elements[i].classList.remove('selected-chat');
+        }
+        //select the new current contact
+        document.getElementById(contact.contact_name).classList.add('selected-chat')
+
+
+
         setMessages(contact.chat_history)
     }
     //add a new contact to the contact list
