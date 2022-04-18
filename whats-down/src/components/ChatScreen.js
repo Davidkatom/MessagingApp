@@ -105,6 +105,7 @@ const ChatScreen = () => {
             setMessages([...messages, elm])
         }
         document.getElementById('message').value = ""
+        document.getElementById('chatbox').scrollTop = document.getElementById('chatbox').scrollHeight;
     }
 
     const sendMedia = (action) => {
@@ -205,7 +206,7 @@ const ChatScreen = () => {
                 <CurrentContact contact_name={curernt_Contact_name} />
                 <ContactSide args={{ contact_list: contact_list, selectContact: selectContact }} />
                 <div className="col-sm chat-space">
-                    <div className="chat-box scrollable">
+                    <div className="chat-box scrollable" id = "chatbox">
                         {messages}
                     </div>
                     <div className="toolbar row row-cols-3">
@@ -228,10 +229,10 @@ const ChatScreen = () => {
                             </div>
                         </div>
                         <div className='col-9'>
-                            <input type="text" className="form-control" placeholder="text" id='message' />
+                            <input type="text" className="form-control" placeholder="message" id='message' onKeyDown={(e)=>{e.key == 'Enter' ? sendText() : console.log("")}} />
                         </div>
                         <div className='col-1'>
-                            <Button label='Send' classy="btn btn-primary" onClick={sendText} id='send_button' />
+                            <input type="submit" value="Send" className ="btn btn-primary" onClick={sendText} id='send' />
                         </div>
                     </div>
                 </div>
