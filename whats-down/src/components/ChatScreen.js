@@ -2,6 +2,7 @@
 import { useState, useRef } from 'react';
 import MiniContant from './MiniContant';
 import SendPhoto from './SendPhoto'
+import ImageElm from './ImageElm';
 import '../index.css';
 import Button from './Button';
 import MessageElm from './MessageElm.js'
@@ -16,11 +17,10 @@ import { AiFillVideoCamera } from 'react-icons/ai';
 
 var checked = false
 const ChatScreen = () => {
+    const [buttonSend, setButtonSend] = useState(null)
+
     const [sendingRef, setsendingRef] = useState(null)
-    const sendPhoto = () => {
-        setsendingRef((<SendPhoto />))
-        console.log(sendingRef.current)
-    }
+
     const sendAudio = () => { }
     const sendVideo = () => { }
     const sendLocation = () => { }
@@ -46,15 +46,24 @@ const ChatScreen = () => {
 
     }
 
-    const sendMed = () => {
-        var element = document.getElementById('media-to-send')
-        var elm = (<MessageElm direction="send" text={(element)} />)
-        setMessages([...messages, elm])        
+    const sendIm = () => {
+        let element = document.getElementById('media-to-send')
+        if (!element.classList.contains('collapse')) {
+            let elm = (<ImageElm direction="send" imgSrc={element.src} />)
+            setMessages([...messages, elm])
+            document.getElementById('media-to-send').src = ""
+        }
+        element.classList.add("collapse")
+        document.getElementById('send_button').classList.add('collapse');
+        document.getElementById('send_button').value = ""
     }
     const [classes, setClasses] = useState("btn btn-light collapse");
     const [messages, setMessages] = useState([]);
 
-
+    const sendPhoto = () => {
+        setsendingRef((<SendPhoto sendIm />))
+        setButtonSend(() => sendIm)
+    }
 
 
     const [contact_list, setContact_List] = useState([
@@ -168,7 +177,7 @@ const ChatScreen = () => {
                 <div className="modal-dialog">
                     <div className="modal-content">
                         {sendingRef}
-                        <Button label='Send' classy="btn btn-primary" onClick={sendMed} id='send_button' />
+                        <button className="btn btn-primary collapse" onClick={buttonSend} id='send_button' data-bs-dismiss="modal">Send</button>
                     </div>
                 </div>
             </div>
