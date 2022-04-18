@@ -6,13 +6,12 @@ import Button from './Button';
 import MessageElm from './MessageElm.js'
 import ContactSide from './ContactSide';
 import { ImAttachment } from 'react-icons/im';
-import { RiCloseCircleLine } from 'react-icons/ri';
-import { AiOutlineCamera } from 'react-icons/ai';
-import { GoLocation } from 'react-icons/go';
+import { RiCloseCircleLine, RiContactsLine } from 'react-icons/ri';
+import { AiOutlineCamera, AiFillVideoCamera } from 'react-icons/ai';
 import { BiMicrophone } from 'react-icons/bi';
-import { AiFillVideoCamera } from 'react-icons/ai';
+import { GoLocation } from 'react-icons/go';
 import TimeStempCalc from '../functions/TimeStempCalc';
-
+import CurrentContact from './CurrentContact';
 var checked = false
 const ChatScreen = () => {
     const [buttonSend, setButtonSend] = useState(null)
@@ -105,7 +104,7 @@ const ChatScreen = () => {
     const sendMedia = (action) => {
         switch (action) {
             case 'messages':
-                
+
             case 'send_audio':
                 break;
             case 'send_video':
@@ -116,7 +115,7 @@ const ChatScreen = () => {
                 return () => {
                     let element = document.getElementById('media-to-send')
                     if (!element.classList.contains('collapse')) {
-                        let elm = (<ImageElm direction="send" imgSrc={element.src} timeStamp={new Date()}/>)
+                        let elm = (<ImageElm direction="send" imgSrc={element.src} timeStamp={new Date()} />)
                         setMessages([...messages, elm])
                         document.getElementById('media-to-send').src = ""
                     }
@@ -170,18 +169,20 @@ const ChatScreen = () => {
     return (
 
         <div className='container large'>
-
-                <div className="col-5">
-                    <div className="container">
-                        asdsadsa
-                    </div>
-                    <button onClick={() => addContact({ name: 'oo' })} >dsad</button>
-                </div>
-                <div className="col-7">
-                    asdasd
-                </div>
             <div className="row row-chat">
+                <div className="col-5">
+                    <div className="row row-chat">
+                        <div className="col-6">
+                            <img className="float-start img-thumbnail rounded-start right-padding-for-picture" src={require('../../src/Images/blank-profile-picture.png')} alt="user-profile-picture" />
+                            User Name
+                        </div>
+                        <div className="col-6">
+                            <button className="btn btn-light " title="add contact" onClick={() => addContact({ name: 'oo' })} ><RiContactsLine /></button>
 
+                        </div>
+                    </div>
+                </div>
+                <CurrentContact contact_name={curernt_Contact_name} />
                 <ContactSide args={{ contact_list: contact_list, selectContact: selectContact }} />
                 <div className="col-sm chat-space">
                     <div className="chat-box scrollable">

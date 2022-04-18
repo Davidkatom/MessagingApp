@@ -6,9 +6,20 @@ body {
     background-image: url("./Images/background.jpg");
     background-size: cover;
 }
-
+.right-padding-for-picture{
+    margin-right: 10px;
+}
+.contact-header{
+  font-family: 'Lobster', cursive;
+  font-size: 30px;
+  color: rgb(141, 168, 209);
+  text-align: left;
+}
+.rounded-start{
+    max-height: 50px;
+}
 .selected-chat {
-    background-color: #c4c4e9;
+    background-color: #bdbdccb0;
 }
 .time_stamp{
   color: rgb(252, 177, 177);
@@ -16,7 +27,7 @@ body {
 }
 .scrollable {
     overflow-y: scroll;
-    height: 80vh;
+    height: 65vh;
     direction: rtl;
 }
 
@@ -36,16 +47,16 @@ body {
     justify-content: center;
     padding-left: 1%;
     padding-right: 1%;
-    padding-top: 1%;
+    padding-top: 0.1%;
     padding-bottom: 1%;
-    margin-top: 5%;
+    margin-top: 0%;
     border: 3px solid white;
     border-radius: 5px;
     background-color: whitesmoke;
 }
 
 .large {
-    margin-top: 1%;
+    margin-top: 0.5%;
     margin-bottom: 10%;
     padding-bottom: 1%;
     width: 80%;
