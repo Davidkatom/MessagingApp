@@ -21,10 +21,12 @@ body {
 .selected-chat {
     background-color: #bdbdccb0;
 }
-.time_stamp{
-  color: rgb(252, 177, 177);
-  font-size: 12px;
+
+.time_stamp {
+    color: rgb(252, 177, 177);
+    font-size: 12px;
 }
+
 .scrollable {
     overflow-y: scroll;
     height: 65vh;
