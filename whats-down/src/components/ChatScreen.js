@@ -37,7 +37,7 @@ const ChatScreen = () => {
     const sendBut = () => {
         let input = document.getElementById('message').value
         if (input != "") {
-            var elm = (<MessageElm direction="send" text={input}  timeStamp={new Date()} />)
+            var elm = (<MessageElm direction="send" text={input} timeStamp={new Date()} />)
             setMessages([...messages, elm])
         }
         document.getElementById('message').value = ""
@@ -67,13 +67,13 @@ const ChatScreen = () => {
     const [contact_list, setContact_List] = useState([
         {
             contact_name: 'omer',
-            chat_history: [(<MessageElm direction="send" text={'hellow'} timeStamp={date2} />), (<MessageElm direction="receive" text={'second hello'} timeStamp={date1}/>)],
+            chat_history: [(<MessageElm direction="send" text={'hellow'} timeStamp={date2} />), (<MessageElm direction="receive" text={'second hello'} timeStamp={date1} />)],
             last_message: 'second hello',
             last_message_time: TimeStempCalc(date1),
         },
         {
             contact_name: 'david',
-            chat_history: [(<MessageElm direction="send" text={'long live sparta'} timeStamp={date2}/>)],
+            chat_history: [(<MessageElm direction="send" text={'long live sparta'} timeStamp={date2} />)],
             last_message: 'long live sparta',
             last_message_time: TimeStempCalc(date2),
         },
@@ -128,9 +128,9 @@ const ChatScreen = () => {
         contact_list.map((contact_item) => {
             console.log('here')
             if (contact_item.contact_name === cahnged_contact) {
-                contact_item.last_message = (messages.length>0?  messages[messages.length - 1].props.text :'empty chat')
+                contact_item.last_message = (messages.length > 0 ? messages[messages.length - 1].props.text : 'empty chat')
                 contact_item.chat_history = messages
-                contact_item.last_message_time = (messages.length>0?  TimeStempCalc(messages[messages.length - 1].props.timeStamp) :'-')
+                contact_item.last_message_time = (messages.length > 0 ? TimeStempCalc(messages[messages.length - 1].props.timeStamp) : '')
             }
         })
 
@@ -158,8 +158,16 @@ const ChatScreen = () => {
 
         <div className='container large'>
 
+                <div className="col-5">
+                    <div className="container">
+                        asdsadsa
+                    </div>
+                    <button onClick={() => addContact({ name: 'oo' })} >dsad</button>
+                </div>
+                <div className="col-7">
+                    asdasd
+                </div>
             <div className="row row-chat">
-                <button onClick={() => addContact({ name: 'oo' })} >dsad</button>
 
                 <ContactSide args={{ contact_list: contact_list, selectContact: selectContact }} />
                 <div className="col-sm chat-space">
