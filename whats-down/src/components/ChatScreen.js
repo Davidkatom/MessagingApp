@@ -35,7 +35,6 @@ const ChatScreen = () => {
         checked = !checked
     }
 
-
     const [classes, setClasses] = useState("btn btn-light collapse");
     const [messages, setMessages] = useState([]);
 
@@ -153,7 +152,7 @@ const ChatScreen = () => {
             if (contact_item.contact_name === cahnged_contact) {
                 contact_item.last_message = (messages.length > 0 ? messages[messages.length - 1].props.text : 'empty chat')
                 contact_item.chat_history = messages
-                contact_item.last_message_time = (messages.length > 0 ? TimeStempCalc(messages[messages.length - 1].props.timeStamp) : '-')
+                contact_item.last_message_time = (messages.length > 0 ? TimeStempCalc(messages[messages.length - 1].props.timeStamp) : '')
             }
         })
 
@@ -181,8 +180,16 @@ const ChatScreen = () => {
 
         <div className='container large'>
 
+                <div className="col-5">
+                    <div className="container">
+                        asdsadsa
+                    </div>
+                    <button onClick={() => addContact({ name: 'oo' })} >dsad</button>
+                </div>
+                <div className="col-7">
+                    asdasd
+                </div>
             <div className="row row-chat">
-                <button onClick={() => addContact({ name: 'oo' })} >dsad</button>
 
                 <ContactSide args={{ contact_list: contact_list, selectContact: selectContact }} />
                 <div className="col-sm chat-space">
