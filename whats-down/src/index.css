@@ -6,6 +6,7 @@ body {
     background-image: url("./Images/background.jpg");
     background-size: cover;
 }
+
 .selected-chat {
     background-color: #c4c4e9;
 }
@@ -128,6 +129,8 @@ code {
     border-color: #b2dddd;
     width: 70%;
     inline-size: fit-content;
+    margin-top: 0.5%;
+    margin-bottom: 0.5%;
 }
 
 .receive {
@@ -139,6 +142,8 @@ code {
     border-color: whitesmoke;
     width: 70%;
     inline-size: fit-content;
+    margin-top: 0.5%;
+    margin-bottom: 0.5%;
 }
 
 .receive_cont {
