@@ -49,7 +49,7 @@ const ChatScreen = () => {
         },
         {
             contact_name: 'david',
-            chat_history: [(<MessageElm direction="send" text={'fuck you david!'} />)],
+            chat_history: [(<MessageElm direction="send" text={'long live sparta'} />)],
             last_message: 'David loves to eat food and drink beer',
             last_message_time: 'empty time',
         },
