@@ -6,7 +6,7 @@ import Button from './Button';
 import Register from './Register';
 
 var user_list_local
-const Login = ({ user_list, addUser, checkUser, getCurrentUserName }) => {
+const Login = ({ user_list, addUser, checkUser }) => {
     user_list_local = user_list;
     return (
         <div className='container'>
@@ -20,7 +20,6 @@ const Login = ({ user_list, addUser, checkUser, getCurrentUserName }) => {
 
             <div className="collapse" id="success">
                 <div className="alert alert-success" role="alert" id="alert">
-                    {getCurrentUserName(document.getElementById('username').value)}
                     Login Successful
                 </div>
             </div>
@@ -52,7 +51,7 @@ const logBu = function loginButton() {
     if (user_list_local.map((user) => (user.user_name === document.getElementById('username').value && user.password === document.getElementById('password').value)).includes(true)) {
         myCollapseE.classList.add('collapse');
         myCollapseS.classList.remove('collapse');
-
+        
     }
     else {
         myCollapseE.classList.remove('collapse');

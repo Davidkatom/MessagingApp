@@ -3,9 +3,8 @@ import './App.css';
 import Login from './components/LogIn';
 import { useState } from 'react';
 import ChatScreen from './components/ChatScreen';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
 function App() {
-  const [current_user,set_current_user] = useState(null);
   //user list
   const [user_list, setUser] = useState([
     {
@@ -36,26 +35,21 @@ function App() {
     return isExists
   }
 
-  const getCurrentUserName = () => {
-    console.log(current_user)
-    return current_user;
-  }
+
+  // ReactDOM.render(
+  //   <ChatScreen />,
+  //   document.getElementById('root')
+  // );
 
   return (
     <div className="App">
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Login user_list={user_list} checkUser={checkUser} addUser={addUser} set_current_user={set_current_user} />} />
-          <Route path="/chat" element={<ChatScreen getCurrentUserName={getCurrentUserName} />} />
-        </Routes>
-      </BrowserRouter>
       {/* <Login user_list={user_list} checkUser={checkUser} addUser={addUser}/> */}
-      {/* <ChatScreen /> */}
+      <ChatScreen />    
 
 
     </div>
   );
-
+  
 }
 
 export default App;

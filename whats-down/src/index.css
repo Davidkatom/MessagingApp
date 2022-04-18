@@ -6,15 +6,12 @@ body {
     background-image: url("./Images/background.jpg");
     background-size: cover;
 }
-
-.align-right {
+.align-right{
     text-align: right;
 }
-
-.align-center {
+.align-center{
     text-align: center;
 }
-
 .right-padding-for-picture {
     margin-right: 10px;
 }
@@ -233,8 +230,12 @@ code {
     bottom: 150px;
 }
 
-#close {
+#location {
     bottom: 195px;
+}
+
+#close {
+    bottom: 240px;
 }
 
 .btn-primary.recording {

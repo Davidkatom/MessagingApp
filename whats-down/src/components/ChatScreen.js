@@ -19,7 +19,7 @@ import AddNewContact from './AddNewContact';
 import AudioElm from './AudioElm';
 
 var checked = false
-const ChatScreen = ({current_user}) => {
+const ChatScreen = () => {
 
 
     const [buttonSend, setButtonSend] = useState(null)
@@ -107,7 +107,6 @@ const ChatScreen = ({current_user}) => {
             setMessages([...messages, elm])
         }
         document.getElementById('message').value = ""
-        document.getElementById('chatbox').scrollTop = document.getElementById('chatbox').scrollHeight;
     }
 
     const sendMedia = (action) => {
@@ -196,7 +195,7 @@ const ChatScreen = ({current_user}) => {
                     <div className="row row-chat">
                         <div className="col-6">
                             <img className="float-start img-thumbnail rounded-start right-padding-for-picture" src={require('../../src/Images/blank-profile-picture.png')} alt="user-profile-picture" />
-                            <h2 className="card-title">{current_user}</h2>
+                            <h2 className="card-title">User Name</h2>
                         </div>
                         <div className="col-6 align-right">
                             <AddNewContact addContact={addContact} />
@@ -208,7 +207,7 @@ const ChatScreen = ({current_user}) => {
                 <CurrentContact contact_name={curernt_Contact_name} />
                 <ContactSide args={{ contact_list: contact_list, selectContact: selectContact }} />
                 <div className="col-sm chat-space">
-                    <div className="chat-box scrollable" id = "chatbox">
+                    <div className="chat-box scrollable">
                         {messages}
                     </div>
                     <div className="toolbar row row-cols-3">
@@ -231,10 +230,10 @@ const ChatScreen = ({current_user}) => {
                             </div>
                         </div>
                         <div className='col-9'>
-                            <input type="text" className="form-control" placeholder="message" id='message' onKeyDown={(e)=>{e.key == 'Enter' ? sendText() : console.log("")}} />
+                            <input type="text" className="form-control" placeholder="text" id='message' />
                         </div>
                         <div className='col-1'>
-                            <input type="submit" value="Send" className ="btn btn-primary" onClick={sendText} id='send' />
+                            <Button label='Send' classy="btn btn-primary" onClick={sendText} id='send_button' />
                         </div>
                     </div>
                 </div>
