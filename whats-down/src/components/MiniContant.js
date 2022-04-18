@@ -2,7 +2,6 @@ import '../index.css';
 
 const MiniContant = ( {args} ) => {
   const temp = () => {
-    alert('clicked: ' + args.contact.contact_name)
     args.selectContact(args.contact)
   }
   return (
