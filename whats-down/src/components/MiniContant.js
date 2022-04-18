@@ -1,12 +1,10 @@
 import '../index.css';
 
 const MiniContant = ( {args} ) => {
-  const temp = () => {
-    args.selectContact(args.contact)
-  }
+
   return (
     <div>
-      <div className="card mb-0" onClick={temp}>
+      <div className="card mb-0" onClick={()=>args.selectContact(args.contact)}>
         <div className="row g-0">
           <div className="col-sm-2">
             <img src="cake.jpg" className="img-fluid rounded-start" alt="..." />
