@@ -47,6 +47,8 @@ const ChatScreen = () => {
     var date1 = new Date();
     var date2 = new Date();
     date2.setDate(date2.getDate() - 1);
+    var date3 = new Date();
+    date3.setMinutes(date3.getMinutes() - 12);
 
     const [contact_list, setContact_List] = useState([
         {
@@ -63,9 +65,9 @@ const ChatScreen = () => {
         },
         {
             contact_name: 'joe',
-            chat_history: [],
+            chat_history: [(<MessageElm direction="send" text={'long live sparta'} timeStamp={date3} />)],
             last_message: 'empty chat',
-            last_message_time: '',
+            last_message_time: TimeStempCalc(date3),
         },
         {
             contact_name: 'yossi',
@@ -168,7 +170,7 @@ const ChatScreen = () => {
     //add a new contact to the contact list
     const addContact = (newContactName) => {
         //check if newContactName is already in the contact list
-        if(newContactName.length <=3){ return 'Please enter a valid name'}
+        if(newContactName.length <1){ return 'Please enter a valid name'}
         var isExists = false
         contact_list.map((contact_item) => {
             if (contact_item.contact_name === newContactName) {

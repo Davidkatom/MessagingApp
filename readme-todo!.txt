@@ -5,5 +5,5 @@ Run the dev server.
 
 
 omer to add:
-? npm i jquery --save
+npm i jquery --save
 npm install react-bootstrap bootstrap
