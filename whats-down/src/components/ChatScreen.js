@@ -1,6 +1,7 @@
 
 import { useState, useRefm, useEffect } from 'react';
 import SendPhoto from './SendPhoto'
+import SendAudio from './SendAudio'
 import ImageElm from './ImageElm';
 import Button from './Button';
 import MessageElm from './MessageElm.js'
@@ -14,9 +15,12 @@ import TimeStempCalc from '../functions/TimeStempCalc';
 import CurrentContact from './CurrentContact';
 import VideoElm from './VideoElm';
 import SendVideo from './SendVideo';
+import AudioElm from './AudioElm';
 
 var checked = false
 const ChatScreen = () => {
+
+
     const [buttonSend, setButtonSend] = useState(null)
 
     const [sendingRef, setsendingRef] = useState(null)
@@ -107,7 +111,17 @@ const ChatScreen = () => {
                     document.getElementById('message').value = ""
                 }
             case 'send_audio':
-                break;
+                return () => {
+                    let element = document.getElementById('media-to-send')
+                    if (!element.classList.contains('full')) {
+                        let elm = (<AudioElm direction="send" recording={element.src} timeStamp={new Date()} />)
+                        setMessages([...messages, elm])
+                        document.getElementById('media-to-send').src = ""
+                    }
+                    element.classList.remove("full")
+                    document.getElementById('send_button').classList.add('collapse');
+                    document.getElementById('send_button').value = ""
+                }
             case 'send_video':
                 return () => {
                     let element = document.getElementById('media-to-send')
@@ -211,7 +225,10 @@ const ChatScreen = () => {
                                     setsendingRef((<SendVideo />))
                                     setButtonSend(() => sendMedia("send_video"))
                                 }}><AiFillVideoCamera /></button>
-                                <button className={classes} type="checkbox" id='audio' data-bs-toggle="modal" data-bs-target="#PopupModal" onClick={sendAudio}><BiMicrophone /></button>
+                                <button className={classes} type="checkbox" id='audio' data-bs-toggle="modal" data-bs-target="#PopupModal" onClick={() => {
+                                    setsendingRef((<SendAudio />))
+                                    setButtonSend(() => sendMedia("send_audio"))
+                                }}><BiMicrophone /></button>
                                 <button className={classes} type="checkbox" id='location' data-bs-toggle="modal" data-bs-target="#PopupModal" onClick={sendLocation}><GoLocation /></button>
                                 <button className={classes} type="checkbox" id='close' onClick={toggle}><RiCloseCircleLine /></button>
                             </div>
