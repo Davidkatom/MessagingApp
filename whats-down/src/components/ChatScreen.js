@@ -1,4 +1,3 @@
-import ReactDOM from 'react-dom';
 
 import { useState } from 'react';
 import MiniContant from './MiniContant';
@@ -37,6 +36,9 @@ const ChatScreen = () => {
     }
     const [classes, setClasses] = useState("btn btn-light collapse");
     const [messages, setMessages] = useState([]);
+    const [contact_list1, setContact_List1] = useState([]);
+
+
     const [contact_list, setContact_List] = useState([
         {
             contact_name: 'omer',
@@ -91,51 +93,45 @@ const ChatScreen = () => {
     //add a new contact to the contact list
     const addContact = (args) => {
         setContact_List([...contact_list, {
-            contact_name: args.user_name,
-            chat_history: args.password,
-            last_message: args.display_name,
-            last_message_time: args.picture,
+            contact_name: args.contact_name,
+            chat_history: args.chat_history,
+            last_message: args.last_message,
+            last_message_time: args.last_message_time,
         }])
-        return 'success'
     }
-    var newGuy = {
-        contact_name: 'newGuy',
-        chat_history: ["good morning", "bye", "fuck you"],
-        last_message: 'empty chat',
-        last_message_time: 'empty time',
-    }
+
     return (
 
-        <div class='container large'>
+        <div className='container large'>
 
-            <div class="row row-chat">
-                <div class="col-5 scrollable" >
-                    <div class='direction-fix'>
-
+            <div className="row row-chat">
+                <div className="col-5 scrollable" >
+                {/* <button className='btn btn-light collapse' onClick={addContact({contact_name:"dasd"})}>dsad</button> */}
+                    <div className='direction-fix'>
                         {contact_list.map((contactIndex) => (
                             <MiniContant contact={contactIndex} />
                         ))}
                     </div>
                 </div>
-                <div class="col-sm chat-space">
-                    <div class="chat-box scrollable">
+                <div className="col-sm chat-space">
+                    <div className="chat-box scrollable">
                         {messages}
                     </div>
-                    <div class="toolbar row row-cols-3">
-                        <div class='col-1'>
-                            <button class="btn btn-light" id="attach" onClick={toggle}><ImAttachment />
+                    <div className="toolbar row row-cols-3">
+                        <div className='col-1'>
+                            <button className="btn btn-light" id="attach" onClick={toggle}><ImAttachment />
 
-                                <button class={classes} type="checkbox" id='photo' ><AiOutlineCamera /></button>
-                                <button class={classes} type="checkbox" id='video'><AiFillVideoCamera /></button>
-                                <button class={classes} type="checkbox" id='audio'><BiMicrophone /></button>
-                                <button class={classes} type="checkbox" id='location'><GoLocation /></button>
-                                <button class={classes} type="checkbox" id='close'><RiCloseCircleLine /></button>
+                                <button className={classes} type="checkbox" id='photo' ><AiOutlineCamera /></button>
+                                <button className={classes} type="checkbox" id='video'><AiFillVideoCamera /></button>
+                                <button className={classes} type="checkbox" id='audio'><BiMicrophone /></button>
+                                <button className={classes} type="checkbox" id='location'><GoLocation /></button>
+                                <button className={classes} type="checkbox" id='close'><RiCloseCircleLine /></button>
                             </button>
                         </div>
-                        <div class='col-9'>
-                            <input type="text" class="form-control" placeholder="text" id='message' />
+                        <div className='col-9'>
+                            <input type="text" className="form-control" placeholder="text" id='message' />
                         </div>
-                        <div class='col-1'>
+                        <div className='col-1'>
                             <Button label='Send' classy="btn btn-primary" onClick={sendBut} id='send_button' />
                         </div>
                     </div>

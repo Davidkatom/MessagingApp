@@ -1,4 +1,3 @@
-import ReactDOM from 'react-dom';
 
 import './App.css';
 import Login from './components/LogIn';
@@ -35,11 +34,20 @@ function App() {
     ))
     return isExists
   }
- 
 
-  ReactDOM.render(
-    <ChatScreen />,
-    document.getElementById('root')
+
+  // ReactDOM.render(
+  //   <ChatScreen />,
+  //   document.getElementById('root')
+  // );
+
+  return (
+    <div className="App">
+      {/* <Login user_list={user_list} checkUser={checkUser} addUser={addUser}/> */}
+      <ChatScreen />    
+
+
+    </div>
   );
   
 }
