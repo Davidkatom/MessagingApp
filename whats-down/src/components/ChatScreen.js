@@ -2,7 +2,6 @@
 import { useState, useRefm, useEffect } from 'react';
 import SendPhoto from './SendPhoto'
 import ImageElm from './ImageElm';
-import '../index.css';
 import Button from './Button';
 import MessageElm from './MessageElm.js'
 import ContactSide from './ContactSide';
@@ -12,7 +11,7 @@ import { AiOutlineCamera } from 'react-icons/ai';
 import { GoLocation } from 'react-icons/go';
 import { BiMicrophone } from 'react-icons/bi';
 import { AiFillVideoCamera } from 'react-icons/ai';
-
+import TimeStempCalc from '../functions/TimeStempCalc';
 
 var checked = false
 const ChatScreen = () => {
@@ -38,7 +37,7 @@ const ChatScreen = () => {
     const sendBut = () => {
         let input = document.getElementById('message').value
         if (input != "") {
-            var elm = (<MessageElm direction="send" text={input} />)
+            var elm = (<MessageElm direction="send" text={input}  timeStamp={new Date()} />)
             setMessages([...messages, elm])
         }
         document.getElementById('message').value = ""
@@ -62,79 +61,76 @@ const ChatScreen = () => {
         setsendingRef((<SendPhoto sendIm />))
         setButtonSend(() => sendIm)
     }
-
-
-
+    var date1 = new Date();
+    var date2 = new Date();
+    date2.setDate(date2.getDate() - 1);
     const [contact_list, setContact_List] = useState([
         {
             contact_name: 'omer',
-            chat_history: [(<MessageElm direction="send" text={'hellow'} />), (<MessageElm direction="receive" text={'second hello'} />)],
+            chat_history: [(<MessageElm direction="send" text={'hellow'} timeStamp={date2} />), (<MessageElm direction="receive" text={'second hello'} timeStamp={date1}/>)],
             last_message: 'second hello',
-            last_message_time: '2 minutes ago',
+            last_message_time: TimeStempCalc(date1),
         },
         {
             contact_name: 'david',
-            chat_history: [(<MessageElm direction="send" text={'long live sparta'} />)],
+            chat_history: [(<MessageElm direction="send" text={'long live sparta'} timeStamp={date2}/>)],
             last_message: 'long live sparta',
-            last_message_time: 'empty time',
+            last_message_time: TimeStempCalc(date2),
         },
         {
             contact_name: 'joe',
             chat_history: [],
             last_message: 'empty chat',
-            last_message_time: 'empty time',
+            last_message_time: '',
         },
         {
             contact_name: 'yossi',
             chat_history: [],
             last_message: 'empty chat',
-            last_message_time: 'empty time',
+            last_message_time: '',
         },
         {
             contact_name: 'Hampti',
             chat_history: [],
             last_message: 'empty chat',
-            last_message_time: 'empty time',
+            last_message_time: '',
         },
         {
             contact_name: 'Dampti',
             chat_history: [],
             last_message: 'empty chat',
-            last_message_time: 'empty time',
+            last_message_time: '',
         },
         {
             contact_name: 'Tidididam',
             chat_history: [],
             last_message: 'empty chat',
-            last_message_time: 'empty time',
+            last_message_time: '',
         },
         {
             contact_name: 'UmcoolTum',
             chat_history: [],
             last_message: 'empty chat',
-            last_message_time: 'empty time',
+            last_message_time: '',
         }
     ]);
 
     useEffect(() => {
         if (messages) {
-            console.log('update in messages')
             contact_chat_change(curernt_Contact_name)
-
         }
     }, [messages]);
 
     const [curernt_Contact_name, set_contact_name] = useState("-");
 
-
-
     //update the contact list when a new message sent/recived
     const contact_chat_change = (cahnged_contact) => {
         contact_list.map((contact_item) => {
+            console.log('here')
             if (contact_item.contact_name === cahnged_contact) {
                 contact_item.last_message = (messages.length>0?  messages[messages.length - 1].props.text :'empty chat')
                 contact_item.chat_history = messages
-                contact_item.last_message_time = 'empty time'
+                contact_item.last_message_time = (messages.length>0?  TimeStempCalc(messages[messages.length - 1].props.timeStamp) :'-')
             }
         })
 
@@ -147,8 +143,6 @@ const ChatScreen = () => {
         }
         document.getElementById(contact.contact_name).classList.add('selected-chat')
         set_contact_name(contact.contact_name)
-        // contact_chat_change(curernt_Contact_name)
-
         setMessages(contact.chat_history)
     }
     //add a new contact to the contact list
