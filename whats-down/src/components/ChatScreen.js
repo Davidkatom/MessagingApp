@@ -123,7 +123,6 @@ const ChatScreen = () => {
     const contact_chat_change = (cahnged_contact) => {
         contact_list.map((contact_item) => {
             if (contact_item.contact_name === cahnged_contact) {
-                console.log(messages)
                 contact_item.last_message = (messages.length>0?  messages[messages.length - 1].props.text :'empty chat')
                 contact_item.chat_history = messages
                 contact_item.last_message_time = 'empty time'
