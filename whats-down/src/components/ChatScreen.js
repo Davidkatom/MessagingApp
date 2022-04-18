@@ -185,7 +185,7 @@ const ChatScreen = () => {
                     <div className="row row-chat">
                         <div className="col-6">
                             <img className="float-start img-thumbnail rounded-start right-padding-for-picture" src={require('../../src/Images/blank-profile-picture.png')} alt="user-profile-picture" />
-                            User Name
+                            <h2 className="card-title">User Name</h2>
                         </div>
                         <div className="col-6">
                             <button className="btn btn-light " title="add contact" onClick={() => addContact({ name: 'oo' })} ><RiContactsLine /></button>
