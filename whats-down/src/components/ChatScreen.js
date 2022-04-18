@@ -53,7 +53,6 @@ const ChatScreen = () => {
     }
     const [classes, setClasses] = useState("btn btn-light collapse");
     const [messages, setMessages] = useState([]);
-    const [contact_list1, setContact_List1] = useState([]);
 
 
 
@@ -61,53 +60,68 @@ const ChatScreen = () => {
     const [contact_list, setContact_List] = useState([
         {
             contact_name: 'omer',
-            chat_history: ["hello", "hi", "how are you"],
+            chat_history: [(<MessageElm direction="send" text={'hellow'} />), (<MessageElm direction="receive" text={'second hello'} />)],
             last_message: 'Omer like to talk about his life',
             last_message_time: '2 minutes ago',
         },
         {
             contact_name: 'david',
-            chat_history: ["good morning", "bye", "fuck you"],
+            chat_history: [(<MessageElm direction="send" text={'long live sparta'} />)],
             last_message: 'David loves to eat food and drink beer',
             last_message_time: 'empty time',
         },
         {
             contact_name: 'joe',
-            chat_history: ["good morning", "bye", "fuck you"],
+            chat_history: [],
             last_message: 'empty chat',
             last_message_time: 'empty time',
         },
         {
             contact_name: 'yossi',
-            chat_history: ["good morning", "bye", "fuck you"],
+            chat_history: [],
             last_message: 'empty chat',
             last_message_time: 'empty time',
         },
         {
             contact_name: 'Hampti',
-            chat_history: ["good morning", "bye", "fuck you"],
+            chat_history: [],
             last_message: 'empty chat',
             last_message_time: 'empty time',
         },
         {
             contact_name: 'Dampti',
-            chat_history: ["good morning", "bye", "fuck you"],
+            chat_history: [],
             last_message: 'empty chat',
             last_message_time: 'empty time',
         },
         {
             contact_name: 'Tidididam',
-            chat_history: ["good morning", "bye", "fuck you"],
+            chat_history: [],
             last_message: 'empty chat',
             last_message_time: 'empty time',
         },
         {
             contact_name: 'UmcoolTum',
-            chat_history: ["good morning", "bye", "fuck you"],
+            chat_history: [],
             last_message: 'empty chat',
             last_message_time: 'empty time',
         }
     ]);
+
+    //select a spescific contact, update current chat history and last message
+    const selectContact = (contact) => {
+        //loop through contact list and deselect all contacts
+        var contact_elements = document.getElementsByClassName("contact_selection");
+        for (var i = 0, len = contact_elements.length; i < len; i++) {
+            contact_elements[i].classList.remove('selected-chat');
+        }
+        //select the new current contact
+        document.getElementById(contact.contact_name).classList.add('selected-chat')
+
+
+
+        setMessages(contact.chat_history)
+    }
     //add a new contact to the contact list
     const addContact = (args) => {
         setContact_List([...contact_list, {
@@ -124,7 +138,7 @@ const ChatScreen = () => {
             <div className="row row-chat">
                 <button onClick={() => addContact({ name: 'oo' })} >dsad</button>
 
-                <ContactSide contact_list={contact_list} />
+                <ContactSide args={{ contact_list: contact_list, selectContact: selectContact }} />
                 <div className="col-sm chat-space">
                     <div className="chat-box scrollable">
                         {messages}
