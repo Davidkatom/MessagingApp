@@ -19,16 +19,9 @@ const Login = ({ user_list, addUser, checkUser, getCurrentUserName }) => {
         if (user_list.map((user) => (user.user_name === document.getElementById('username').value && user.password === document.getElementById('password').value)).includes(true)) {
             myCollapseE.classList.add('collapse');
             myCollapseS.classList.remove('collapse');
-            // this.props.router.push('/chat')
-            handleOnClick();
-            
-            
-    
             console.log("Login Successful");
-            // <BrowserRouter>
-            //     <Route exact path="/chat" />
-            // </BrowserRouter>
-            // { getCurrentUserName(document.getElementById('username').value) }
+            handleOnClick();
+
         }
         else {
             myCollapseE.classList.remove('collapse');

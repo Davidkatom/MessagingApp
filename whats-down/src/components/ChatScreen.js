@@ -63,8 +63,8 @@ const ChatScreen = ({ current_user }) => {
         },
         {
             contact_name: 'joe',
-            chat_history: [(<MessageElm direction="send" text={'long live sparta'} timeStamp={date3} />)],
-            last_message: 'empty chat',
+            chat_history: [(<MessageElm direction="send" text={'The clowns are comming!'} timeStamp={date3} />)],
+            last_message: 'The clowns are comming!',
             last_message_time: TimeStempCalc(date3),
         },
         {
