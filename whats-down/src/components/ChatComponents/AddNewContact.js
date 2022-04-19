@@ -38,7 +38,7 @@ const AddNewContact = ({ addContact }) => {
                 <Modal.Header closeButton>
                     <h4 className="modal-title">Add new contact</h4>
                 </Modal.Header>
-                <Modal.Body><InputLine label='Contact-identifier:' type='text' id='new_user_name' placeholder='Contact-identifier' />
+                <Modal.Body><InputLine label='Contact-identifier:' type='text' id='new_user_name' placeholder='Contact-identifier' fun = {validateAndAddNewContact}/>
                 <div className="align-center collapse" id="error_message">
                     <div className="alert alert-danger" role="alert" id="alert">
                         {error_message}

@@ -39,7 +39,8 @@ const Login = ({ user_list, addUser, checkUser, getCurrentUserName }) => {
             <span className='contact-header'>Log in to Whats Down</span>
 
             <InputLine label='Username' placeholder='Username' type='text' id='username' />
-            <InputLine label='Password' placeholder='Password' type='password' id='password' />
+            <InputLine label='Password' placeholder='Password' type='password' id='password' fun = {logBu} />
+
             <div className="collapse" id="error_message">
                 <div className="alert alert-danger" role="alert" id="alert">
                     Wrong username or password

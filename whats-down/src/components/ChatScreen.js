@@ -230,7 +230,7 @@ const ChatScreen = ({ current_user }) => {
                             </div>
                         </div>
                         <div className='col-9'>
-                            <input type="text" className="form-control" placeholder="message" id='message' onKeyDown={(e) => { e.key == 'Enter' ? sendText() : console.log("") }} />
+                            <input type="text" className="form-control" placeholder="message" id='message' onKeyDown={(e) => { e.key == 'Enter' && sendText() }} />
                         </div>
                         <div className='col-1'>
                             <input type="submit" value="Send" className="btn btn-primary" onClick={sendText} id='send' />
