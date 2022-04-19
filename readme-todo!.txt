@@ -6,5 +6,5 @@ Run the dev server.
 
 omer to add:
 npm i jquery --save
-npm install react-bootstrap bootstrap
+npm install react-bootstrap
 npm install react-router-dom

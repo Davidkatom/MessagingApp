@@ -5,7 +5,7 @@ import { useState } from 'react';
 import ChatScreen from './components/ChatScreen';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 function App() {
-  const [current_user,set_current_user] = useState(null);
+  const [current_user,set_current_user] = useState('No UserName');
   //user list
   const [user_list, setUser] = useState([
     {
@@ -36,7 +36,7 @@ function App() {
     return isExists
   }
 
-  const getCurrentUserName = () => {
+  function getCurrentUserName() {
     console.log(current_user)
     return current_user;
   }
@@ -45,8 +45,9 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Routes>
+          {console.log(current_user)}
           <Route path="/" element={<Login user_list={user_list} checkUser={checkUser} addUser={addUser} set_current_user={set_current_user} />} />
-          <Route path="/chat" element={<ChatScreen getCurrentUserName={getCurrentUserName} />} />
+          <Route path="/chat" element={<ChatScreen getCurrentUserName={current_user} />} />
         </Routes>
       </BrowserRouter>
       {/* <Login user_list={user_list} checkUser={checkUser} addUser={addUser}/> */}

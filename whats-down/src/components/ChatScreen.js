@@ -3,14 +3,12 @@ import { useState, useRefm, useEffect } from 'react';
 import SendPhoto from './AttachmentElements/SendPhoto'
 import SendAudio from './AttachmentElements/SendAudio'
 import ImageElm from './AttachmentElements/ImageElm';
-import Button from './Button';
 import MessageElm from './AttachmentElements/MessageElm.js'
 import ContactSide from './ChatComponents/ContactSide';
 import { ImAttachment } from 'react-icons/im';
-import { RiCloseCircleLine, RiContactsLine } from 'react-icons/ri';
+import { RiCloseCircleLine } from 'react-icons/ri';
 import { AiOutlineCamera, AiFillVideoCamera } from 'react-icons/ai';
 import { BiMicrophone } from 'react-icons/bi';
-import { GoLocation } from 'react-icons/go';
 import TimeStempCalc from '../functions/TimeStempCalc';
 import CurrentContact from './ChatComponents/CurrentContact';
 import VideoElm from './AttachmentElements/VideoElm';
@@ -19,7 +17,7 @@ import AddNewContact from './ChatComponents/AddNewContact';
 import AudioElm from './AttachmentElements/AudioElm';
 
 var checked = false
-const ChatScreen = ({current_user}) => {
+const ChatScreen = ({ current_user }) => {
 
 
     const [buttonSend, setButtonSend] = useState(null)
@@ -112,7 +110,7 @@ const ChatScreen = ({current_user}) => {
 
     const sendMedia = (action) => {
         return () => {
-            const element = document.getElementById('media-to-send')            
+            const element = document.getElementById('media-to-send')
             switch (action) {
                 case 'send_audio':
                     var elm = (<AudioElm direction="send" Src={element.src} timeStamp={new Date()} />)
@@ -134,7 +132,7 @@ const ChatScreen = ({current_user}) => {
             document.getElementById('send_button').classList.add('collapse');
             document.getElementById('send_button').value = ""
             setsendingRef(null)
-        }      
+        }
 
     }
 
@@ -170,14 +168,14 @@ const ChatScreen = ({current_user}) => {
     //add a new contact to the contact list
     const addContact = (newContactName) => {
         //check if newContactName is already in the contact list
-        if(newContactName.length <1){ return 'Please enter a valid name'}
+        if (newContactName.length < 1) { return 'Please enter a valid name' }
         var isExists = false
         contact_list.map((contact_item) => {
             if (contact_item.contact_name === newContactName) {
                 isExists = true
             }
         })
-        if(isExists){return 'User already in contact list'}
+        if (isExists) { return 'User already in contact list' }
         let new_contact = {
             contact_name: newContactName,
             chat_history: [],
@@ -197,6 +195,7 @@ const ChatScreen = ({current_user}) => {
                         <div className="col-6">
                             <img className="float-start img-thumbnail rounded-start right-padding-for-picture" src={require('../../src/Images/blank-profile-picture.png')} alt="user-profile-picture" />
                             <h2 className="card-title">{current_user}</h2>
+                            {console.log(current_user)}
                         </div>
                         <div className="col-6 align-right">
                             <AddNewContact addContact={addContact} />
@@ -208,7 +207,7 @@ const ChatScreen = ({current_user}) => {
                 <CurrentContact contact_name={curernt_Contact_name} />
                 <ContactSide args={{ contact_list: contact_list, selectContact: selectContact }} />
                 <div className="col-sm chat-space">
-                    <div className="chat-box scrollable" id = "chatbox">
+                    <div className="chat-box scrollable" id="chatbox">
                         {messages}
                     </div>
                     <div className="toolbar row row-cols-3">
@@ -231,10 +230,10 @@ const ChatScreen = ({current_user}) => {
                             </div>
                         </div>
                         <div className='col-9'>
-                            <input type="text" className="form-control" placeholder="message" id='message' onKeyDown={(e)=>{e.key == 'Enter' ? sendText() : console.log("")}} />
+                            <input type="text" className="form-control" placeholder="message" id='message' onKeyDown={(e) => { e.key == 'Enter' ? sendText() : console.log("") }} />
                         </div>
                         <div className='col-1'>
-                            <input type="submit" value="Send" className ="btn btn-primary" onClick={sendText} id='send' />
+                            <input type="submit" value="Send" className="btn btn-primary" onClick={sendText} id='send' />
                         </div>
                     </div>
                 </div>
