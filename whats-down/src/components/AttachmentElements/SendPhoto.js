@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import Button from './Button';
 const SendPhoto = () => {
     const [Picture, setPicture] = useState();
     const handlePicture = (e) => {

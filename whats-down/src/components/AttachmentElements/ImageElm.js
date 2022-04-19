@@ -1,17 +1,13 @@
-import TimeStempCalc from "../functions/TimeStempCalc";
+import TimeStempCalc from "../../functions/TimeStempCalc";
 
-const AudioElm = ({ direction, Src, timeStamp }) => {
+const ImageElm = ({ direction, Src , timeStamp }) => {
 
     return (
-
-        <div class={direction + '_cont'}>
+        
+        <div class = {direction + '_cont'}>
             <div className={"message-elm" + direction} >
                 <div className={"alert alert-primary " + direction}>
-                    <div>
-                        <audio controls src={Src}></audio>
-                    </div>
-
-
+                    <img src={Src} alt="profile" className="img-thumbnail" width="140" height="140" />
                     <span className="time_stamp">
                         {TimeStempCalc(timeStamp)}
                     </span>
@@ -22,4 +18,4 @@ const AudioElm = ({ direction, Src, timeStamp }) => {
     )
 }
 
-export default AudioElm
+export default ImageElm

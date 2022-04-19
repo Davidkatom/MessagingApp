@@ -1,22 +1,22 @@
 
 import { useState, useRefm, useEffect } from 'react';
-import SendPhoto from './SendPhoto'
-import SendAudio from './SendAudio'
-import ImageElm from './ImageElm';
+import SendPhoto from './AttachmentElements/SendPhoto'
+import SendAudio from './AttachmentElements/SendAudio'
+import ImageElm from './AttachmentElements/ImageElm';
 import Button from './Button';
-import MessageElm from './MessageElm.js'
-import ContactSide from './ContactSide';
+import MessageElm from './AttachmentElements/MessageElm.js'
+import ContactSide from './ChatComponents/ContactSide';
 import { ImAttachment } from 'react-icons/im';
 import { RiCloseCircleLine, RiContactsLine } from 'react-icons/ri';
 import { AiOutlineCamera, AiFillVideoCamera } from 'react-icons/ai';
 import { BiMicrophone } from 'react-icons/bi';
 import { GoLocation } from 'react-icons/go';
 import TimeStempCalc from '../functions/TimeStempCalc';
-import CurrentContact from './CurrentContact';
-import VideoElm from './VideoElm';
-import SendVideo from './SendVideo';
-import AddNewContact from './AddNewContact';
-import AudioElm from './AudioElm';
+import CurrentContact from './ChatComponents/CurrentContact';
+import VideoElm from './AttachmentElements/VideoElm';
+import SendVideo from './AttachmentElements/SendVideo';
+import AddNewContact from './ChatComponents/AddNewContact';
+import AudioElm from './AttachmentElements/AudioElm';
 
 var checked = false
 const ChatScreen = ({current_user}) => {

@@ -1,13 +1,10 @@
-import TimeStempCalc from "../functions/TimeStempCalc";
-
-const ImageElm = ({ direction, Src , timeStamp }) => {
-
+import TimeStempCalc from "../../functions/TimeStempCalc";
+const MessageElm = ({ direction, text, timeStamp }) => {
     return (
-        
-        <div class = {direction + '_cont'}>
+        <div className={direction + '_cont'}>
             <div className={"message-elm" + direction} >
                 <div className={"alert alert-primary " + direction}>
-                    <img src={Src} alt="profile" className="img-thumbnail" width="140" height="140" />
+                    {text}
                     <span className="time_stamp">
                         {TimeStempCalc(timeStamp)}
                     </span>
@@ -18,4 +15,4 @@ const ImageElm = ({ direction, Src , timeStamp }) => {
     )
 }
 
-export default ImageElm
+export default MessageElm

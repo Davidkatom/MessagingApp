@@ -1,4 +1,4 @@
-import TimeStempCalc from "../functions/TimeStempCalc";
+import TimeStempCalc from "../../functions/TimeStempCalc";
 
 const VideoElm = ({ direction, Src, timeStamp }) => {
 

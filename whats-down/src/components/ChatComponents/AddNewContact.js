@@ -1,4 +1,4 @@
-import InputLine from "./InputLine"
+import InputLine from "../InputLine"
 import Modal from 'react-bootstrap/Modal'
 import { useState } from "react";
 
