@@ -52,19 +52,19 @@ const ChatScreen = ({ current_user }) => {
         {
             contact_name: 'omer',
             chat_history: [(<MessageElm direction="send" text={'hellow'} timeStamp={date2} />), (<MessageElm direction="receive" text={'second hello'} timeStamp={date1} />)],
-            last_message: 'second hello',
+            last_message: (<MessageElm direction="receive" text={'second hello'} timeStamp={date1} />),
             last_message_time: TimeStempCalc(date1),
         },
         {
             contact_name: 'david',
             chat_history: [(<MessageElm direction="send" text={'long live sparta'} timeStamp={date2} />)],
-            last_message: 'long live sparta',
+            last_message: (<MessageElm direction="send" text={'long live sparta'} timeStamp={date2} />),
             last_message_time: TimeStempCalc(date2),
         },
         {
             contact_name: 'joe',
             chat_history: [(<MessageElm direction="send" text={'The clowns are comming!'} timeStamp={date3} />)],
-            last_message: 'The clowns are comming!',
+            last_message: (<MessageElm direction="send" text={'The clowns are comming!'} timeStamp={date3} />),
             last_message_time: TimeStempCalc(date3),
         },
         {
@@ -148,7 +148,7 @@ const ChatScreen = ({ current_user }) => {
     const contact_chat_change = (cahnged_contact) => {
         contact_list.map((contact_item) => {
             if (contact_item.contact_name === cahnged_contact) {
-                contact_item.last_message = (messages.length > 0 ? messages[messages.length - 1].props.text : 'empty chat')
+                contact_item.last_message = (messages.length > 0 ? messages[messages.length - 1] : 'empty chat')
                 contact_item.chat_history = messages
                 contact_item.last_message_time = (messages.length > 0 ? TimeStempCalc(messages[messages.length - 1].props.timeStamp) : '')
             }
@@ -164,6 +164,8 @@ const ChatScreen = ({ current_user }) => {
         document.getElementById(contact.contact_name).classList.add('selected-chat')
         set_contact_name(contact.contact_name)
         setMessages(contact.chat_history)
+        console.log('check')
+        document.getElementById('ChatSide').classList.remove('collapse')
     }
     //add a new contact to the contact list
     const addContact = (newContactName) => {
@@ -206,7 +208,7 @@ const ChatScreen = ({ current_user }) => {
                 </div>
                 <CurrentContact contact_name={curernt_Contact_name} />
                 <ContactSide args={{ contact_list: contact_list, selectContact: selectContact }} />
-                <div className="col-sm chat-space">
+                <div className="col-sm chat-space collapse"id='ChatSide'>
                     <div className="chat-box scrollable" id="chatbox">
                         {messages}
                     </div>

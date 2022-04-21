@@ -3,7 +3,6 @@
 //return to login
 import InputLine from "./InputLine"
 import { useState } from "react"
-import Button from "./Button"
 
 
 
@@ -11,11 +10,11 @@ const Register = ({ user_list, addUser, checkUser }) => {
     const [down_alert, setAlert] = useState(['', ''])
 
     //show all existing users for tests:
-    const showUsers = () => {
-        user_list.map((user) => (
-            alert('username: ' + user.user_name + ' password: ' + user.password)
-        ))
-    }
+    // const showUsers = () => {
+    //     user_list.map((user) => (
+    //         alert('username: ' + user.user_name + ' password: ' + user.password)
+    //     ))
+    // }
     const [profilePicture, setProfilePicture] = useState();
     const handlePicture = (e) => {
         //console.log(e.target.files[0])
@@ -130,7 +129,7 @@ const Register = ({ user_list, addUser, checkUser }) => {
                 <br />
             </form>
 
-            <Button label='show users' classy="btn btn-primary" onClick={showUsers} />
+            {/* <Button label='show users' classy="btn btn-primary" onClick={showUsers} /> */}
 
             <div className="" id="error_message_reg">
                 <div className={down_alert[1]} role="alert" id="alert">
