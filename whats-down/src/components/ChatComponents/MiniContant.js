@@ -1,5 +1,6 @@
 //Mini contact blocks on the left side of the chat window
 import LastMessageCalc from "../../functions/LastMessageCalc"
+import TimeStempCalc from "../../functions/TimeStempCalc"
 const MiniContant = ( {args} ) => {
 
   return (
@@ -17,7 +18,7 @@ const MiniContant = ( {args} ) => {
                 </div>
                 <div className="col">
                   <p className="card-text" style={{ textAlign: 'right' }}><small className="text-muted">
-                    {args.contact.last_message_time}
+                    {TimeStempCalc(args.contact.last_message.props.timeStamp)}
                   </small></p>
                 </div>
               </div>

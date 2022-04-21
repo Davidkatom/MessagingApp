@@ -8,7 +8,6 @@ import { ImAttachment } from 'react-icons/im';
 import { RiCloseCircleLine } from 'react-icons/ri';
 import { AiOutlineCamera, AiFillVideoCamera } from 'react-icons/ai';
 import { BiMicrophone } from 'react-icons/bi';
-import TimeStempCalc from '../functions/TimeStempCalc';
 import CurrentContact from './ChatComponents/CurrentContact';
 import SendVideo from './AttachmentElements/SendVideo';
 import AddNewContact from './ChatComponents/AddNewContact';
@@ -50,49 +49,41 @@ const ChatScreen = ({ current_user }) => {
             contact_name: 'omer',
             chat_history: [(<MessageElm direction="send" src={'hellow'} timeStamp={date2} messagetype='text' />), (<MessageElm direction="receive" src={'second hello'} timeStamp={date1} messagetype='text' />)],
             last_message: (<MessageElm direction="receive" src={'second hello'} timeStamp={date1} messagetype='text' />),
-            last_message_time: TimeStempCalc(date1),
         },
         {
             contact_name: 'david',
             chat_history: [(<MessageElm direction="send" src={'long live sparta'} timeStamp={date2} messagetype='text' />)],
             last_message: (<MessageElm direction="send" src={'long live sparta'} timeStamp={date2} messagetype='text' />),
-            last_message_time: TimeStempCalc(date2),
         },
         {
             contact_name: 'joe',
             chat_history: [(<MessageElm direction="send" src={'The clowns are comming!'} timeStamp={date3} messagetype='text' />)],
             last_message: (<MessageElm direction="send" src={'The clowns are comming!'} timeStamp={date3} messagetype='text' />),
-            last_message_time: TimeStempCalc(date3),
         },
         {
             contact_name: 'yossi',
             chat_history: [],
             last_message: emptyMsg,
-            last_message_time: null,
         },
         {
             contact_name: 'Hampti',
             chat_history: [],
             last_message: emptyMsg,
-            last_message_time: null,
         },
         {
             contact_name: 'Dampti',
             chat_history: [],
             last_message: emptyMsg,
-            last_message_time: null,
         },
         {
             contact_name: 'Tidididam',
             chat_history: [],
             last_message: emptyMsg,
-            last_message_time: null,
         },
         {
             contact_name: 'UmcoolTum',
             chat_history: [],
             last_message: emptyMsg,
-            last_message_time: "2 minutes",
         }
     ]);
     const sendText = () => {
@@ -146,7 +137,7 @@ const ChatScreen = ({ current_user }) => {
             if (contact_item.contact_name === cahnged_contact) {
                 if (messages.length > 0) {contact_item.last_message = messages[messages.length - 1]}
                 contact_item.chat_history = messages
-                contact_item.last_message_time = (messages.length > 0 ? TimeStempCalc(messages[messages.length - 1].props.timeStamp) : '')
+                // contact_item.last_message_time = (messages.length > 0 ? TimeStempCalc(messages[messages.length - 1].props.timeStamp) : '')
             }
         })
 
@@ -177,7 +168,7 @@ const ChatScreen = ({ current_user }) => {
             contact_name: newContactName,
             chat_history: [],
             last_message: emptyMsg,
-            last_message_time: null
+            // last_message_time: null
         }
         setContact_List([...contact_list, new_contact])
         return 'success'
