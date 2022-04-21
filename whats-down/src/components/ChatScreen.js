@@ -2,7 +2,6 @@
 import { useState, useRefm, useEffect } from 'react';
 import SendPhoto from './AttachmentElements/SendPhoto'
 import SendAudio from './AttachmentElements/SendAudio'
-import ImageElm from './AttachmentElements/ImageElm';
 import MessageElm from './AttachmentElements/MessageElm.js'
 import ContactSide from './ChatComponents/ContactSide';
 import { ImAttachment } from 'react-icons/im';
@@ -11,10 +10,8 @@ import { AiOutlineCamera, AiFillVideoCamera } from 'react-icons/ai';
 import { BiMicrophone } from 'react-icons/bi';
 import TimeStempCalc from '../functions/TimeStempCalc';
 import CurrentContact from './ChatComponents/CurrentContact';
-import VideoElm from './AttachmentElements/VideoElm';
 import SendVideo from './AttachmentElements/SendVideo';
 import AddNewContact from './ChatComponents/AddNewContact';
-import AudioElm from './AttachmentElements/AudioElm';
 
 var checked = false
 const ChatScreen = ({ current_user }) => {
@@ -47,83 +44,82 @@ const ChatScreen = ({ current_user }) => {
     date2.setDate(date2.getDate() - 1);
     var date3 = new Date();
     date3.setMinutes(date3.getMinutes() - 12);
-
+    var emptyMsg = <MessageElm direction="send" src={'empty chat'} timeStamp={null} messagetype='text' />;
     const [contact_list, setContact_List] = useState([
         {
             contact_name: 'omer',
-            chat_history: [(<MessageElm direction="send" text={'hellow'} timeStamp={date2} />), (<MessageElm direction="receive" text={'second hello'} timeStamp={date1} />)],
-            last_message: (<MessageElm direction="receive" text={'second hello'} timeStamp={date1} />),
+            chat_history: [(<MessageElm direction="send" src={'hellow'} timeStamp={date2} messagetype='text' />), (<MessageElm direction="receive" src={'second hello'} timeStamp={date1} messagetype='text' />)],
+            last_message: (<MessageElm direction="receive" src={'second hello'} timeStamp={date1} messagetype='text' />),
             last_message_time: TimeStempCalc(date1),
         },
         {
             contact_name: 'david',
-            chat_history: [(<MessageElm direction="send" text={'long live sparta'} timeStamp={date2} />)],
-            last_message: (<MessageElm direction="send" text={'long live sparta'} timeStamp={date2} />),
+            chat_history: [(<MessageElm direction="send" src={'long live sparta'} timeStamp={date2} messagetype='text' />)],
+            last_message: (<MessageElm direction="send" src={'long live sparta'} timeStamp={date2} messagetype='text' />),
             last_message_time: TimeStempCalc(date2),
         },
         {
             contact_name: 'joe',
-            chat_history: [(<MessageElm direction="send" text={'The clowns are comming!'} timeStamp={date3} />)],
-            last_message: (<MessageElm direction="send" text={'The clowns are comming!'} timeStamp={date3} />),
+            chat_history: [(<MessageElm direction="send" src={'The clowns are comming!'} timeStamp={date3} messagetype='text' />)],
+            last_message: (<MessageElm direction="send" src={'The clowns are comming!'} timeStamp={date3} messagetype='text' />),
             last_message_time: TimeStempCalc(date3),
         },
         {
             contact_name: 'yossi',
             chat_history: [],
-            last_message: 'empty chat',
-            last_message_time: '',
+            last_message: emptyMsg,
+            last_message_time: null,
         },
         {
             contact_name: 'Hampti',
             chat_history: [],
-            last_message: 'empty chat',
-            last_message_time: '',
+            last_message: emptyMsg,
+            last_message_time: null,
         },
         {
             contact_name: 'Dampti',
             chat_history: [],
-            last_message: 'empty chat',
-            last_message_time: '',
+            last_message: emptyMsg,
+            last_message_time: null,
         },
         {
             contact_name: 'Tidididam',
             chat_history: [],
-            last_message: 'empty chat',
-            last_message_time: '',
+            last_message: emptyMsg,
+            last_message_time: null,
         },
         {
             contact_name: 'UmcoolTum',
             chat_history: [],
-            last_message: 'empty chat',
-            last_message_time: '',
+            last_message: emptyMsg,
+            last_message_time: "2 minutes",
         }
     ]);
     const sendText = () => {
         let input = document.getElementById('message').value
         if (input != "") {
-            var elm = (<MessageElm direction="send" text={input} timeStamp={new Date()} />)
+            var elm = (<MessageElm direction="send" src={input} timeStamp={new Date()} messagetype='text' />)
             setMessages([...messages, elm])
         }
         document.getElementById('message').value = ""
         document.getElementById('chatbox').scrollTop = document.getElementById('chatbox').scrollHeight;
     }
 
-    const sendMedia = (action) => {
+    const sendMedia = (messageType) => {
         return () => {
             const element = document.getElementById('media-to-send')
-            switch (action) {
-                case 'send_audio':
-                    var elm = (<AudioElm direction="send" Src={element.src} timeStamp={new Date()} />)
-                    break;
-                case 'send_video':
-                    var elm = (<VideoElm direction="send" Src={element.src} timeStamp={new Date()} />)
-                    console.log("send video")
-                    break;
-                case 'send_photo':
-                    var elm = (<ImageElm direction="send" Src={element.src} timeStamp={new Date()} />)
-                    console.log("send photo")
-                    break;
-            }
+            var elm = (<MessageElm direction="send" src={element.src} timeStamp={new Date()} messagetype={messageType} />)
+            // switch (action) {
+            //     case 'send_audio':
+            //         var elm = (<AudioElm direction="send" audioSrc={element.src} timeStamp={new Date()} />)
+            //         break;
+            //     case 'send_video':
+            //         var elm = (<VideoElm direction="send" videoSrc={element.src} timeStamp={new Date()} />)
+            //         break;
+            //     case 'send_photo':
+            //         var elm = (<ImageElm direction="send" imageSrc={element.src} timeStamp={new Date()} />)
+            //         break;
+            // }
             if (!element.classList.contains('collapse')) {
                 setMessages([...messages, elm])
                 document.getElementById('media-to-send').src = ""
@@ -148,7 +144,7 @@ const ChatScreen = ({ current_user }) => {
     const contact_chat_change = (cahnged_contact) => {
         contact_list.map((contact_item) => {
             if (contact_item.contact_name === cahnged_contact) {
-                contact_item.last_message = (messages.length > 0 ? messages[messages.length - 1] : 'empty chat')
+                if (messages.length > 0) {contact_item.last_message = messages[messages.length - 1]}
                 contact_item.chat_history = messages
                 contact_item.last_message_time = (messages.length > 0 ? TimeStempCalc(messages[messages.length - 1].props.timeStamp) : '')
             }
@@ -164,7 +160,6 @@ const ChatScreen = ({ current_user }) => {
         document.getElementById(contact.contact_name).classList.add('selected-chat')
         set_contact_name(contact.contact_name)
         setMessages(contact.chat_history)
-        console.log('check')
         document.getElementById('ChatSide').classList.remove('collapse')
     }
     //add a new contact to the contact list
@@ -181,8 +176,8 @@ const ChatScreen = ({ current_user }) => {
         let new_contact = {
             contact_name: newContactName,
             chat_history: [],
-            last_message: 'empty chat',
-            last_message_time: ''
+            last_message: emptyMsg,
+            last_message_time: null
         }
         setContact_List([...contact_list, new_contact])
         return 'success'
@@ -197,7 +192,6 @@ const ChatScreen = ({ current_user }) => {
                         <div className="col-6">
                             <img className="float-start img-thumbnail rounded-start right-padding-for-picture" src={require('../../src/Images/blank-profile-picture.png')} alt="user-profile-picture" />
                             <h2 className="card-title">{current_user}</h2>
-                            {console.log(current_user)}
                         </div>
                         <div className="col-6 align-right">
                             <AddNewContact addContact={addContact} />
@@ -208,7 +202,7 @@ const ChatScreen = ({ current_user }) => {
                 </div>
                 <CurrentContact contact_name={curernt_Contact_name} />
                 <ContactSide args={{ contact_list: contact_list, selectContact: selectContact }} />
-                <div className="col-sm chat-space collapse"id='ChatSide'>
+                <div className="col-sm chat-space collapse" id='ChatSide'>
                     <div className="chat-box scrollable" id="chatbox">
                         {messages}
                     </div>
@@ -218,15 +212,15 @@ const ChatScreen = ({ current_user }) => {
                                 <button className="btn btn-light" id="attach" onClick={toggle}><ImAttachment /></button>
                                 <button className={classes} type="checkbox" id='photo' data-bs-toggle="modal" data-bs-target="#PopupModal" onClick={() => {
                                     setsendingRef((<SendPhoto />))
-                                    setButtonSend(() => sendMedia("send_photo"))
+                                    setButtonSend(() => sendMedia("image"))
                                 }}  > <AiOutlineCamera /></button>
                                 <button className={classes} type="checkbox" id='video' data-bs-toggle="modal" data-bs-target="#PopupModal" onClick={() => {
                                     setsendingRef((<SendVideo />))
-                                    setButtonSend(() => sendMedia("send_video"))
+                                    setButtonSend(() => sendMedia("video"))
                                 }}><AiFillVideoCamera /></button>
                                 <button className={classes} type="checkbox" id='audio' data-bs-toggle="modal" data-bs-target="#PopupModal" onClick={() => {
                                     setsendingRef((<SendAudio />))
-                                    setButtonSend(() => sendMedia("send_audio"))
+                                    setButtonSend(() => sendMedia("audio"))
                                 }}><BiMicrophone /></button>
                                 <button className={classes} type="checkbox" id='close' onClick={toggle}><RiCloseCircleLine /></button>
                             </div>
