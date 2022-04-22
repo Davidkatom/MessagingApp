@@ -14,7 +14,7 @@ import AddNewContact from './ChatComponents/AddNewContact';
 
 var checked = false
 const ChatScreen = ({ current_user }) => {
-
+    console.log(current_user)
 
     const [buttonSend, setButtonSend] = useState(null)
 
@@ -181,8 +181,8 @@ const ChatScreen = ({ current_user }) => {
                 <div className="col-5">
                     <div className="row row-chat">
                         <div className="col-6">
-                            <img className="float-start img-thumbnail rounded-start right-padding-for-picture" src={require('../../src/Images/blank-profile-picture.png')} alt="user-profile-picture" />
-                            <h2 className="card-title">{current_user}</h2>
+                            <img className="float-start img-thumbnail rounded-start right-padding-for-picture" src={current_user.picture} alt="user-profile-picture" />
+                            <h2 className="card-title">{current_user.display_name}</h2>
                         </div>
                         <div className="col-6 align-right">
                             <AddNewContact addContact={addContact} />

@@ -6,7 +6,7 @@ import { useState } from "react"
 
 
 
-const Register = ({ user_list, addUser, checkUser }) => {
+const Register = ({ user_list, addUser, checkUser, close}) => {
     const [down_alert, setAlert] = useState(['', ''])
 
     //show all existing users for tests:
@@ -95,6 +95,8 @@ const Register = ({ user_list, addUser, checkUser }) => {
         document.getElementById('password1').value = ''
         document.getElementById('password2').value = ''
         document.getElementById('display_name').value = ''
+
+        close()
         //document.getElementById('picture').value = ''
     }
 
