@@ -1,5 +1,5 @@
 
-import { useState, useRefm, useEffect } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import SendPhoto from './AttachmentElements/SendPhoto'
 import SendAudio from './AttachmentElements/SendAudio'
 import MessageElm from './AttachmentElements/MessageElm.js'
@@ -11,18 +11,25 @@ import { BiMicrophone } from 'react-icons/bi';
 import CurrentContact from './ChatComponents/CurrentContact';
 import SendVideo from './AttachmentElements/SendVideo';
 import AddNewContact from './ChatComponents/AddNewContact';
+import { useNavigate } from 'react-router-dom';
+
 
 var checked = false
 const ChatScreen = ({ current_user }) => {
-    console.log(current_user)
+    const navigate = useNavigate();
+    const refresh = useCallback(() => navigate('/', { replace: true }), [navigate]);
+
+    useEffect(() => {
+        console.log(current_user)
+        if(current_user == "No UserName"){
+            console.log("YAY")
+            refresh()
+        }
+    });
+
 
     const [buttonSend, setButtonSend] = useState(null)
-
     const [sendingRef, setsendingRef] = useState(null)
-
-    const sendAudio = () => { }
-    const sendVideo = () => { }
-    const sendLocation = () => { }
 
     const toggle = () => {
         if (checked === false) {
