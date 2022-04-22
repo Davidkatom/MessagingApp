@@ -12,7 +12,7 @@ function App() {
         user_name: 'omer',
         password: '123',
         display_name: 'hamdiTools',
-        picture: "Images/blank-profile-picture.png",
+        picture: "blank-profile-picture.png",
       }
     }
 
