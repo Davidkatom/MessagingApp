@@ -9,7 +9,7 @@ const SendPhoto = () => {
     return (
         <div className="send-photo">
             <label className="input-group-text" for='picture'>Upload an image:</label>
-            <input type="file" className="form-control" id='picture' onChange={handlePicture}></input>
+            <input type="file" className="form-control" id='picture' accept="image/*" onChange={handlePicture}></input>
             <img src={Picture} alt="Pic" className="img-thumbnail collapse" width="140" height="140" id = "media-to-send"/>
         </div>
     )

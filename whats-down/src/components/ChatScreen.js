@@ -65,7 +65,7 @@ const ChatScreen = ({ current_user }) => {
         {
             contact_name: 'joe',
             chat_history: [(<MessageElm direction="receive" src={'Turret Im Different.mp3'} timeStamp={date3} messagetype='audio' />), (<MessageElm direction="send" src={'לוזר'} timeStamp={date2} messagetype='text' />)],
-            last_message: (<MessageElm direction="send" src={'The clowns are comming!'} timeStamp={date3} messagetype='text' />),
+            last_message: (<MessageElm direction="send" src={'לוזר'} timeStamp={date2} messagetype='text' />),
         },
         {
             contact_name: 'yossi',

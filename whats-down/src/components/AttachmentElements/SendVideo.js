@@ -9,7 +9,7 @@ const SendVideo = () => {
     return (
         <div className="send-photo">
             <label className="input-group-text" for='picture'>Upload a Video:</label>
-            <input type="file" className="form-control" id='picture' onChange={handleVideo}></input>
+            <input type="file" className="form-control" accept="video/*" id='picture' onChange={handleVideo}></input>
             <video src={Video} alt="Pic" className="img-thumbnail collapse" width="140" height="140"  type="video/mp4" id = "media-to-send"/>
         </div>
     )
