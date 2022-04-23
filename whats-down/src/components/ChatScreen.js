@@ -21,7 +21,7 @@ const ChatScreen = ({ current_user }) => {
 
     useEffect(() => {
         console.log(current_user)
-        if(current_user == "No UserName"){
+        if (current_user == "No UserName") {
             console.log("YAY")
             refresh()
         }
@@ -54,17 +54,17 @@ const ChatScreen = ({ current_user }) => {
     const [contact_list, setContact_List] = useState([
         {
             contact_name: 'omer',
-            chat_history: [(<MessageElm direction="send" src={'hellow'} timeStamp={date2} messagetype='text' />), (<MessageElm direction="receive" src={'second hello'} timeStamp={date1} messagetype='text' />)],
+            chat_history: [(<MessageElm direction="send" src={'hello'} timeStamp={date2} messagetype='text' />), (<MessageElm direction="receive" src={'שלום בחזרה'} timeStamp={date1} messagetype='text' />)],
             last_message: (<MessageElm direction="receive" src={'second hello'} timeStamp={date1} messagetype='text' />),
         },
         {
             contact_name: 'david',
-            chat_history: [(<MessageElm direction="send" src={'long live sparta'} timeStamp={date2} messagetype='text' />)],
-            last_message: (<MessageElm direction="send" src={'long live sparta'} timeStamp={date2} messagetype='text' />),
+            chat_history: [(<MessageElm direction="send" src={'cake.jpg'} timeStamp={date2} messagetype='image' />), (<MessageElm direction="receive" src={'Still Alive.mp4'} timeStamp={date1} messagetype='video' />)],
+            last_message: (<MessageElm direction="send" src={'Still Alive.mp4'} timeStamp={date2} messagetype='video' />),
         },
         {
             contact_name: 'joe',
-            chat_history: [(<MessageElm direction="send" src={'The clowns are comming!'} timeStamp={date3} messagetype='text' />)],
+            chat_history: [(<MessageElm direction="receive" src={'Turret Im Different.mp3'} timeStamp={date3} messagetype='audio' />), (<MessageElm direction="send" src={'לוזר'} timeStamp={date2} messagetype='text' />)],
             last_message: (<MessageElm direction="send" src={'The clowns are comming!'} timeStamp={date3} messagetype='text' />),
         },
         {
@@ -126,6 +126,7 @@ const ChatScreen = ({ current_user }) => {
             document.getElementById('send_button').classList.add('collapse');
             document.getElementById('send_button').value = ""
             setsendingRef(null)
+            
         }
 
     }
@@ -142,7 +143,7 @@ const ChatScreen = ({ current_user }) => {
     const contact_chat_change = (cahnged_contact) => {
         contact_list.map((contact_item) => {
             if (contact_item.contact_name === cahnged_contact) {
-                if (messages.length > 0) {contact_item.last_message = messages[messages.length - 1]}
+                if (messages.length > 0) { contact_item.last_message = messages[messages.length - 1] }
                 contact_item.chat_history = messages
                 // contact_item.last_message_time = (messages.length > 0 ? TimeStempCalc(messages[messages.length - 1].props.timeStamp) : '')
             }
@@ -156,9 +157,20 @@ const ChatScreen = ({ current_user }) => {
             document.getElementById(curernt_Contact_name).classList.remove('selected-chat')
         }
         document.getElementById(contact.contact_name).classList.add('selected-chat')
+        document.getElementById("message").value = ''
+
         set_contact_name(contact.contact_name)
         setMessages(contact.chat_history)
         document.getElementById('ChatSide').classList.remove('collapse')
+        resetSendMedia()
+    }
+
+    const resetSendMedia = () => {
+        document.getElementById('media-to-send').src = ""
+        document.getElementById('media-to-send').classList.add('collapse')
+        document.getElementById('send_button').classList.add('collapse');
+        document.getElementById('send_button').value = ""
+        setsendingRef(null)
     }
     //add a new contact to the contact list
     const addContact = (newContactName) => {
