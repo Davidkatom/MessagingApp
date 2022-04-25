@@ -21,6 +21,7 @@ const ChatScreen = ({ current_user }) => {
 
     useEffect(() => {
         console.log(current_user)
+        document.getElementById('chatbox').scrollTop = document.getElementById('chatbox').scrollHeight;
         if (current_user == "No UserName") {
             console.log("YAY")
             refresh()
@@ -94,12 +95,13 @@ const ChatScreen = ({ current_user }) => {
         }
     ]);
     const sendText = () => {
-        let input = document.getElementById('message').value
+        var input = document.getElementById('message').value
         if (input != "") {
             var elm = (<MessageElm direction="send" src={input} timeStamp={new Date()} messagetype='text' />)
             setMessages([...messages, elm])
         }
         document.getElementById('message').value = ""
+        //console.log(document.getElementById('chatbox').scrollHeight)
         document.getElementById('chatbox').scrollTop = document.getElementById('chatbox').scrollHeight;
     }
 
