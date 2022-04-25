@@ -20,7 +20,6 @@ const Login = ({ user_list, addUser, checkUser, set_current_user }) => {
     const handleShow = () => setShow(true);
 
     const logBu = function loginButton() {
-        // console.log("Click")
         var myCollapseS = document.getElementById('success')
         var myCollapseE = document.getElementById('error_message')
         //check if user and password in data base
@@ -29,7 +28,6 @@ const Login = ({ user_list, addUser, checkUser, set_current_user }) => {
         if (checkUser(document.getElementById('username').value) && user_list[document.getElementById('username').value].user_name === document.getElementById('username').value && user_list[document.getElementById('username').value].password === document.getElementById('password').value) {
             myCollapseE.classList.add('collapse');
             myCollapseS.classList.remove('collapse');
-            console.log("Login Successful");
             var user = user_list
             set_current_user(user_list[document.getElementById('username').value])
             handleOnClick();

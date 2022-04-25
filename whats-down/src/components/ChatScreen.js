@@ -1,5 +1,5 @@
 
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, Component } from 'react';
 import SendPhoto from './AttachmentElements/SendPhoto'
 import SendAudio from './AttachmentElements/SendAudio'
 import MessageElm from './AttachmentElements/MessageElm.js'
@@ -13,12 +13,14 @@ import SendVideo from './AttachmentElements/SendVideo';
 import AddNewContact from './ChatComponents/AddNewContact';
 import { useNavigate } from 'react-router-dom';
 
-
 var checked = false
+
+
 const ChatScreen = ({ current_user }) => {
     const navigate = useNavigate();
     const refresh = useCallback(() => navigate('/', { replace: true }), [navigate]);
 
+<<<<<<< Updated upstream
     useEffect(() => {
         console.log(current_user)
         document.getElementById('chatbox').scrollTop = document.getElementById('chatbox').scrollHeight;
@@ -27,6 +29,9 @@ const ChatScreen = ({ current_user }) => {
             refresh()
         }
     });
+=======
+
+>>>>>>> Stashed changes
 
 
     const [buttonSend, setButtonSend] = useState(null)
@@ -44,6 +49,28 @@ const ChatScreen = ({ current_user }) => {
 
     const [classes, setClasses] = useState("btn btn-light collapse");
     const [messages, setMessages] = useState([]);
+    function messageElements() {
+        console.log(this.state)
+        console.log('1')
+        const isBlocked = this.state;
+        console.log('2')
+        
+        if (isBlocked) {
+
+            console.log('blocked');
+        }
+        this.setState(
+            console.log('a'),
+            prevState => ({ isCollapsed: !prevState.isCollapsed }),
+            () => {
+                console.log('isCollapsed: ' + this.state.isCollapsed);
+                console.log('done1');
+            }
+        );
+        // Always this line is fired first
+        console.log('done2');
+
+    }
 
 
     var date1 = new Date();
@@ -94,11 +121,17 @@ const ChatScreen = ({ current_user }) => {
             last_message: emptyMsg,
         }
     ]);
+
+
     const sendText = () => {
         var input = document.getElementById('message').value
         if (input != "") {
             var elm = (<MessageElm direction="send" src={input} timeStamp={new Date()} messagetype='text' />)
             setMessages([...messages, elm])
+            console.log('omer start')
+            messageElements()
+            console.log('omer finish')
+
         }
         document.getElementById('message').value = ""
         //console.log(document.getElementById('chatbox').scrollHeight)
@@ -109,17 +142,6 @@ const ChatScreen = ({ current_user }) => {
         return () => {
             const element = document.getElementById('media-to-send')
             var elm = (<MessageElm direction="send" src={element.src} timeStamp={new Date()} messagetype={messageType} />)
-            // switch (action) {
-            //     case 'send_audio':
-            //         var elm = (<AudioElm direction="send" audioSrc={element.src} timeStamp={new Date()} />)
-            //         break;
-            //     case 'send_video':
-            //         var elm = (<VideoElm direction="send" videoSrc={element.src} timeStamp={new Date()} />)
-            //         break;
-            //     case 'send_photo':
-            //         var elm = (<ImageElm direction="send" imageSrc={element.src} timeStamp={new Date()} />)
-            //         break;
-            // }
             if (!element.classList.contains('collapse')) {
                 setMessages([...messages, elm])
                 document.getElementById('media-to-send').src = ""
@@ -128,16 +150,21 @@ const ChatScreen = ({ current_user }) => {
             document.getElementById('send_button').classList.add('collapse');
             document.getElementById('send_button').value = ""
             setsendingRef(null)
-            
+
         }
 
     }
 
     useEffect(() => {
-        if (messages) {
-            contact_chat_change(curernt_Contact_name)
+
+        // if (messages) {
+        //     contact_chat_change(curernt_Contact_name)
+        // }
+        // make sure a user is logged in - otherwise redirect to login page
+        if (current_user == "No UserName") {
+            refresh()
         }
-    }, [messages]);
+    });
 
     const [curernt_Contact_name, set_contact_name] = useState("-");
 

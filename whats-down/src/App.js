@@ -38,7 +38,6 @@ function App() {
   }
 
   function getCurrentUserName() {
-    console.log(current_user)
     return current_user;
   }
 
@@ -46,7 +45,6 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Routes>
-          {console.log(current_user)}
           <Route path="/" element={<Login user_list={user_list} checkUser={checkUser} addUser={addUser} set_current_user={set_current_user} />} />
           <Route path="/chat" element={<ChatScreen current_user={current_user} />} />
         </Routes>
