@@ -115,7 +115,7 @@ const Register = ({ user_list, addUser, checkUser, close}) => {
                     <InputLine label='Display Name:' type='text' id='display_name' placeholder='Enter Display Name' />
                     <div className="row">
                         <div className="col-sm">
-                            <label className="input-group-text" for='picture'>Upload a Profile Picture:</label>
+                            <label className="input-group-text" htmlFor='picture'>Upload a Profile Picture:</label>
                             <input type="file" className="form-control" id='picture' onChange={handlePicture}></input>
                         </div>
                         <div className="col-sm collapse" id='profile_mini_pic'>
