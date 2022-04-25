@@ -20,18 +20,7 @@ const ChatScreen = ({ current_user }) => {
     const navigate = useNavigate();
     const refresh = useCallback(() => navigate('/', { replace: true }), [navigate]);
 
-<<<<<<< Updated upstream
-    useEffect(() => {
-        console.log(current_user)
-        document.getElementById('chatbox').scrollTop = document.getElementById('chatbox').scrollHeight;
-        if (current_user == "No UserName") {
-            console.log("YAY")
-            refresh()
-        }
-    });
-=======
 
->>>>>>> Stashed changes
 
 
     const [buttonSend, setButtonSend] = useState(null)
@@ -54,7 +43,7 @@ const ChatScreen = ({ current_user }) => {
         console.log('1')
         const isBlocked = this.state;
         console.log('2')
-        
+
         if (isBlocked) {
 
             console.log('blocked');
@@ -123,19 +112,26 @@ const ChatScreen = ({ current_user }) => {
     ]);
 
 
-    const sendText = () => {
+    function resolveAfter2Seconds(x) {
+        return new Promise(resolve => {
+          setTimeout(() => {
+            resolve(x);
+          }, 2000);
+        });
+      };
+    const sendText = async () => {
         var input = document.getElementById('message').value
         if (input != "") {
             var elm = (<MessageElm direction="send" src={input} timeStamp={new Date()} messagetype='text' />)
-            setMessages([...messages, elm])
+            let b = await setMessages([...messages, elm])
             console.log('omer start')
-            messageElements()
+            let a = await resolveAfter2Seconds(20)
+            // messageElements()
             console.log('omer finish')
 
         }
         document.getElementById('message').value = ""
         //console.log(document.getElementById('chatbox').scrollHeight)
-        document.getElementById('chatbox').scrollTop = document.getElementById('chatbox').scrollHeight;
     }
 
     const sendMedia = (messageType) => {
@@ -157,10 +153,11 @@ const ChatScreen = ({ current_user }) => {
 
     useEffect(() => {
 
-        // if (messages) {
-        //     contact_chat_change(curernt_Contact_name)
-        // }
+        if (messages) {
+            contact_chat_change(curernt_Contact_name)
+        }
         // make sure a user is logged in - otherwise redirect to login page
+        document.getElementById('chatbox').scrollTop = document.getElementById('chatbox').scrollHeight;
         if (current_user == "No UserName") {
             refresh()
         }
@@ -174,7 +171,6 @@ const ChatScreen = ({ current_user }) => {
             if (contact_item.contact_name === cahnged_contact) {
                 if (messages.length > 0) { contact_item.last_message = messages[messages.length - 1] }
                 contact_item.chat_history = messages
-                // contact_item.last_message_time = (messages.length > 0 ? TimeStempCalc(messages[messages.length - 1].props.timeStamp) : '')
             }
         })
 
