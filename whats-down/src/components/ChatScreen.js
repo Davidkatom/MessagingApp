@@ -38,28 +38,7 @@ const ChatScreen = ({ current_user }) => {
 
     const [classes, setClasses] = useState("btn btn-light collapse");
     const [messages, setMessages] = useState([]);
-    function messageElements() {
-        console.log(this.state)
-        console.log('1')
-        const isBlocked = this.state;
-        console.log('2')
 
-        if (isBlocked) {
-
-            console.log('blocked');
-        }
-        this.setState(
-            console.log('a'),
-            prevState => ({ isCollapsed: !prevState.isCollapsed }),
-            () => {
-                console.log('isCollapsed: ' + this.state.isCollapsed);
-                console.log('done1');
-            }
-        );
-        // Always this line is fired first
-        console.log('done2');
-
-    }
 
 
     var date1 = new Date();
@@ -111,27 +90,13 @@ const ChatScreen = ({ current_user }) => {
         }
     ]);
 
-
-    function resolveAfter2Seconds(x) {
-        return new Promise(resolve => {
-          setTimeout(() => {
-            resolve(x);
-          }, 2000);
-        });
-      };
-    const sendText = async () => {
+    const sendText = () => {
         var input = document.getElementById('message').value
         if (input != "") {
             var elm = (<MessageElm direction="send" src={input} timeStamp={new Date()} messagetype='text' />)
-            let b = await setMessages([...messages, elm])
-            console.log('omer start')
-            let a = await resolveAfter2Seconds(20)
-            // messageElements()
-            console.log('omer finish')
-
+            setMessages([...messages, elm])
         }
         document.getElementById('message').value = ""
-        //console.log(document.getElementById('chatbox').scrollHeight)
     }
 
     const sendMedia = (messageType) => {
@@ -151,30 +116,39 @@ const ChatScreen = ({ current_user }) => {
 
     }
 
-    useEffect(() => {
 
+    //refresh chat side every 0.1 seconds:
+    const interval = setInterval(() => {
+        refreshContactSide()
+    }, 100);
+
+    useEffect(() => {
         if (messages) {
             contact_chat_change(curernt_Contact_name)
         }
-        // make sure a user is logged in - otherwise redirect to login page
+        //set scrolling correctly
         document.getElementById('chatbox').scrollTop = document.getElementById('chatbox').scrollHeight;
+        // make sure a user is logged in - otherwise redirect to login page
         if (current_user == "No UserName") {
             refresh()
         }
     });
 
     const [curernt_Contact_name, set_contact_name] = useState("-");
-
     //update the contact list when a new message sent/recived
     const contact_chat_change = (cahnged_contact) => {
         contact_list.map((contact_item) => {
             if (contact_item.contact_name === cahnged_contact) {
-                if (messages.length > 0) { contact_item.last_message = messages[messages.length - 1] }
+                if (messages.length > 0) {
+                    contact_item.last_message = messages[messages.length - 1]
+                    // console.log(contact_item.last_message)
+                }
                 contact_item.chat_history = messages
+                setMessages(contact_item.chat_history)
             }
         })
-
         setContact_List(contact_list)
+
     }
     //select a spescific contact, update current chat history and last message
     const selectContact = (contact) => {
@@ -218,6 +192,10 @@ const ChatScreen = ({ current_user }) => {
         return 'success'
     }
 
+
+    const [update, setUpdate] = useState(0);
+    const refreshContactSide = () => { setUpdate(update + 1) };
+
     return (
 
         <div className='container large'>
@@ -230,8 +208,6 @@ const ChatScreen = ({ current_user }) => {
                         </div>
                         <div className="col-6 align-right">
                             <AddNewContact addContact={addContact} />
-                            {/* <button className="btn btn-light " title="add contact" onClick={() => addContact({ name: 'oo' })} ><RiContactsLine /></button> */}
-
                         </div>
                     </div>
                 </div>
