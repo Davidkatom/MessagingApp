@@ -17,3 +17,9 @@ Installation guide:
 4. Run  npm install react-bootstrap
 5. Run  npm install react-router-dom
 6. Run  npm install react-icons --save
+
+LogIn example:
+
+1. If you want to register a new username - press the sign up button and fill the form.
+2. If you want to use a current user, you can use:[usernae ='omer', password='123]
+3. Press the LogIn button and enjoy our platform.
