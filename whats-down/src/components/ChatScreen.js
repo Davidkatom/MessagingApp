@@ -52,41 +52,49 @@ const ChatScreen = ({ current_user }) => {
             contact_name: 'omer',
             chat_history: [(<MessageElm direction="send" src={'hello'} timeStamp={date2} messagetype='text' />), (<MessageElm direction="receive" src={'שלום בחזרה'} timeStamp={date1} messagetype='text' />)],
             last_message: (<MessageElm direction="receive" src={'second hello'} timeStamp={date1} messagetype='text' />),
+            picture: "omer.png",
         },
         {
             contact_name: 'david',
             chat_history: [(<MessageElm direction="send" src={'cake.jpg'} timeStamp={date2} messagetype='image' />), (<MessageElm direction="receive" src={'Still Alive.mp4'} timeStamp={date1} messagetype='video' />)],
             last_message: (<MessageElm direction="send" src={'Still Alive.mp4'} timeStamp={date2} messagetype='video' />),
+            picture: "david.png",
         },
         {
             contact_name: 'joe',
             chat_history: [(<MessageElm direction="receive" src={'Turret Im Different.mp3'} timeStamp={date3} messagetype='audio' />), (<MessageElm direction="send" src={'לוזר'} timeStamp={date2} messagetype='text' />)],
             last_message: (<MessageElm direction="send" src={'לוזר'} timeStamp={date2} messagetype='text' />),
+            picture: "blank-profile-picture.png",
         },
         {
             contact_name: 'yossi',
             chat_history: [],
             last_message: emptyMsg,
+            picture: "blank-profile-picture.png",
         },
         {
             contact_name: 'Hampti',
             chat_history: [],
             last_message: emptyMsg,
+            picture: "blank-profile-picture.png",
         },
         {
             contact_name: 'Dampti',
             chat_history: [],
             last_message: emptyMsg,
+            picture: "blank-profile-picture.png",
         },
         {
             contact_name: 'Tidididam',
             chat_history: [],
             last_message: emptyMsg,
+            picture: "blank-profile-picture.png",
         },
         {
             contact_name: 'UmcoolTum',
             chat_history: [],
             last_message: emptyMsg,
+            picture: "blank-profile-picture.png",
         }
     ]);
 
@@ -124,7 +132,7 @@ const ChatScreen = ({ current_user }) => {
 
     useEffect(() => {
         if (messages) {
-            contact_chat_change(curernt_Contact_name)
+            contact_chat_change(curernt_contact.contact_name)
         }
         //set scrolling correctly
         document.getElementById('chatbox').scrollTop = document.getElementById('chatbox').scrollHeight;
@@ -134,7 +142,7 @@ const ChatScreen = ({ current_user }) => {
         }
     });
 
-    const [curernt_Contact_name, set_contact_name] = useState("-");
+    const [curernt_contact, set_curernt_contact] = useState("-");
     //update the contact list when a new message sent/recived
     const contact_chat_change = (cahnged_contact) => {
         contact_list.map((contact_item) => {
@@ -152,13 +160,13 @@ const ChatScreen = ({ current_user }) => {
     }
     //select a spescific contact, update current chat history and last message
     const selectContact = (contact) => {
-        if (curernt_Contact_name != '-') {
-            document.getElementById(curernt_Contact_name).classList.remove('selected-chat')
+        if (curernt_contact.contact_name != '-') {
+            document.getElementById(curernt_contact.contact_name).classList.remove('selected-chat')
         }
         document.getElementById(contact.contact_name).classList.add('selected-chat')
         document.getElementById("message").value = ''
 
-        set_contact_name(contact.contact_name)
+        set_curernt_contact(contact)
         setMessages(contact.chat_history)
         document.getElementById('ChatSide').classList.remove('collapse')
         resetSendMedia()
@@ -211,7 +219,7 @@ const ChatScreen = ({ current_user }) => {
                         </div>
                     </div>
                 </div>
-                <CurrentContact contact_name={curernt_Contact_name} />
+                <CurrentContact contact_name={curernt_contact.contact_name} />
                 <ContactSide args={{ contact_list: contact_list, selectContact: selectContact }} />
                 <div className="col-sm chat-space collapse" id='ChatSide'>
                     <div className="chat-box scrollable" id="chatbox">
