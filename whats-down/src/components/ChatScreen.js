@@ -52,14 +52,14 @@ const ChatScreen = ({ current_user }) => {
             user_name: 'omer',
             contact_name: 'omer',
             chat_history: [(<MessageElm direction="send" src={'hello'} timeStamp={date2} messagetype='text' />), (<MessageElm direction="receive" src={'שלום בחזרה'} timeStamp={date1} messagetype='text' />)],
-            last_message: (<MessageElm direction="receive" src={'second hello'} timeStamp={date1} messagetype='text' />),
+            last_message: (<MessageElm direction="receive" src={'שלום בחזרה'} timeStamp={date1} messagetype='text' />),
             picture: "omer.png",
         },
         "david": {
             user_name: 'david',
             contact_name: 'david',
             chat_history: [(<MessageElm direction="send" src={'cake.jpg'} timeStamp={date2} messagetype='image' />), (<MessageElm direction="receive" src={'Still Alive.mp4'} timeStamp={date1} messagetype='video' />)],
-            last_message: (<MessageElm direction="send" src={'Still Alive.mp4'} timeStamp={date2} messagetype='video' />),
+            last_message: (<MessageElm direction="send" src={'sent video'} timeStamp={date2} messagetype='text' />),
             picture: "david.png",
         },
         "joe": {
