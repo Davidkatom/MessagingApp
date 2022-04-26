@@ -132,7 +132,7 @@ const ChatScreen = ({ current_user }) => {
 
     useEffect(() => {
         if (messages) {
-            contact_chat_change(curernt_contact.contact_name)
+            contact_chat_change(curernt_Contact_name)
         }
         //set scrolling correctly
         document.getElementById('chatbox').scrollTop = document.getElementById('chatbox').scrollHeight;
@@ -142,7 +142,7 @@ const ChatScreen = ({ current_user }) => {
         }
     });
 
-    const [curernt_contact, set_curernt_contact] = useState("-");
+    const [curernt_Contact_name, set_contact_name] = useState("-");
     //update the contact list when a new message sent/recived
     const contact_chat_change = (cahnged_contact) => {
         contact_list.map((contact_item) => {
@@ -160,13 +160,13 @@ const ChatScreen = ({ current_user }) => {
     }
     //select a spescific contact, update current chat history and last message
     const selectContact = (contact) => {
-        if (curernt_contact.contact_name != '-') {
-            document.getElementById(curernt_contact.contact_name).classList.remove('selected-chat')
+        if (curernt_Contact_name != '-') {
+            document.getElementById(curernt_Contact_name).classList.remove('selected-chat')
         }
         document.getElementById(contact.contact_name).classList.add('selected-chat')
         document.getElementById("message").value = ''
 
-        set_curernt_contact(contact)
+        set_contact_name(contact.contact_name)
         setMessages(contact.chat_history)
         document.getElementById('ChatSide').classList.remove('collapse')
         resetSendMedia()
@@ -219,7 +219,7 @@ const ChatScreen = ({ current_user }) => {
                         </div>
                     </div>
                 </div>
-                <CurrentContact contact_name={curernt_contact.contact_name} />
+                <CurrentContact contact_name={curernt_Contact_name} />
                 <ContactSide args={{ contact_list: contact_list, selectContact: selectContact }} />
                 <div className="col-sm chat-space collapse" id='ChatSide'>
                     <div className="chat-box scrollable" id="chatbox">
