@@ -18,6 +18,8 @@ Installation guide:
 5. Run  npm install react-router-dom
 6. Run  npm install react-icons --save
 
+To lunch the app, write inside the terminal of you favourite softwere development environment 'npm start'
+
 LogIn example:
 
 1. If you want to register a new username - press the sign up button and fill the form.
