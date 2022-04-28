@@ -1,7 +1,6 @@
-import { useState, useEffect } from "react";
 import MiniContant from './MiniContant';
 
-const ContactSide = ({ contact_list , selectContact, key}) => {
+const ContactSide = ({ contact_list , selectContact, flag}) => {
 
     return (
         <div className="col-5 scrollable" id = "contacts">

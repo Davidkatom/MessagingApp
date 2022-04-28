@@ -1,18 +1,15 @@
 //user validation
 //start register
 //lunch chatdowns
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import React, { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import InputLine from './InputLine';
-import Button from './Button';
 import Register from './Register';
 import Modal from 'react-bootstrap/Modal'
 import { useState } from "react"
 
 
-var user_list_local
 const Login = ({ user_list, addUser, checkUser, set_current_user }) => {
     const [show, setShow] = useState(false);
 
@@ -23,12 +20,9 @@ const Login = ({ user_list, addUser, checkUser, set_current_user }) => {
         var myCollapseS = document.getElementById('success')
         var myCollapseE = document.getElementById('error_message')
         //check if user and password in data base
-    
-
         if (checkUser(document.getElementById('username').value) && user_list[document.getElementById('username').value].user_name === document.getElementById('username').value && user_list[document.getElementById('username').value].password === document.getElementById('password').value) {
             myCollapseE.classList.add('collapse');
             myCollapseS.classList.remove('collapse');
-            var user = user_list
             set_current_user(user_list[document.getElementById('username').value])
             handleOnClick();
 
@@ -40,7 +34,6 @@ const Login = ({ user_list, addUser, checkUser, set_current_user }) => {
         }
 
     }
-    user_list_local = user_list;
     const navigate = useNavigate();
     const handleOnClick = useCallback(() => navigate('/chat', { replace: true }), [navigate]);
 
@@ -65,7 +58,7 @@ const Login = ({ user_list, addUser, checkUser, set_current_user }) => {
             </div>
 
             <div className="buttons">
-                <Button label='Login' classy="btn btn-primary" onClick={logBu} id='login_button' />
+                <button label='Login' className="btn btn-primary" onClick={logBu} id='login_button' >Login</button>
                 <button className="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={handleShow} >Sign Up</button>
             </div>
 
@@ -81,7 +74,7 @@ const Login = ({ user_list, addUser, checkUser, set_current_user }) => {
             <Modal show={show} onHide={handleClose}>
 
                 <Modal.Body>
-                    <Register user_list={user_list} checkUser={checkUser} addUser={addUser} close={handleClose}/>
+                    <Register user_list={user_list} checkUser={checkUser} addUser={addUser} close={handleClose} />
                 </Modal.Body>
             </Modal>
         </div>

@@ -1,5 +1,5 @@
 
-import { useState, useCallback, useEffect, Component } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import SendPhoto from './AttachmentElements/SendPhoto'
 import SendAudio from './AttachmentElements/SendAudio'
 import MessageElm from './AttachmentElements/MessageElm.js'
@@ -19,7 +19,6 @@ var checked = false
 const ChatScreen = ({ current_user }) => {
     const navigate = useNavigate();
     const refresh = useCallback(() => navigate('/', { replace: true }), [navigate]);
-    const [contact_side, set_contact_side] = useState({});
     const [refreshed_contact, set_refreshed_contact] = useState(false);
 
 
@@ -94,7 +93,7 @@ const ChatScreen = ({ current_user }) => {
 
     const sendText = () => {
         var input = document.getElementById('message').value
-        if (input != "") {
+        if (input !== "") {
             var elm = (<MessageElm direction="send" src={input} timeStamp={new Date()} messagetype='text' />)
             setMessages([...messages, elm])
             selected_contact.chat_history.push(elm)
@@ -130,7 +129,7 @@ const ChatScreen = ({ current_user }) => {
         //set scrolling correctly
         document.getElementById('chatbox').scrollTop = document.getElementById('chatbox').scrollHeight;
         // make sure a user is logged in - otherwise redirect to login page
-        if (current_user == "No UserName") {
+        if (current_user === "No UserName") {
             refresh()
         }
     });
@@ -142,11 +141,11 @@ const ChatScreen = ({ current_user }) => {
     }
     //select a spescific contact, update current chat history and last message
     const selectContact = (contact) => {
-        if (selected_contact != '') {
+        if (selected_contact !== '') {
             document.getElementById(selected_contact.contact_name).classList.remove('selected-chat')
         }
         var temp_contact = document.getElementById(contact.contact_name)
-        if (temp_contact != null) {
+        if (temp_contact !== null) {
             document.getElementById(contact.contact_name).classList.add('selected-chat')
         }
         document.getElementById("message").value = ''
@@ -201,7 +200,7 @@ const ChatScreen = ({ current_user }) => {
                 <div className="col-5">
                     <div className="row row-chat">
                         <div className="col-6">
-                            <img className="float-start img-thumbnail rounded-start right-padding-for-picture" src={current_user.picture} alt="user-profile-picture" />
+                            <img className="float-start img-thumbnail rounded-start right-padding-for-picture" src={current_user.picture} alt="Profile" />
                             <h2 className="card-title">{current_user.display_name}</h2>
                         </div>
                         <div className="col-6 align-right">
@@ -210,7 +209,7 @@ const ChatScreen = ({ current_user }) => {
                     </div>
                 </div>
                 <CurrentContact contact={selected_contact} />
-                <ContactSide contact_list={contact_list} selectContact={selectContact} key={refreshed_contact} />
+                <ContactSide contact_list={contact_list} selectContact={selectContact} flag={refreshed_contact} />
                 <div className="col-sm chat-space collapse" id='ChatSide'>
                     <div className="chat-box scrollable" id="chatbox">
                         {messages}
@@ -235,7 +234,7 @@ const ChatScreen = ({ current_user }) => {
                             </div>
                         </div>
                         <div className='col-9'>
-                            <input type="text" className="form-control" placeholder="message" id='message' onKeyDown={(e) => { e.key == 'Enter' && sendText() }} />
+                            <input type="text" className="form-control" placeholder="message" id='message' onKeyDown={(e) => { e.key === 'Enter' && sendText() }} />
                         </div>
                         <div className='col-1'>
                             <input type="submit" value="Send" className="btn btn-primary" onClick={sendText} id='send' />
