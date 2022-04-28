@@ -23,5 +23,12 @@ To lunch the app, write inside the terminal of you favourite softwere developmen
 LogIn example:
 
 1. If you want to register a new username - press the sign up button and fill the form.
-2. If you want to use a current user, you can use:[usernae ='omer', password='123]
-3. Press the LogIn button and enjoy our platform.
+2. If you want to use an existing user, you can use:
+  -user_name: 'OmerHamdi'
+        password: 'qwe123'
+   -user_name: 'OtherOmer'
+        password: 'qwe123'
+   - user_name: 'davidShan'
+        password: 'qwe123'
+4. Press the LogIn button and enjoy our platform.
+
