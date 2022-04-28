@@ -103,6 +103,14 @@ const ChatScreen = ({ current_user }) => {
         document.getElementById('message').value = ""
     }
 
+    const clearMedia = () => {
+        const element = document.getElementById('media-to-send')
+        element.classList.add("collapse")
+        document.getElementById('send_button').classList.add('collapse');
+        document.getElementById('send_button').value = ""
+        setsendingRef(null)
+
+    }
     const sendMedia = (messageType) => {
         return () => {
             const element = document.getElementById('media-to-send')
@@ -113,11 +121,7 @@ const ChatScreen = ({ current_user }) => {
                 selected_contact.last_message = <MessageElm direction="send" src={"sent " + messageType} timeStamp={new Date()} messagetype="text" />
                 document.getElementById('media-to-send').src = ""
             }
-            element.classList.add("collapse")
-            document.getElementById('send_button').classList.add('collapse');
-            document.getElementById('send_button').value = ""
-            setsendingRef(null)
-
+            clearMedia()
         }
 
     }
@@ -191,9 +195,6 @@ const ChatScreen = ({ current_user }) => {
     }, [contact_list]);
 
 
-    //const [update, setUpdate] = useState(0);
-    //const refreshContactSide = () => { setUpdate(update + 1) };
-
     return (
 
         <div className='container large'>
@@ -247,7 +248,7 @@ const ChatScreen = ({ current_user }) => {
             <div className="modal fade" id="PopupModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
                 <div className="modal-dialog">
                     <div className="modal-content">
-                        <button type="button" class="btn-close" id = "close-button" data-bs-dismiss="modal"></button>
+                        <button type="button" class="btn-close" onClick={clearMedia} id = "close-button" data-bs-dismiss="modal"></button>
                         {sendingRef}
                         <button className="btn btn-primary collapse" onClick={buttonSend} id='send_button' data-bs-dismiss="modal">Send</button>
 
