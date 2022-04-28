@@ -24,6 +24,7 @@ const SendAudio = () => {
                         const play = () => audio.play();
                         resolve({ audioBlob, audioUrl, play });
                         setRecording(audioUrl)
+                        stream.getTracks().forEach(t => t.stop())
                     });
 
                     mediaRecorder.stop();
