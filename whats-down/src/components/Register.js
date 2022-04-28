@@ -6,10 +6,10 @@ import { useState } from "react"
 
 
 
-const Register = ({ user_list, addUser, checkUser, close}) => {
+const Register = ({ user_list, addUser, checkUser, close }) => {
     const [down_alert, setAlert] = useState(['', ''])
 
-    //show all existing users for tests:
+    //show all existing users for tests: -LEAVE IT FOR NEXT ASSIGNMENT
     // const showUsers = () => {
     //     user_list.map((user) => (
     //         alert('username: ' + user.user_name + ' password: ' + user.password)
@@ -17,11 +17,15 @@ const Register = ({ user_list, addUser, checkUser, close}) => {
     // }
     const [profilePicture, setProfilePicture] = useState();
     const handlePicture = (e) => {
-        //console.log(e.target.files[0])
+        var a = document.getElementById('picture').value
+        console.log(a)
+        console.log('here')
+        console.log(e)
+        console.log(e.target.files[0])
+        console.log(URL.createObjectURL(e.target.files[0]))
         setProfilePicture(URL.createObjectURL(e.target.files[0]))
         document.getElementById('profile_mini_pic').classList.remove('collapse');
         // let picture = e.target.value
-        // document.getElementById('picture').value = picture
     }
     //password validation
     function validatePassword(p1, p2) {
@@ -47,9 +51,10 @@ const Register = ({ user_list, addUser, checkUser, close}) => {
 
     //user validation and registreation
     const on_submit = (e) => {
-
         //prevent default form submit - to prevent page reload
         e.preventDefault();
+        console.log('on submit')
+
         let u_name = document.getElementById('user_name').value
         let p_word1 = document.getElementById('password1').value
         let p_word2 = document.getElementById('password2').value
@@ -67,16 +72,16 @@ const Register = ({ user_list, addUser, checkUser, close}) => {
         if (!validatePassword(p_word1, p_word2)) {
             return
         }
-
         //check display name
         if (d_name.length < 3) {
             setAlert(["Display name must be at least 3 characters long", 'alert alert-danger'])
             return
         }
-        //check picture
-        //todo add picture check
-
-
+        //check profile picture:
+        if (profilePicture === undefined) {
+            setAlert(["You must add a profile picture", 'alert alert-danger'])
+            return
+        }
         //add user to userlist after all validation
         let isRegisterded = addUser({
             user_name: u_name,
@@ -97,12 +102,8 @@ const Register = ({ user_list, addUser, checkUser, close}) => {
         document.getElementById('display_name').value = ''
 
         close()
-        //document.getElementById('picture').value = ''
     }
 
-    // function getImgUrl() {
-    //     return <img src="./Images/blank-profile-picture.png" />;
-    // }
     return (
 
         <div className='container-fluid'>
