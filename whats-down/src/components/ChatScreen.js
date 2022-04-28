@@ -17,10 +17,13 @@ var checked = false
 
 
 const ChatScreen = ({ current_user }) => {
+    var emptyMsg = <MessageElm direction="send" src={'empty chat'} timeStamp={null} messagetype='text' />;
     const navigate = useNavigate();
     const refresh = useCallback(() => navigate('/', { replace: true }), [navigate]);
     const [refreshed_contact, set_refreshed_contact] = useState(false);
-
+    var init_contact_list =current_user === 'No UserName'? []:current_user.contact_list;
+    const [contact_list, setContact_List] = useState(init_contact_list);
+    
 
     const [buttonSend, setButtonSend] = useState(null)
     const [sendingRef, setsendingRef] = useState(null)
@@ -40,56 +43,6 @@ const ChatScreen = ({ current_user }) => {
 
 
 
-    var date1 = new Date();
-    var date2 = new Date();
-    date2.setDate(date2.getDate() - 1);
-    var date3 = new Date();
-    date3.setMinutes(date3.getMinutes() - 12);
-    var emptyMsg = <MessageElm direction="send" src={'empty chat'} timeStamp={null} messagetype='text' />;
-    const [contact_list, setContact_List] = useState({
-        "omer": {
-            user_name: 'omer',
-            contact_name: 'omer',
-            chat_history: [(<MessageElm direction="send" src={'hello'} timeStamp={date2} messagetype='text' />), (<MessageElm direction="receive" src={'שלום בחזרה'} timeStamp={date1} messagetype='text' />)],
-            last_message: (<MessageElm direction="receive" src={'שלום בחזרה'} timeStamp={date1} messagetype='text' />),
-            picture: "omer.png",
-        },
-        "david": {
-            user_name: 'david',
-            contact_name: 'david',
-            chat_history: [(<MessageElm direction="send" src={'cake.jpg'} timeStamp={date2} messagetype='image' />), (<MessageElm direction="receive" src={'Still Alive.mp4'} timeStamp={date1} messagetype='video' />)],
-            last_message: (<MessageElm direction="send" src={'sent video'} timeStamp={date2} messagetype='text' />),
-            picture: "david.png",
-        },
-        "joe": {
-            user_name: 'joe',
-            contact_name: 'joe',
-            chat_history: [(<MessageElm direction="receive" src={'Turret Im Different.mp3'} timeStamp={date3} messagetype='audio' />), (<MessageElm direction="send" src={'לוזר'} timeStamp={date2} messagetype='text' />)],
-            last_message: (<MessageElm direction="send" src={'לוזר'} timeStamp={date2} messagetype='text' />),
-            picture: "blank-profile-picture.png",
-        },
-        "yossi": {
-            user_name: 'yossi',
-            contact_name: 'yossi',
-            chat_history: [],
-            last_message: emptyMsg,
-            picture: "blank-profile-picture.png",
-        },
-        "Hampti": {
-            user_name: 'Hampti',
-            contact_name: 'Hampti',
-            chat_history: [],
-            last_message: emptyMsg,
-            picture: "blank-profile-picture.png",
-        },
-        "Dampti": {
-            user_name: 'Dampti',
-            contact_name: 'Dampti',
-            chat_history: [],
-            last_message: emptyMsg,
-            picture: "blank-profile-picture.png",
-        },
-    });
 
     const sendText = () => {
         var input = document.getElementById('message').value
@@ -126,9 +79,8 @@ const ChatScreen = ({ current_user }) => {
     }
 
     useEffect(() => {
-        setContact_List(contact_list)
         if (messages) {
-            contact_chat_change(selected_contact.contact_name)
+            contact_chat_change(selected_contact.display_name)
         }
         //set scrolling correctly
         document.getElementById('chatbox').scrollTop = document.getElementById('chatbox').scrollHeight;
@@ -146,11 +98,11 @@ const ChatScreen = ({ current_user }) => {
     //select a spescific contact, update current chat history and last message
     const selectContact = (contact) => {
         if (selected_contact !== '') {
-            document.getElementById(selected_contact.contact_name).classList.remove('selected-chat')
+            document.getElementById(selected_contact.display_name).classList.remove('selected-chat')
         }
-        var temp_contact = document.getElementById(contact.contact_name)
+        var temp_contact = document.getElementById(contact.display_name)
         if (temp_contact !== null) {
-            document.getElementById(contact.contact_name).classList.add('selected-chat')
+            document.getElementById(contact.display_name).classList.add('selected-chat')
         }
         document.getElementById("message").value = ''
 
@@ -180,7 +132,7 @@ const ChatScreen = ({ current_user }) => {
 
         var temp = contact_list
         temp[newContactName] = {
-            contact_name: newContactName,
+            display_name: newContactName,
             chat_history: [],
             last_message: emptyMsg,
             picture: "blank-profile-picture.png",
@@ -189,10 +141,6 @@ const ChatScreen = ({ current_user }) => {
         set_refreshed_contact(!refreshed_contact)
         return 'success'
     }
-    useEffect(() => {
-        console.log("contact_list")
-    }, [contact_list]);
-
 
     return (
 
@@ -247,7 +195,7 @@ const ChatScreen = ({ current_user }) => {
             <div className="modal fade" id="PopupModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
                 <div className="modal-dialog">
                     <div className="modal-content">
-                        <button type="button" class="btn-close" onClick={clearMedia} id = "close-button" data-bs-dismiss="modal"></button>
+                        <button type="button" className="btn-close" onClick={clearMedia} id="close-button" data-bs-dismiss="modal"></button>
                         {sendingRef}
                         <button className="btn btn-primary collapse" onClick={buttonSend} id='send_button' data-bs-dismiss="modal">Send</button>
 

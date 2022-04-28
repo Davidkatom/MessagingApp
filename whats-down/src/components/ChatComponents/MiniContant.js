@@ -10,11 +10,11 @@ const MiniContant = ( {args} ) => {
           {/*picture of mini contact */}
           <div className="col-sm-2"><img src={args.contact.picture} className="img-thumbnail " alt="..." /></div>
           {/* body of mini contact */}
-          <div className="col-sm-10 contact_selection" id={args.contact.contact_name}>
+          <div className="col-sm-10 contact_selection" id={args.contact.display_name}>
             <div className="card-body low-padding">
               <div className="row">
                 <div className="col">
-                  <h4 className="card-title" style={{ textAlign: 'left' }}>{args.contact.contact_name}</h4>
+                  <h4 className="card-title" style={{ textAlign: 'left' }}>{args.contact.display_name}</h4>
                 </div>
                 <div className="col">
                   <p className="card-text" style={{ textAlign: 'right' }}><small className="text-muted">
