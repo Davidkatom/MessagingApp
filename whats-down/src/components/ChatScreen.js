@@ -20,7 +20,7 @@ const ChatScreen = ({ current_user }) => {
     const navigate = useNavigate();
     const refresh = useCallback(() => navigate('/', { replace: true }), [navigate]);
     const [contact_side, set_contact_side] = useState({});
-
+    const [refreshed_contact, set_refreshed_contact] = useState(false);
 
 
     const [buttonSend, setButtonSend] = useState(null)
@@ -154,6 +154,7 @@ const ChatScreen = ({ current_user }) => {
         set_selected_contact(contact)
         setMessages(contact.chat_history)
         document.getElementById('ChatSide').classList.remove('collapse')
+        document.getElementById("selected-contact-image").classList.remove('collapse')
         resetSendMedia()
     }
 
@@ -174,16 +175,20 @@ const ChatScreen = ({ current_user }) => {
         if (newContactName.length < 1) { return 'Please enter a valid name' }
         if (newContactName in contact_list) { return 'User already in contact list' }
 
-        contact_list[newContactName] = {
+        var temp = contact_list
+        temp[newContactName] = {
             contact_name: newContactName,
             chat_history: [],
             last_message: emptyMsg,
             picture: "blank-profile-picture.png",
         }
-        setContact_List(contact_list)
-        
+        setContact_List(temp)
+        set_refreshed_contact(!refreshed_contact)
         return 'success'
     }
+    useEffect(() => {
+        console.log("contact_list")
+    }, [contact_list]);
 
 
     //const [update, setUpdate] = useState(0);
@@ -204,8 +209,8 @@ const ChatScreen = ({ current_user }) => {
                         </div>
                     </div>
                 </div>
-                <CurrentContact contact_name={selected_contact.contact_name} />
-                <ContactSide args={{ contact_list: contact_list, selectContact: selectContact }} />
+                <CurrentContact contact={selected_contact} />
+                <ContactSide contact_list={contact_list} selectContact={selectContact} key={refreshed_contact} />
                 <div className="col-sm chat-space collapse" id='ChatSide'>
                     <div className="chat-box scrollable" id="chatbox">
                         {messages}
@@ -239,11 +244,13 @@ const ChatScreen = ({ current_user }) => {
                 </div>
             </div>
 
-            <div className="modal fade" id="PopupModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div className="modal fade" id="PopupModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
                 <div className="modal-dialog">
                     <div className="modal-content">
+                        <button type="button" class="btn-close" id = "close-button" data-bs-dismiss="modal"></button>
                         {sendingRef}
                         <button className="btn btn-primary collapse" onClick={buttonSend} id='send_button' data-bs-dismiss="modal">Send</button>
+
                     </div>
                 </div>
             </div>

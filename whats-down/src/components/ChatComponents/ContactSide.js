@@ -1,16 +1,14 @@
-import {  useEffect } from "react";
+import { useState, useEffect } from "react";
 import MiniContant from './MiniContant';
 
-const ContactSide = ({ args }) => {
+const ContactSide = ({ contact_list , selectContact, key}) => {
 
     return (
-        <div className="col-5 scrollable" >
+        <div className="col-5 scrollable" id = "contacts">
             <div className='direction-fix'>
-                
-                {/* <MiniContant args={{ contact: args.contact_list["omer"], selectContact: args.selectContact }} /> */}
-                
-                {Object.values(args.contact_list).map((contactIndex) => (
-                    <MiniContant args={{ contact: contactIndex, selectContact: args.selectContact }} />
+                                
+                {Object.values(contact_list).map((contactIndex) => (
+                    <MiniContant args={{ contact: contactIndex, selectContact: selectContact }} />
                 ))}
             </div>
         </div>

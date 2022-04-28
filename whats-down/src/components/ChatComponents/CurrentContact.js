@@ -1,9 +1,9 @@
 
-const CurrentContact = ({ contact_name }) => {
+const CurrentContact = ({ contact }) => {
     return (
         <div className="col-7 contact-header">
-            <img src="blank-profile-picture.png" className="float-start img-thumbnail rounded-start right-padding-for-picture" alt="..." />
-            {contact_name}
+            <img src={contact.picture} className="float-start img-thumbnail rounded-start right-padding-for-picture collapse" alt="..."  id="selected-contact-image"/>
+            {contact.contact_name}
         </div>
     )
 }

@@ -41,6 +41,7 @@ const SendAudio = () => {
                 recorder.start();
                 inProgress = true;
                 button.classList.add("recording")
+                document.getElementById('close-button').classList.add('collapse');
             }
             else {
                 await recorder.stop();
@@ -48,6 +49,7 @@ const SendAudio = () => {
                 button.classList.remove("recording")
                 document.getElementById('media-to-send').classList.remove('collapse');
                 document.getElementById('send_button').classList.remove('collapse');
+                document.getElementById('close-button').classList.remove('collapse');
             }
         })();
     }
