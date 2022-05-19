@@ -1,7 +1,6 @@
 ﻿//$('tbody').load('/Reviews/Search2?query=' + q)
 
 $(function () {
-
     $('form').submit(async e => {
         e.preventDefault();
         const q = $('#SearchQuery').val();

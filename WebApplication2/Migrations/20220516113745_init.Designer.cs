@@ -12,8 +12,8 @@ using WebApplication2.Data;
 namespace WebApplication2.Migrations
 {
     [DbContext(typeof(WebApplication2Context))]
-    [Migration("20220510130705_Init")]
-    partial class Init
+    [Migration("20220516113745_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
