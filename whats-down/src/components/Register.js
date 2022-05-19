@@ -3,6 +3,7 @@
 //return to login
 import InputLine from "./InputLine"
 import { useState } from "react"
+import $ from "jquery"
 
 
 
@@ -83,12 +84,29 @@ const Register = ({ user_list, addUser, checkUser, close }) => {
             return
         }
         //add user to userlist after all validation
+        /*
+        $.ajax({
+            type: "POST",
+            url: "https://localhost:7144/api/Users1",
+            data: `{
+              "userName": "Omer Hamdi',
+              "password": "Jason Sweet",
+            }`,
+            success: function (result) {
+               console.log(result);
+            },
+            dataType: "json"
+          });
+        /*
         let isRegisterded = addUser({
             user_name: u_name,
             password: p_word1,
             display_name: d_name,
             picture: profilePicture,
         })
+        */
+        console.log("done");
+        let isRegisterded = "success"
         if (isRegisterded === "success") {
             setAlert(["Register Successful", 'alert alert-success'])
         } else {
