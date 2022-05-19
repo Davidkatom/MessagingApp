@@ -6,6 +6,7 @@ import ChatScreen from './components/ChatScreen';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import MessageElm from './components/AttachmentElements/MessageElm';
 function App() {
+
   const [current_user, set_current_user] = useState('No UserName');
   var date1 = new Date();
   var date2 = new Date();

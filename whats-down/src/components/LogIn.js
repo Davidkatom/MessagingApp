@@ -37,6 +37,16 @@ const Login = ({ user_list, addUser, checkUser, set_current_user }) => {
     const navigate = useNavigate();
     const handleOnClick = useCallback(() => navigate('/chat', { replace: true }), [navigate]);
 
+    
+    const [network, setNetwork] = useState("")
+    const getFromNet = async () =>{
+
+        fetch('https://localhost:7144/api/Contacts')
+        .then(response => response.json())
+        .then(data =>setNetwork(data));
+        // await fetch('https://localhost:7144/api/Contacts')
+        // .then(response =>setNetwork(response))
+    }
     return (
         <div className='container'>
             <span className='contact-header'>Log in to Whats Down</span>
@@ -61,15 +71,10 @@ const Login = ({ user_list, addUser, checkUser, set_current_user }) => {
                 <button label='Login' className="btn btn-primary" onClick={logBu} id='login_button' >Login</button>
                 <button className="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={handleShow} >Sign Up</button>
             </div>
+            <div>
+                <button className="btn btn-secondary" onClick={getFromNet}>{network}</button>
+            </div>
 
-
-            {/* <div className="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div className="modal-dialog">
-                    <div className="modal-content">
-                        <Register user_list={user_list} checkUser={checkUser} addUser={addUser} />
-                    </div>
-                </div>
-            </div> */}
 
             <Modal show={show} onHide={handleClose}>
 
