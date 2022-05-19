@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using WhatsdownAPI;
+using WhatsdownAPI.Models;
 
 namespace WhatsdownAPI.Data
 {
@@ -17,5 +18,6 @@ namespace WhatsdownAPI.Data
         public DbSet<WhatsdownAPI.Contact>? Contact { get; set; }
 
         public DbSet<WhatsdownAPI.Contacts>? Contacts { get; set; }
+        public DbSet<WhatsdownAPI.Models.User>? User { get; set; }
     }
 }
