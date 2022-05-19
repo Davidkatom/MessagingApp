@@ -3,7 +3,6 @@
 //return to login
 import InputLine from "./InputLine"
 import { useState } from "react"
-import $ from "jquery"
 
 
 
@@ -51,7 +50,7 @@ const Register = ({ user_list, addUser, checkUser, close }) => {
     }
 
     //user validation and registreation
-    const on_submit = (e) => {
+    const on_submit = async(e) => {
         //prevent default form submit - to prevent page reload
         e.preventDefault();
         console.log('on submit')
@@ -61,10 +60,10 @@ const Register = ({ user_list, addUser, checkUser, close }) => {
         let p_word2 = document.getElementById('password2').value
         let d_name = document.getElementById('display_name').value
         //check username doesn't exist
-        if (checkUser(u_name)) {
-            setAlert(["Username already exists", 'alert alert-danger'])
-            return
-        }
+        // if (checkUser(u_name)) {
+        //     setAlert(["Username already exists", 'alert alert-danger'])
+        //     return
+        // }
         if (u_name.length < 3) {
             setAlert(["Username must be at least 3 characters long", 'alert alert-danger'])
             return
@@ -84,19 +83,28 @@ const Register = ({ user_list, addUser, checkUser, close }) => {
             return
         }
         //add user to userlist after all validation
-        /*
-        $.ajax({
-            type: "POST",
-            url: "https://localhost:7144/api/Users1",
-            data: `{
-              "userName": "Omer Hamdi',
-              "password": "Jason Sweet",
-            }`,
-            success: function (result) {
-               console.log(result);
+        await fetch('https://localhost:7144/api/Users', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
             },
-            dataType: "json"
-          });
+            body: JSON.stringify({
+                userName: u_name,
+                password: p_word1,
+                nickName: d_name,
+                profilePicture: profilePicture
+                // contact_list: [],
+                // chat_history: [],
+                // last_message: null
+            })
+            // }).then(res => res.json())
+            // .then(data => {
+            //     console.log(data)
+            //     addUser(data)
+            //     close()
+            // }
+
+        })
         /*
         let isRegisterded = addUser({
             user_name: u_name,

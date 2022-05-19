@@ -44,23 +44,6 @@ const Login = ({ user_list, addUser, checkUser, set_current_user }) => {
         .then(response => response.json())
         .then(data =>setNetwork(data));
     }
-    const addUserTest = async () =>{
-        await fetch('https://localhost:7144/api/Users1', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                userName: "Omer Hamdi2",
-                password: "Jason Sweet",
-                // contact_list: [],
-                // chat_history: [],
-                // last_message: null
-            })
-        })
-        .then(response => response.json())
-        .then(data =>console.log(data));
-    }
     
     return (
         <div className='container'>
@@ -86,9 +69,7 @@ const Login = ({ user_list, addUser, checkUser, set_current_user }) => {
                 <button label='Login' className="btn btn-primary" onClick={logBu} id='login_button' >Login</button>
                 <button className="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={handleShow} >Sign Up</button>
             </div>
-            <div>
-                <button className="btn btn-secondary" onClick={addUserTest}>addUserTest</button>
-            </div>
+   
             <div>
                 <button className="btn btn-secondary" onClick={getFromNet}>{network}</button>
             </div>

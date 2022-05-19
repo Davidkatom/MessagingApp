@@ -11,6 +11,21 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+//Session 29:20
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(10);
+});
+
+//Login  48:20
+ builder.Services.AddAuthentication(options =>
+ {
+     options.DefaultScheme = CookieAuthenticationDefaults.auth
+ })
+
+
+
+//Login  48:20
 
 var app = builder.Build();
 app.UseCors(x => x
@@ -26,6 +41,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseSession(); //29:30
 app.UseAuthorization();
 
 app.MapControllers();
