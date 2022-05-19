@@ -1,4 +1,4 @@
-﻿namespace WhatsdownAPI.Models
+﻿namespace WhatsdownAPI
 {
     public class Contact
     {
