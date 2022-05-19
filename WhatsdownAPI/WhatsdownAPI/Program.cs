@@ -1,4 +1,9 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using WhatsdownAPI.Data;
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddDbContext<WhatsdownAPIContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("WhatsdownAPIContext") ?? throw new InvalidOperationException("Connection string 'WhatsdownAPIContext' not found.")));
 
 // Add services to the container.
 
