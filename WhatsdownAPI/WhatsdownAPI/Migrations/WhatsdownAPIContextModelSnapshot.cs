@@ -27,8 +27,8 @@ namespace WhatsdownAPI.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("ContactsId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int?>("ContactsId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -42,8 +42,11 @@ namespace WhatsdownAPI.Migrations
 
             modelBuilder.Entity("WhatsdownAPI.Contacts", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.HasKey("Id");
 
@@ -52,8 +55,11 @@ namespace WhatsdownAPI.Migrations
 
             modelBuilder.Entity("WhatsdownAPI.Message", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("ContactId")
                         .HasColumnType("nvarchar(450)");
@@ -82,8 +88,8 @@ namespace WhatsdownAPI.Migrations
                     b.Property<string>("UserName")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("ContactListId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int?>("ContactListId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime2");
