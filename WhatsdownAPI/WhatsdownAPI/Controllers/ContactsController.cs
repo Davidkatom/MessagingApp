@@ -6,35 +6,35 @@ namespace WhatsdownAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class Contacts : ControllerBase
+    public class ContactsController : ControllerBase
     {
-        // GET: api/<Contacts>
+        // GET: api/<ContactsController>
         [HttpGet]
-        public string Get()
+        public IEnumerable<string> Get()
         {
-            return "Hello";
+            return new string[] { "value1", "value2" };
         }
 
-        // GET api/<Contacts>/5
+        // GET api/<ContactsController>/5
         [HttpGet("{id}")]
         public string Get(int id)
         {
             return "value";
         }
 
-        // POST api/<Contacts>
+        // POST api/<ContactsController>
         [HttpPost]
         public void Post([FromBody] string value)
         {
         }
 
-        // PUT api/<Contacts>/5
+        // PUT api/<ContactsController>/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] string value)
         {
         }
 
-        // DELETE api/<Contacts>/5
+        // DELETE api/<ContactsController>/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {

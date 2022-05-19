@@ -40,12 +40,9 @@ const Login = ({ user_list, addUser, checkUser, set_current_user }) => {
     
     const [network, setNetwork] = useState("")
     const getFromNet = async () =>{
-
-        fetch('https://localhost:7144/api/Contacts')
+        await fetch('https://localhost:7144/api/Contacts')
         .then(response => response.json())
         .then(data =>setNetwork(data));
-        // await fetch('https://localhost:7144/api/Contacts')
-        // .then(response =>setNetwork(response))
     }
     return (
         <div className='container'>
