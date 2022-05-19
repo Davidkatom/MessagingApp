@@ -10,9 +10,9 @@ namespace WhatsdownAPI.Controllers
     {
         // GET: api/<Contacts>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public string Get()
         {
-            return new string[] { "value1", "value2" };
+            return "Hello";
         }
 
         // GET api/<Contacts>/5
