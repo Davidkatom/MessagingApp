@@ -1,7 +1,9 @@
-﻿namespace WhatsdownAPI.Models
+﻿using System.ComponentModel.DataAnnotations;
+namespace WhatsdownAPI.Models
 {
     public class User
     {
+        [Key]
         public string? UserName { get; set; }
         public string? Password { get; set; }
         public string? NickName { get; set; }
