@@ -10,7 +10,6 @@ using WhatsdownAPI.Models;
 
 namespace WhatsdownAPI.Controllers
 {
-
     [Route("api/[controller]")]
     [ApiController]
     public class ContactsController : ControllerBase
@@ -28,7 +27,8 @@ namespace WhatsdownAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Contact>>> GetContact()
         {
-            //return await _context.User.FindAsync()
+            User list = await _context.User.FindAsync(ConnectedUser);
+            Console.Write(list);
             User user = _context.User.Single(a => a.UserName == ConnectedUser);
             return user.ContactList;
 
@@ -36,7 +36,7 @@ namespace WhatsdownAPI.Controllers
 
         // GET: api/Contacts/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Contact>> GetContact(string id)
+        public async Task<ActionResult<Contact>> GetContact(int id)
         {
             var contact = await _context.Contact.FindAsync(id);
 
@@ -51,7 +51,7 @@ namespace WhatsdownAPI.Controllers
         // PUT: api/Contacts/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutContact(string id, Contact contact)
+        public async Task<IActionResult> PutContact(int id, Contact contact)
         {
             if (id != contact.Id)
             {
@@ -85,28 +85,14 @@ namespace WhatsdownAPI.Controllers
         public async Task<ActionResult<Contact>> PostContact(Contact contact)
         {
             _context.Contact.Add(contact);
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                if (ContactExists(contact.Id))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetContact", new { id = contact.Id }, contact);
         }
 
         // DELETE: api/Contacts/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteContact(string id)
+        public async Task<IActionResult> DeleteContact(int id)
         {
             var contact = await _context.Contact.FindAsync(id);
             if (contact == null)
@@ -120,7 +106,7 @@ namespace WhatsdownAPI.Controllers
             return NoContent();
         }
 
-        private bool ContactExists(string id)
+        private bool ContactExists(int id)
         {
             return _context.Contact.Any(e => e.Id == id);
         }
