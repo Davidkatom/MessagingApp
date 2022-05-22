@@ -12,16 +12,6 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 //Session 29:20
-builder.Services.AddSession(options =>
-{
-    options.IdleTimeout = TimeSpan.FromMinutes(10);
-});
-
-//Login  48:20
- builder.Services.AddAuthentication(options =>
- {
-     options.DefaultScheme = CookieAuthenticationDefaults.auth
- })
 
 
 
@@ -41,8 +31,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseSession(); //29:30
-app.UseAuthorization();
+//app.UseSession(); //29:30
+//app.UseAuthorization();
 
 app.MapControllers();
 
