@@ -1,9 +1,12 @@
-﻿namespace WhatsdownAPI
+﻿using System.ComponentModel.DataAnnotations;
+namespace WhatsdownAPI
 {
     public class Contacts
     {
-        public int Id { get; set; }
-        public List<Contact> ContactList { get; set; }
+        [Key]
+        public string Id { get; set; }
+        public Dictionary<string, string> ContactDictionary { get; set; }
+        //public Dictionary<string, List<Message>> ContactDictionary { get; set; }
 
     }
 }
