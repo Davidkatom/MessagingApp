@@ -12,47 +12,47 @@ namespace WhatsdownAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UsersController : ControllerBase
+    public class MessagesController : ControllerBase
     {
         private readonly WhatsdownAPIContext _context;
 
-        public UsersController(WhatsdownAPIContext context)
+        public MessagesController(WhatsdownAPIContext context)
         {
             _context = context;
         }
 
-        // GET: api/Users
+        // GET: api/Messages
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetUser()
+        public async Task<ActionResult<IEnumerable<Message>>> GetMessage()
         {
-            return await _context.User.ToListAsync();
+            return await _context.Message.ToListAsync();
         }
 
-        // GET: api/Users/5
+        // GET: api/Messages/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUser(int id)
+        public async Task<ActionResult<Message>> GetMessage(int id)
         {
-            var user = await _context.User.FindAsync(id);
+            var message = await _context.Message.FindAsync(id);
 
-            if (user == null)
+            if (message == null)
             {
                 return NotFound();
             }
 
-            return user;
+            return message;
         }
 
-        // PUT: api/Users/5
+        // PUT: api/Messages/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(int id, User user)
+        public async Task<IActionResult> PutMessage(int id, Message message)
         {
-            if (id != user.Id)
+            if (id != message.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(user).State = EntityState.Modified;
+            _context.Entry(message).State = EntityState.Modified;
 
             try
             {
@@ -60,7 +60,7 @@ namespace WhatsdownAPI.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!UserExists(id))
+                if (!MessageExists(id))
                 {
                     return NotFound();
                 }
@@ -73,36 +73,36 @@ namespace WhatsdownAPI.Controllers
             return NoContent();
         }
 
-        // POST: api/Users
+        // POST: api/Messages
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<User>> PostUser(User user)
+        public async Task<ActionResult<Message>> PostMessage(Message message)
         {
-            _context.User.Add(user);
+            _context.Message.Add(message);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetUser", new { id = user.Id }, user);
+            return CreatedAtAction("GetMessage", new { id = message.Id }, message);
         }
 
-        // DELETE: api/Users/5
+        // DELETE: api/Messages/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUser(int id)
+        public async Task<IActionResult> DeleteMessage(int id)
         {
-            var user = await _context.User.FindAsync(id);
-            if (user == null)
+            var message = await _context.Message.FindAsync(id);
+            if (message == null)
             {
                 return NotFound();
             }
 
-            _context.User.Remove(user);
+            _context.Message.Remove(message);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool UserExists(int id)
+        private bool MessageExists(int id)
         {
-            return _context.User.Any(e => e.Id == id);
+            return _context.Message.Any(e => e.Id == id);
         }
     }
 }

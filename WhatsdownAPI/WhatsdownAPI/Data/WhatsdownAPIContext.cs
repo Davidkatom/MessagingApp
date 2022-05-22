@@ -14,10 +14,9 @@ namespace WhatsdownAPI.Data
             : base(options)
         {
         }
-
-
         
         public DbSet<WhatsdownAPI.Models.User> User { get; set; }
-        public DbSet<WhatsdownAPI.Models.Contact> Contact { get; set; }
+        
+        public DbSet<WhatsdownAPI.Models.Message> Message { get; set; }
     }
 }

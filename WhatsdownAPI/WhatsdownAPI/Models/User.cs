@@ -3,7 +3,7 @@ namespace WhatsdownAPI.Models
 {
     public class User
     {
-        [Key]
+        public int Id { get; set; }
         public string UserName { get; set; }
         [Required]
         [DataType(DataType.Password)]
@@ -11,8 +11,9 @@ namespace WhatsdownAPI.Models
         [Required]
         public string NickName { get; set; }
         public string ProfilePicture { get; set; }
-        public List<Contact> ContactList { get; set; }
-        public DateTime CreatedDate { get; set; }
+        public ICollection<User> ContactList { get; set; }
+
+        //public DateTime CreatedDate { get; set; }
 
     }
 }
