@@ -1,5 +1,8 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using WhatsdownAPI.Data;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<WhatsdownAPIContext>(options =>
@@ -11,22 +14,35 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-//Session 29:20
-/*
-builder.Services.AddSession(options =>
+//Token login 24:15
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {
-    options.IdleTimeout = TimeSpan.FromMinutes(10);
+    options.RequireHttpsMetadata = false;
+    options.SaveToken = true;
+    options.TokenValidationParameters = new TokenValidationParameters()
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidAudience = builder.Configuration["JWTParams:Audience"],
+        ValidIssuer = builder.Configuration["JWTParams:Issuer"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWTParams:SecretKey"]))
+    };
+});
+//access for all 32:40
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("Allow All",
+        builder =>
+        {
+            builder
+            .AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader();
+        });
 });
 
-//Login  48:20
- builder.Services.AddAuthentication(options =>
- {
-     options.DefaultScheme = CookieAuthenticationDefaults.auth
- })
 
-*/
-
-//Login  48:20
+//Login and cors end
 
 var app = builder.Build();
 app.UseCors(x => x
@@ -41,8 +57,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors("Allow All"); //33:00
+
 app.UseHttpsRedirection();
-//app.UseSession(); //29:30
+app.UseAuthentication(); //25:30
 app.UseAuthorization();
 
 app.MapControllers();
