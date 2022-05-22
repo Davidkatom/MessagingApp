@@ -103,7 +103,6 @@ const Register = ({ user_list, addUser, checkUser, close }) => {
             //     addUser(data)
             //     close()
             // }
-
         })
         /*
         let isRegisterded = addUser({

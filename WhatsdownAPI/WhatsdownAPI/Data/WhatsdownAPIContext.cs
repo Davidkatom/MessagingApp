@@ -15,9 +15,9 @@ namespace WhatsdownAPI.Data
         {
         }
 
-        public DbSet<WhatsdownAPI.Contact>? Contact { get; set; }
+        public DbSet<WhatsdownAPI.Contact> Contact { get; set; }
 
-        public DbSet<WhatsdownAPI.Contacts>? Contacts { get; set; }
-        public DbSet<WhatsdownAPI.Models.User>? User { get; set; }
+        public DbSet<WhatsdownAPI.Contacts> Contacts { get; set; }
+        public DbSet<WhatsdownAPI.Models.User> User { get; set; }
     }
 }

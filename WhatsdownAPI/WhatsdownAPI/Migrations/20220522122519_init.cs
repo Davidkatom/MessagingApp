@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace WhatsdownAPI.Migrations
 {
-    public partial class Init : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -44,11 +44,11 @@ namespace WhatsdownAPI.Migrations
                 columns: table => new
                 {
                     UserName = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    NickName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    NickName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ProfilePicture = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ContactListId = table.Column<int>(type: "int", nullable: true),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -68,7 +68,7 @@ namespace WhatsdownAPI.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     IsSent = table.Column<bool>(type: "bit", nullable: false),
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Time = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Time = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Type = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ContactId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },

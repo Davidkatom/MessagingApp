@@ -12,8 +12,8 @@ using WhatsdownAPI.Data;
 namespace WhatsdownAPI.Migrations
 {
     [DbContext(typeof(WhatsdownAPIContext))]
-    [Migration("20220519143640_Init")]
-    partial class Init
+    [Migration("20220522122519_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -72,7 +72,7 @@ namespace WhatsdownAPI.Migrations
                     b.Property<bool>("IsSent")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime?>("Time")
+                    b.Property<DateTime>("Time")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Type")
@@ -93,13 +93,15 @@ namespace WhatsdownAPI.Migrations
                     b.Property<int?>("ContactListId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("CreatedDate")
+                    b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("NickName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Password")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ProfilePicture")

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WhatsdownAPI.Data;
 
@@ -11,9 +12,10 @@ using WhatsdownAPI.Data;
 namespace WhatsdownAPI.Migrations
 {
     [DbContext(typeof(WhatsdownAPIContext))]
-    partial class WhatsdownAPIContextModelSnapshot : ModelSnapshot
+    [Migration("20220522123108_micknameFix")]
+    partial class micknameFix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
