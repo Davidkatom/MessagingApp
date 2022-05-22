@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace WhatsdownAPI.Migrations
 {
-    public partial class init : Migration
+    public partial class init5 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -13,30 +13,11 @@ namespace WhatsdownAPI.Migrations
                 name: "Contacts",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1")
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Contacts", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Contact",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ContactsId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Contact", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Contact_Contacts_ContactsId",
-                        column: x => x.ContactsId,
-                        principalTable: "Contacts",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -47,17 +28,29 @@ namespace WhatsdownAPI.Migrations
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     NickName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ProfilePicture = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ContactListId = table.Column<int>(type: "int", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_User", x => x.UserName);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Contact",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    NickName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserName = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Contact", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_User_Contacts_ContactListId",
-                        column: x => x.ContactListId,
-                        principalTable: "Contacts",
-                        principalColumn: "Id");
+                        name: "FK_Contact_User_UserName",
+                        column: x => x.UserName,
+                        principalTable: "User",
+                        principalColumn: "UserName");
                 });
 
             migrationBuilder.CreateTable(
@@ -66,11 +59,12 @@ namespace WhatsdownAPI.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    IsSent = table.Column<bool>(type: "bit", nullable: false),
+                    Sender = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Reciever = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Time = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Type = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ContactId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    ContactId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    ContactsId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -80,12 +74,17 @@ namespace WhatsdownAPI.Migrations
                         column: x => x.ContactId,
                         principalTable: "Contact",
                         principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Message_Contacts_ContactsId",
+                        column: x => x.ContactsId,
+                        principalTable: "Contacts",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Contact_ContactsId",
+                name: "IX_Contact_UserName",
                 table: "Contact",
-                column: "ContactsId");
+                column: "UserName");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Message_ContactId",
@@ -93,9 +92,9 @@ namespace WhatsdownAPI.Migrations
                 column: "ContactId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_User_ContactListId",
-                table: "User",
-                column: "ContactListId");
+                name: "IX_Message_ContactsId",
+                table: "Message",
+                column: "ContactsId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -104,13 +103,13 @@ namespace WhatsdownAPI.Migrations
                 name: "Message");
 
             migrationBuilder.DropTable(
-                name: "User");
-
-            migrationBuilder.DropTable(
                 name: "Contact");
 
             migrationBuilder.DropTable(
                 name: "Contacts");
+
+            migrationBuilder.DropTable(
+                name: "User");
         }
     }
 }

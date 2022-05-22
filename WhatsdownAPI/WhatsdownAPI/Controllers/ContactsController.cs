@@ -10,49 +10,55 @@ using WhatsdownAPI.Models;
 
 namespace WhatsdownAPI.Controllers
 {
+
     [Route("api/[controller]")]
     [ApiController]
-    public class UsersController : ControllerBase
+    public class ContactsController : ControllerBase
     {
+        string ConnectedUser = "omer";
+
         private readonly WhatsdownAPIContext _context;
 
-        public UsersController(WhatsdownAPIContext context)
+        public ContactsController(WhatsdownAPIContext context)
         {
             _context = context;
         }
 
-        // GET: api/Users
+        // GET: api/Contacts
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetUser()
+        public async Task<ActionResult<IEnumerable<Contact>>> GetContact()
         {
-            return await _context.User.ToListAsync();
+            //return await _context.User.FindAsync()
+            User user = _context.User.Single(a => a.UserName == ConnectedUser);
+            return user.ContactList;
+
         }
 
-        // GET: api/Users/5
+        // GET: api/Contacts/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUser(string id)
+        public async Task<ActionResult<Contact>> GetContact(string id)
         {
-            var user = await _context.User.FindAsync(id);
+            var contact = await _context.Contact.FindAsync(id);
 
-            if (user == null)
+            if (contact == null)
             {
                 return NotFound();
             }
 
-            return user;
+            return contact;
         }
 
-        // PUT: api/Users/5
+        // PUT: api/Contacts/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(string id, User user)
+        public async Task<IActionResult> PutContact(string id, Contact contact)
         {
-            if (id != user.UserName)
+            if (id != contact.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(user).State = EntityState.Modified;
+            _context.Entry(contact).State = EntityState.Modified;
 
             try
             {
@@ -60,7 +66,7 @@ namespace WhatsdownAPI.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!UserExists(id))
+                if (!ContactExists(id))
                 {
                     return NotFound();
                 }
@@ -73,19 +79,19 @@ namespace WhatsdownAPI.Controllers
             return NoContent();
         }
 
-        // POST: api/Users
+        // POST: api/Contacts
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<User>> PostUser(User user)
+        public async Task<ActionResult<Contact>> PostContact(Contact contact)
         {
-            _context.User.Add(user);
+            _context.Contact.Add(contact);
             try
             {
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateException)
             {
-                if (UserExists(user.UserName))
+                if (ContactExists(contact.Id))
                 {
                     return Conflict();
                 }
@@ -95,28 +101,28 @@ namespace WhatsdownAPI.Controllers
                 }
             }
 
-            return CreatedAtAction("GetUser", new { id = user.UserName }, user);
+            return CreatedAtAction("GetContact", new { id = contact.Id }, contact);
         }
 
-        // DELETE: api/Users/5
+        // DELETE: api/Contacts/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUser(string id)
+        public async Task<IActionResult> DeleteContact(string id)
         {
-            var user = await _context.User.FindAsync(id);
-            if (user == null)
+            var contact = await _context.Contact.FindAsync(id);
+            if (contact == null)
             {
                 return NotFound();
             }
 
-            _context.User.Remove(user);
+            _context.Contact.Remove(contact);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool UserExists(string id)
+        private bool ContactExists(string id)
         {
-            return _context.User.Any(e => e.UserName == id);
+            return _context.Contact.Any(e => e.Id == id);
         }
     }
 }

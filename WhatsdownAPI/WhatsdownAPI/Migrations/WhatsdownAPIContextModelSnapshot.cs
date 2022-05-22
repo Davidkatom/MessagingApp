@@ -22,31 +22,10 @@ namespace WhatsdownAPI.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("WhatsdownAPI.Contact", b =>
+            modelBuilder.Entity("WhatsdownAPI.Contacts", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<int?>("ContactsId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ContactsId");
-
-                    b.ToTable("Contact");
-                });
-
-            modelBuilder.Entity("WhatsdownAPI.Contacts", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.HasKey("Id");
 
@@ -64,32 +43,52 @@ namespace WhatsdownAPI.Migrations
                     b.Property<string>("ContactId")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("ContactsId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("Content")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsSent")
-                        .HasColumnType("bit");
+                    b.Property<string>("Reciever")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Sender")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Time")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("Type")
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ContactId");
 
+                    b.HasIndex("ContactsId");
+
                     b.ToTable("Message");
+                });
+
+            modelBuilder.Entity("WhatsdownAPI.Models.Contact", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("NickName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserName");
+
+                    b.ToTable("Contact");
                 });
 
             modelBuilder.Entity("WhatsdownAPI.Models.User", b =>
                 {
                     b.Property<string>("UserName")
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<int?>("ContactListId")
-                        .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -107,40 +106,38 @@ namespace WhatsdownAPI.Migrations
 
                     b.HasKey("UserName");
 
-                    b.HasIndex("ContactListId");
-
                     b.ToTable("User");
-                });
-
-            modelBuilder.Entity("WhatsdownAPI.Contact", b =>
-                {
-                    b.HasOne("WhatsdownAPI.Contacts", null)
-                        .WithMany("ContactList")
-                        .HasForeignKey("ContactsId");
                 });
 
             modelBuilder.Entity("WhatsdownAPI.Message", b =>
                 {
-                    b.HasOne("WhatsdownAPI.Contact", null)
+                    b.HasOne("WhatsdownAPI.Models.Contact", null)
                         .WithMany("Messages")
                         .HasForeignKey("ContactId");
+
+                    b.HasOne("WhatsdownAPI.Contacts", null)
+                        .WithMany("Messages")
+                        .HasForeignKey("ContactsId");
                 });
 
-            modelBuilder.Entity("WhatsdownAPI.Models.User", b =>
+            modelBuilder.Entity("WhatsdownAPI.Models.Contact", b =>
                 {
-                    b.HasOne("WhatsdownAPI.Contacts", "ContactList")
-                        .WithMany()
-                        .HasForeignKey("ContactListId");
-
-                    b.Navigation("ContactList");
+                    b.HasOne("WhatsdownAPI.Models.User", null)
+                        .WithMany("ContactList")
+                        .HasForeignKey("UserName");
                 });
 
-            modelBuilder.Entity("WhatsdownAPI.Contact", b =>
+            modelBuilder.Entity("WhatsdownAPI.Contacts", b =>
                 {
                     b.Navigation("Messages");
                 });
 
-            modelBuilder.Entity("WhatsdownAPI.Contacts", b =>
+            modelBuilder.Entity("WhatsdownAPI.Models.Contact", b =>
+                {
+                    b.Navigation("Messages");
+                });
+
+            modelBuilder.Entity("WhatsdownAPI.Models.User", b =>
                 {
                     b.Navigation("ContactList");
                 });
