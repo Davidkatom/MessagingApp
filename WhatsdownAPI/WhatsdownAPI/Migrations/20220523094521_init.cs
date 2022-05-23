@@ -13,9 +13,9 @@ namespace WhatsdownAPI.Migrations
                 name: "User",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Id = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    NickName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    NickName = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
                     ProfilePicture = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
@@ -29,8 +29,8 @@ namespace WhatsdownAPI.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    SenderId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    RecieverId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    SenderId = table.Column<string>(type: "nvarchar(10)", nullable: true),
+                    RecieverId = table.Column<string>(type: "nvarchar(10)", nullable: true),
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Time = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },

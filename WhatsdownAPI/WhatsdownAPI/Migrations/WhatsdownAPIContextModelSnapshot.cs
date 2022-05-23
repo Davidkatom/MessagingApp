@@ -34,10 +34,10 @@ namespace WhatsdownAPI.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RecieverId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<string>("SenderId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<DateTime>("Time")
                         .HasColumnType("datetime2");
@@ -54,11 +54,13 @@ namespace WhatsdownAPI.Migrations
             modelBuilder.Entity("WhatsdownAPI.Models.User", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<string>("NickName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<string>("Password")
                         .IsRequired()

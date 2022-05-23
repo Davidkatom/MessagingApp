@@ -12,7 +12,7 @@ using WhatsdownAPI.Data;
 namespace WhatsdownAPI.Migrations
 {
     [DbContext(typeof(WhatsdownAPIContext))]
-    [Migration("20220523093900_init")]
+    [Migration("20220523094521_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -36,10 +36,10 @@ namespace WhatsdownAPI.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RecieverId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<string>("SenderId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<DateTime>("Time")
                         .HasColumnType("datetime2");
@@ -56,11 +56,13 @@ namespace WhatsdownAPI.Migrations
             modelBuilder.Entity("WhatsdownAPI.Models.User", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<string>("NickName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<string>("Password")
                         .IsRequired()
