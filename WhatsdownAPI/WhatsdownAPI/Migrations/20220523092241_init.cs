@@ -18,17 +18,11 @@ namespace WhatsdownAPI.Migrations
                     UserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     NickName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ProfilePicture = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserId = table.Column<int>(type: "int", nullable: true)
+                    ProfilePicture = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_User", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_User_User_UserId",
-                        column: x => x.UserId,
-                        principalTable: "User",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -66,11 +60,6 @@ namespace WhatsdownAPI.Migrations
                 name: "IX_Message_SenderId",
                 table: "Message",
                 column: "SenderId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_User_UserId",
-                table: "User",
-                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

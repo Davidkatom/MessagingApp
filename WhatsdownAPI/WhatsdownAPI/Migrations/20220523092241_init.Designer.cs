@@ -12,7 +12,7 @@ using WhatsdownAPI.Data;
 namespace WhatsdownAPI.Migrations
 {
     [DbContext(typeof(WhatsdownAPIContext))]
-    [Migration("20220522182104_init")]
+    [Migration("20220523092241_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -72,15 +72,10 @@ namespace WhatsdownAPI.Migrations
                     b.Property<string>("ProfilePicture")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
-
                     b.Property<string>("UserName")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("User");
                 });
@@ -98,18 +93,6 @@ namespace WhatsdownAPI.Migrations
                     b.Navigation("Reciever");
 
                     b.Navigation("Sender");
-                });
-
-            modelBuilder.Entity("WhatsdownAPI.Models.User", b =>
-                {
-                    b.HasOne("WhatsdownAPI.Models.User", null)
-                        .WithMany("ContactList")
-                        .HasForeignKey("UserId");
-                });
-
-            modelBuilder.Entity("WhatsdownAPI.Models.User", b =>
-                {
-                    b.Navigation("ContactList");
                 });
 #pragma warning restore 612, 618
         }

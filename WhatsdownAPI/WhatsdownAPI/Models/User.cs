@@ -11,9 +11,5 @@ namespace WhatsdownAPI.Models
         [Required]
         public string NickName { get; set; }
         public string ProfilePicture { get; set; }
-        public ICollection<User> ContactList { get; set; }
-
-        //public DateTime CreatedDate { get; set; }
-
     }
 }
