@@ -6,23 +6,17 @@ import { useState } from "react"
 
 
 
-const Register = ({ user_list, addUser, checkUser, close }) => {
+const Register = ({close}) => {
     const [down_alert, setAlert] = useState(['', ''])
 
-    //show all existing users for tests: -LEAVE IT FOR NEXT ASSIGNMENT
-    // const showUsers = () => {
-    //     user_list.map((user) => (
-    //         alert('username: ' + user.user_name + ' password: ' + user.password)
-    //     ))
-    // }
     const [profilePicture, setProfilePicture] = useState();
     const handlePicture = (e) => {
         var a = document.getElementById('picture').value
-        console.log(a)
-        console.log('here')
-        console.log(e)
-        console.log(e.target.files[0])
-        console.log(URL.createObjectURL(e.target.files[0]))
+        // console.log(a)
+        // console.log('here')
+        // console.log(e)
+        // console.log(e.target.files[0])
+        // console.log(URL.createObjectURL(e.target.files[0]))
         setProfilePicture(URL.createObjectURL(e.target.files[0]))
         document.getElementById('profile_mini_pic').classList.remove('collapse');
         // let picture = e.target.value
@@ -59,11 +53,6 @@ const Register = ({ user_list, addUser, checkUser, close }) => {
         let p_word1 = document.getElementById('password1').value
         let p_word2 = document.getElementById('password2').value
         let d_name = document.getElementById('display_name').value
-        //check username doesn't exist
-        // if (checkUser(u_name)) {
-        //     setAlert(["Username already exists", 'alert alert-danger'])
-        //     return
-        // }
         if (u_name.length < 3) {
             setAlert(["Username must be at least 3 characters long", 'alert alert-danger'])
             return
@@ -83,7 +72,8 @@ const Register = ({ user_list, addUser, checkUser, close }) => {
             return
         }
         //add user to userlist after all validation
-        await fetch('https://localhost:7144/api/Users', {
+        
+        var res = await fetch('https://localhost:7144/api/Users', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -93,40 +83,27 @@ const Register = ({ user_list, addUser, checkUser, close }) => {
                 password: p_word1,
                 nickName: d_name,
                 profilePicture: profilePicture
-                // contact_list: [],
-                // chat_history: [],
-                // last_message: null
-            })
-            // }).then(res => res.json())
-            // .then(data => {
-            //     console.log(data)
-            //     addUser(data)
-            //     close()
-            // }
+            }),
         })
-        /*
-        let isRegisterded = addUser({
-            user_name: u_name,
-            password: p_word1,
-            display_name: d_name,
-            picture: profilePicture,
-        })
-        */
-        console.log("done");
-        let isRegisterded = "success"
-        if (isRegisterded === "success") {
-            setAlert(["Register Successful", 'alert alert-success'])
-        } else {
+        if(!res.ok){
+            console.log('register failed!')
+
+            setAlert(["Username already exists", 'alert alert-danger'])
             setAlert(["Register Failed", 'alert alert-danger'])
-
+            return
         }
-        //clear all form inputs
-        document.getElementById('user_name').value = ''
-        document.getElementById('password1').value = ''
-        document.getElementById('password2').value = ''
-        document.getElementById('display_name').value = ''
+        console.log('user added')
+        setAlert(["Register Successful", 'alert alert-success'])
 
-        close()
+        console.log(res.ok)
+
+        //clear all form inputs
+        // document.getElementById('user_name').value = ''
+        // document.getElementById('password1').value = ''
+        // document.getElementById('password2').value = ''
+        // document.getElementById('display_name').value = ''
+
+        //close()
     }
 
     return (

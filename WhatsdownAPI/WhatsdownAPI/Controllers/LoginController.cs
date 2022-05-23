@@ -11,16 +11,13 @@ namespace WhatsdownAPI.Controllers
     [ApiController]
     public class LoginController : ControllerBase
     {
-        //set login token configuration
-        private readonly IConfiguration _configuration;
+        private readonly IConfiguration _configuration;//set login token configuration
         private readonly WhatsdownAPIContext _context;
-
         public LoginController(IConfiguration confi, WhatsdownAPIContext context)
         {
             _configuration = confi;
             _context = context;
         }
-
 
         [HttpPost]
         public IActionResult LoginPost(string username, string password)
@@ -29,7 +26,7 @@ namespace WhatsdownAPI.Controllers
                     where user.UserName.Equals(username) &&
                             user.Password.Equals(password)
                     select user;
-            if (q.Any())
+            if (q.Any()) // if username and password found in User database
             {
                 var claimes = new[] {
                     new Claim(JwtRegisteredClaimNames.Sub,_configuration["JWTParams:Subject"]),
@@ -47,7 +44,7 @@ namespace WhatsdownAPI.Controllers
                     signingCredentials: mac);
                 return Ok(new JwtSecurityTokenHandler().WriteToken(token));
             }
-            return NotFound();//check if valid return statement 
+            return NotFound("mesafaesaf");//check if valid return statement 
         }
 
     }
