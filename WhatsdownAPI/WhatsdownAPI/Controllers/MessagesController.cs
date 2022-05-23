@@ -21,6 +21,12 @@ namespace WhatsdownAPI.Controllers
             _context = context;
         }
 
+        [HttpGet(Name = "GetWeatherForecast")]
+        public async Task<ActionResult<IEnumerable<Message>>> GetContacts()
+        {
+            return await _context.Message.ToListAsync();
+        }
+
         // GET: api/Messages
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Message>>> GetMessage()

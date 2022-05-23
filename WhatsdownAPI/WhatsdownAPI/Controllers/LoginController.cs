@@ -23,7 +23,7 @@ namespace WhatsdownAPI.Controllers
         public IActionResult LoginPost(string username, string password)
         {
             var q = from user in _context.User
-                    where user.UserName.Equals(username) &&
+                    where user.Id.Equals(username) &&
                             user.Password.Equals(password)
                     select user;
             if (q.Any()) // if username and password found in User database

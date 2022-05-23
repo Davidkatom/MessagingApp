@@ -12,7 +12,7 @@ using WhatsdownAPI.Data;
 namespace WhatsdownAPI.Migrations
 {
     [DbContext(typeof(WhatsdownAPIContext))]
-    [Migration("20220523092241_init")]
+    [Migration("20220523093900_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -35,11 +35,11 @@ namespace WhatsdownAPI.Migrations
                     b.Property<string>("Content")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("RecieverId")
-                        .HasColumnType("int");
+                    b.Property<string>("RecieverId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<int?>("SenderId")
-                        .HasColumnType("int");
+                    b.Property<string>("SenderId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("Time")
                         .HasColumnType("datetime2");
@@ -55,11 +55,8 @@ namespace WhatsdownAPI.Migrations
 
             modelBuilder.Entity("WhatsdownAPI.Models.User", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("NickName")
                         .IsRequired()
@@ -70,9 +67,6 @@ namespace WhatsdownAPI.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ProfilePicture")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserName")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
