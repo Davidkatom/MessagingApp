@@ -14,6 +14,7 @@ namespace WhatsdownAPI.Controllers
     [ApiController]
     public class MessagesController : ControllerBase
     {
+        string Connected = "David";
         private readonly WhatsdownAPIContext _context;
 
         public MessagesController(WhatsdownAPIContext context)
@@ -21,10 +22,10 @@ namespace WhatsdownAPI.Controllers
             _context = context;
         }
 
-        [HttpGet(Name = "GetWeatherForecast")]
+        [HttpGet(Name = "api/Contacts")]
         public async Task<ActionResult<IEnumerable<Message>>> GetContacts()
         {
-            return await _context.Message.ToListAsync();
+            return await _context.Message.Include(m => m.Sender.Id == "David").ToListAsync();
         }
 
         // GET: api/Messages
