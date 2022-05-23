@@ -25,7 +25,7 @@ namespace WhatsdownAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ContactRelation>>> GetContactRelation()
         {
-            var q = await _context.ContactRelation.Include(c => c.Contacter.Id.Equals("omer")).ToListAsync();
+            var q = await _context.ContactRelation.Include(c => c.Contacter).Include(c => c.Contacted).Where(c => c.Contacter.Id == "omer").ToListAsync() ;
             return q;
         }
 
