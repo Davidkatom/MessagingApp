@@ -21,6 +21,7 @@ namespace WhatsdownAPI.Controllers
             _context = context;
         }
 
+
         // GET: api/Users
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetUser()

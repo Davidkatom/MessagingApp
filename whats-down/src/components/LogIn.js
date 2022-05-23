@@ -3,6 +3,7 @@
 //lunch chatdowns
 import React, { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+import $ from 'jquery';
 
 import InputLine from './InputLine';
 import Register from './Register';
@@ -38,11 +39,28 @@ const Login = ({ user_list, addUser, checkUser, set_current_user }) => {
     const handleOnClick = useCallback(() => navigate('/chat', { replace: true }), [navigate]);
 
     
-    const [network, setNetwork] = useState("")
-    const getFromNet = async () =>{
-        await fetch('https://localhost:7144/api/Contacts')
-        .then(response => response.json())
-        .then(data =>setNetwork(data));
+    const [token, setToken] = useState("")
+    function loginToken(){
+        $.ajax({
+            url: 'https://localhost:7144/api/Login?username=a&password=b',
+            type: 'POST',
+            contentType: 'application/json',
+            success: function (data) {setToken(data)},
+            error: function(){},
+        });
+    }
+    function getWhether(){
+        $.ajax({
+            url: 'https://localhost:7144/WeatherForecast',
+            type: 'GET',
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+            },
+            data:{},
+            contentType: 'application/json',
+            success: function (data) {console.log(data)},
+            error: function(){},
+        });        
     }
     
     return (
@@ -71,7 +89,10 @@ const Login = ({ user_list, addUser, checkUser, set_current_user }) => {
             </div>
    
             <div>
-                <button className="btn btn-secondary" onClick={getFromNet}>{network}</button>
+                <button className="btn btn-secondary" onClick={loginToken}>{token}</button>
+            </div>   
+            <div>
+                <button className="btn btn-secondary" onClick={getWhether}>getWheter</button>
             </div>
 
 

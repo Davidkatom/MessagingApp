@@ -3,6 +3,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using WhatsdownAPI.Data;
 
 namespace WhatsdownAPI.Controllers
 {
@@ -12,18 +13,23 @@ namespace WhatsdownAPI.Controllers
     {
         //set login token configuration
         private readonly IConfiguration _configuration;
+        private readonly WhatsdownAPIContext _context;
 
-        public LoginController(IConfiguration confi)
+        public LoginController(IConfiguration confi, WhatsdownAPIContext context)
         {
             _configuration = confi;
+            _context = context;
         }
+
 
         [HttpPost]
         public IActionResult LoginPost(string username, string password)
         {
-            //todo add login logic here
-            var varified = true;
-            if (varified)
+            var q = from user in _context.User
+                    where user.UserName.Equals(username) &&
+                            user.Password.Equals(password)
+                    select user;
+            if (q.Any())
             {
                 var claimes = new[] {
                     new Claim(JwtRegisteredClaimNames.Sub,_configuration["JWTParams:Subject"]),
@@ -41,13 +47,8 @@ namespace WhatsdownAPI.Controllers
                     signingCredentials: mac);
                 return Ok(new JwtSecurityTokenHandler().WriteToken(token));
             }
-            //return ""; //check if valid return statement 
-            return NotFound();
-
+            return NotFound();//check if valid return statement 
         }
-
-
-        //end of login token configuration
 
     }
 }
