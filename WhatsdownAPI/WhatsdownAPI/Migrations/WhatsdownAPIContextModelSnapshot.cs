@@ -22,7 +22,7 @@ namespace WhatsdownAPI.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("WhatsdownAPI.Models.ContactRelation", b =>
+            modelBuilder.Entity("WhatsdownAPI.Models.Contact", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -100,7 +100,7 @@ namespace WhatsdownAPI.Migrations
                     b.ToTable("User");
                 });
 
-            modelBuilder.Entity("WhatsdownAPI.Models.ContactRelation", b =>
+            modelBuilder.Entity("WhatsdownAPI.Models.Contact", b =>
                 {
                     b.HasOne("WhatsdownAPI.Models.User", "Contacted")
                         .WithMany()

@@ -12,48 +12,47 @@ namespace WhatsdownAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ContactRelationsController : ControllerBase
+    public class ContactsController : ControllerBase
     {
         private readonly WhatsdownAPIContext _context;
 
-        public ContactRelationsController(WhatsdownAPIContext context)
+        public ContactsController(WhatsdownAPIContext context)
         {
             _context = context;
         }
 
-        // GET: api/ContactRelations
+        // GET: api/Contacts
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ContactRelation>>> GetContactRelation()
+        public async Task<ActionResult<IEnumerable<Contact>>> GetContact()
         {
-            var q = await _context.ContactRelation.Include(c => c.Contacter.Id.Equals("omer")).ToListAsync();
+            var q = await _context.ContactRelation.Include(c => c.Contacter).Include(c => c.Contacted).Where(c => c.Contacter.Id == "omer").ToListAsync();
             return q;
         }
-
-        // GET: api/ContactRelations/5
+        // GET: api/Contacts/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<ContactRelation>> GetContactRelation(int id)
+        public async Task<ActionResult<Contact>> GetContact(int id)
         {
-            var contactRelation = await _context.ContactRelation.FindAsync(id);
+            var contact = await _context.ContactRelation.FindAsync(id);
 
-            if (contactRelation == null)
+            if (contact == null)
             {
                 return NotFound();
             }
 
-            return contactRelation;
+            return contact;
         }
 
-        // PUT: api/ContactRelations/5
+        // PUT: api/Contacts/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutContactRelation(int id, ContactRelation contactRelation)
+        public async Task<IActionResult> PutContact(int id, Contact contact)
         {
-            if (id != contactRelation.Id)
+            if (id != contact.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(contactRelation).State = EntityState.Modified;
+            _context.Entry(contact).State = EntityState.Modified;
 
             try
             {
@@ -61,7 +60,7 @@ namespace WhatsdownAPI.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ContactRelationExists(id))
+                if (!ContactExists(id))
                 {
                     return NotFound();
                 }
@@ -74,34 +73,34 @@ namespace WhatsdownAPI.Controllers
             return NoContent();
         }
 
-        // POST: api/ContactRelations
+        // POST: api/Contacts
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<ContactRelation>> PostContactRelation(ContactRelation contactRelation)
+        public async Task<ActionResult<Contact>> PostContact(Contact contact)
         {
-            _context.ContactRelation.Add(contactRelation);
+            _context.ContactRelation.Add(contact);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetContactRelation", new { id = contactRelation.Id }, contactRelation);
+            return CreatedAtAction("GetContact", new { id = contact.Id }, contact);
         }
 
-        // DELETE: api/ContactRelations/5
+        // DELETE: api/Contacts/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteContactRelation(int id)
+        public async Task<IActionResult> DeleteContact(int id)
         {
-            var contactRelation = await _context.ContactRelation.FindAsync(id);
-            if (contactRelation == null)
+            var contact = await _context.ContactRelation.FindAsync(id);
+            if (contact == null)
             {
                 return NotFound();
             }
 
-            _context.ContactRelation.Remove(contactRelation);
+            _context.ContactRelation.Remove(contact);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool ContactRelationExists(int id)
+        private bool ContactExists(int id)
         {
             return _context.ContactRelation.Any(e => e.Id == id);
         }
