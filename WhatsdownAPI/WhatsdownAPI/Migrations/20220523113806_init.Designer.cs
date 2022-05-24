@@ -12,7 +12,7 @@ using WhatsdownAPI.Data;
 namespace WhatsdownAPI.Migrations
 {
     [DbContext(typeof(WhatsdownAPIContext))]
-    [Migration("20220523105918_init")]
+    [Migration("20220523113806_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,7 +24,7 @@ namespace WhatsdownAPI.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("WhatsdownAPI.Models.ContactRelation", b =>
+            modelBuilder.Entity("WhatsdownAPI.Models.Contact", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -102,7 +102,7 @@ namespace WhatsdownAPI.Migrations
                     b.ToTable("User");
                 });
 
-            modelBuilder.Entity("WhatsdownAPI.Models.ContactRelation", b =>
+            modelBuilder.Entity("WhatsdownAPI.Models.Contact", b =>
                 {
                     b.HasOne("WhatsdownAPI.Models.User", "Contacted")
                         .WithMany()

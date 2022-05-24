@@ -1,6 +1,6 @@
 ﻿namespace WhatsdownAPI.Models
 {
-    public class ContactRelation
+    public class Contact
     {
         public int Id { get; set; }
         public User Contacter { get; set; }
