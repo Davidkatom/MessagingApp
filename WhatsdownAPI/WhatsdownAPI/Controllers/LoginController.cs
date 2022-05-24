@@ -19,6 +19,24 @@ namespace WhatsdownAPI.Controllers
             _context = context;
         }
 
+        [HttpGet]
+        public string getUserr(string tokey)
+        {
+            //var jti = tokenS.Claims.First(claim => claim.Type == "jti").Value;
+
+            var handler = new JwtSecurityTokenHandler();
+            try
+            {
+                var jsonToken = handler.ReadToken(tokey);
+                var tokenS = jsonToken as JwtSecurityToken;
+                return tokenS.Claims.ToArray().GetValue(3).ToString();
+            }
+            catch (Exception ex)
+            {
+                return "Authontication Error";
+            }
+        }
+
         [HttpPost]
         public IActionResult LoginPost(string username, string password)
         {
@@ -44,7 +62,7 @@ namespace WhatsdownAPI.Controllers
                     signingCredentials: mac);
                 return Ok(new JwtSecurityTokenHandler().WriteToken(token));
             }
-            return NotFound("mesafaesaf");//check if valid return statement 
+            return NotFound("UserName and or Password are incorrect.");//check if valid return statement 
         }
 
     }

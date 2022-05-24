@@ -12,7 +12,7 @@ using WhatsdownAPI.Data;
 namespace WhatsdownAPI.Migrations
 {
     [DbContext(typeof(WhatsdownAPIContext))]
-    [Migration("20220524091100_init")]
+    [Migration("20220524095535_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

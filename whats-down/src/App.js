@@ -28,7 +28,7 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Login  setToken={setToken} />} />
+          <Route path="/" element={<Login  setToken={setToken} token={token}/>} />
           <Route path="/chat" element={<ChatScreen token={token} />} />
         </Routes>
       </BrowserRouter>

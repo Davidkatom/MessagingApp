@@ -31,5 +31,31 @@ namespace WhatsdownAPI.Controllers
             })
             .ToArray();
         }
+        /*
+        [HttpGet(Name = "GetToken")]
+        public string GetToken()
+        {
+            var str = "";
+            return str;
+        }
+        /*
+        [HttpGet("GetAllHeaders")]
+        public ActionResult<Dictionary<string, string>> GetAllHeaders()
+        {
+            Dictionary<string, string> requestHeaders =
+               new Dictionary<string, string>();
+            foreach (var header in Request.Headers)
+            {
+                requestHeaders.Add(header.Key, header.Value);
+            }
+            return requestHeaders;
+        }
+        [HttpGet("GetHeaderData")]
+        public ActionResult<string> GetHeaderData(string headerKey)
+        {
+            Request.Headers.TryGetValue(headerKey, out var headerValue);
+            return Ok(headerValue);
+        }
+        */
     }
 }

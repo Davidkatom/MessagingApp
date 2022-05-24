@@ -11,32 +11,115 @@ import CurrentContact from './ChatComponents/CurrentContact';
 import SendVideo from './AttachmentElements/SendVideo';
 import AddNewContact from './ChatComponents/AddNewContact';
 import { useNavigate } from 'react-router-dom';
+import $ from 'jquery';
 
 var checked = false
 
 
 const ChatScreen = ({ token }) => {
+    console.log('render')
+    //console.log(token)
     var emptyMsg = <MessageElm direction="send" src={'empty chat'} timeStamp={null} messagetype='text' />;
-
-    //set contacts
+    
+    //set Cuurent User
+    const [current_user, set_current_user] = useState('No UserName');
+    useEffect( () => {
+        async function fetchMe(){
+            console.log('fetch Users')
+            const res = await fetch('https://localhost:7144/api/Users');
+            const data = await res.json();
+            // console.log(res.status);
+            // console.log(data);   
+            set_current_user(data);
+            console.log(current_user)     
+            console.log(current_user[0].id)     
+            console.log("Step 2 for authorized:")
+            //--------------------------
+            const res2 = await fetch('https://localhost:7144/WeatherForecast');
+            console.log("Whether Request:")     
+            console.log(res2)     
+            console.log('Status is: '+res2.status)     
+            const data2 = await res.json();
+            console.log("Whether:")     
+            console.log(data2)     
+        }
+        // fetchMe();
+        async function GetMeFunc(){
+            $.ajax({
+                url: 'https://localhost:7144/api/Users/Me',
+                type: 'GET',
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("Authorization", "Bearer " + token);
+                },  
+                data:{},
+                success: function (data) {
+                    console.log('User loaded is: '+data);
+                    set_current_user({
+                    user_name: data,
+                    display_name: "nickname",
+                    picture: "picture",
+                })
+                },
+                error: function (data) {
+                    console.log("failed getting userMe");
+                }
+            });
+        }
+        GetMeFunc();
+        },[])
+    //set contacts to contact list from server
+    const [contact_list, setContact_List] = useState(); // will be an array of contact objects without conversations
+    useEffect( () => {
+        async function fetchContactList(){
+            $.ajax({
+                url: 'https://localhost:7144/api/Contacts',
+                type: 'GET',
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("Authorization", "Bearer " + token);
+                },  
+                data:{},
+                success: function (data) {
+                    console.log('omer is here');
+                    console.log(data)
+                },
+                error: function (data) {
+                    console.log("failed getting Contacts");
+                }
+            });
+        }
+        fetchContactList();
+        // const res = await fetch('https://localhost:7144/api/Contacts', {
+        //     method: 'GET',});
+        // const data = await res.json;
+        // console.log("set ccontact list to:");
+        // console.log(data);
+        // setContact_List(data);
+    },[])
+    //set conversations
+    const [conversation_list, setConversation_List] = useState(); // will be an array of conversation objects
+    /*
     useEffect(async () => {
-        const res = await fetch('https://localhost:7144/api/Contacts', {
-            method: 'GET',});
-        const data = await res.json();
-        console.log("set ccontact list to:");
-        console.log(data);
-        setContact_List(data);
-    },)
-
+        var dict = [];
+        contact_list.array.forEach(element => {
+            //TODO: add here awaits for each conversation
+            console.log('loading conversation for ' + element.user_name);
+            console.log('fetching from: '+'https://localhost:7144/api/Contacts/'+element.contactId+ '/messages')
+            const res =  fetch('https://localhost:7144/api/Contacts/'+element.contactId+ '/messages', {
+                method: 'GET',});
+            const data =  res.json();
+            console.log('messages data'+data);
+            setContact_List(data);
+            dict.push({
+                key: element.user_name,
+                value: data
+            });
+        });
+    },)*/
 
     const navigate = useNavigate();
     const refresh = useCallback(() => navigate('/', { replace: true }), [navigate]);
     const [refreshed_contact, set_refreshed_contact] = useState(false);
     //var init_contact_list =current_user === 'No UserName'? []:current_user.contact_list;
-    console.log(res)
-    console.log(res.Json)
-    const [contact_list, setContact_List] = useState(res.Json);
-    
 
     const [buttonSend, setButtonSend] = useState(null)
     const [sendingRef, setsendingRef] = useState(null)
@@ -158,6 +241,8 @@ const ChatScreen = ({ token }) => {
     return (
 
         <div className='container large'>
+            <div> Current UserName: {current_user.user_name}</div>
+            <div> Current Token: {token}</div>
             <div className="row row-chat">
                 <div className="col-5">
                     <div className="row row-chat">
@@ -171,7 +256,7 @@ const ChatScreen = ({ token }) => {
                     </div>
                 </div>
                 <CurrentContact contact={selected_contact} />
-                <ContactSide contact_list={contact_list} selectContact={selectContact} flag={refreshed_contact} />
+                {/* <ContactSide contact_list={contact_list} selectContact={selectContact} flag={refreshed_contact} /> */}
                 <div className="col-sm chat-space collapse" id='ChatSide'>
                     <div className="chat-box scrollable" id="chatbox">
                         {messages}

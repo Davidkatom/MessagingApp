@@ -11,7 +11,7 @@ import Modal from 'react-bootstrap/Modal'
 import { useState } from "react"
 
 
-const Login = ({  setToken }) => {
+const Login = ({  setToken,token }) => {
     //modal show handle and so:
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
@@ -46,7 +46,47 @@ const Login = ({  setToken }) => {
             },
         });
     }
-    
+    async function TestFunc(){
+        $.ajax({
+            url: 'https://localhost:7144/WeatherForecast',
+            type: 'GET',
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("Authorization", "Bearer " + token);
+            },  
+            data:{},
+            success: function (data) {
+                console.log('omer is here');
+
+                console.log(data);
+            },
+            error: function (data) {
+                console.log("failed");
+                console.log(data);
+                console.log(token);
+            }
+        });
+    }
+/*    async function GetMeFunc(){
+        $.ajax({
+            url: 'https://localhost:7144/api/Users/Me',
+            type: 'GET',
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("Authorization", "Bearer " + token);
+            },  
+            data:{tokey:token},
+            success: function (data) {
+                console.log('omer is here');
+                
+                console.log(data);
+            },
+            error: function (data) {
+                console.log("failed");
+                console.log(data);
+                console.log(token);
+            }
+        });
+    }*/
+
     return (
         <div className='container'>
             <span className='contact-header'>Log in to Whats Down</span>
@@ -69,7 +109,7 @@ const Login = ({  setToken }) => {
                 <button label='Login' className="btn btn-primary" onClick={loginButton} id='login_button' >Login</button>
                 <button className="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={handleShow} >Sign Up</button>
             </div>
-   
+  
 
 
             <Modal show={show} onHide={handleClose}>
