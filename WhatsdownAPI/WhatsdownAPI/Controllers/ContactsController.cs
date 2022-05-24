@@ -21,6 +21,18 @@ namespace WhatsdownAPI.Controllers
             _context = context;
         }
 
+        private Dictionary<string, string> Parse(Contact contact)
+        {
+            Dictionary<string, string> summerized = new();
+            summerized["id"] = contact.Contacted.Id;
+            summerized["name"] = contact.Contacted.NickName;
+            summerized["server"] = contact.Server;
+            summerized["last"] = contact.LastMessage;
+            summerized["lastdate"] = contact.LastDate.ToString();
+
+            return summerized;
+        }
+
         // GET: api/Contacts
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Contact>>> GetContactRelation()
@@ -75,11 +87,17 @@ namespace WhatsdownAPI.Controllers
             string name = contact["name"];
             string server = contact["server"];
 
+            var exists = await _context.ContactRelation.Include(c => c.Contacter).Include(c => c.Contacted).Where(c => c.Contacter.Id == "omer").AnyAsync(c => c.Contacted.Id == id);
+            if (exists)
+            {
+                return BadRequest();
+            }
+
             Contact newContact = new Contact()
             {
                 Contacted = await _context.User.FindAsync(id),
-                Contacter = await _context.User.FindAsync("David"), //TODO change to connected user
-                ContactedNickName = name,
+                Contacter = await _context.User.FindAsync("Omer"), //TODO change to connected user
+                ContactedNickName = name,                
                 Server = server,
             };
             //string id = contact.Contacted.Id;
@@ -88,7 +106,7 @@ namespace WhatsdownAPI.Controllers
             _context.ContactRelation.Add(newContact);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetContact", new { id = newContact.Id }, contact);
+            return NoContent();
         }
 
         // DELETE: api/Contacts/5
