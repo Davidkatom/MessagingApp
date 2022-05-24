@@ -14,7 +14,7 @@ namespace WhatsdownAPI.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     NickName = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
                     ProfilePicture = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },

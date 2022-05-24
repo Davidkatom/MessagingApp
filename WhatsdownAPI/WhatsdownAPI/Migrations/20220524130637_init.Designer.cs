@@ -12,7 +12,7 @@ using WhatsdownAPI.Data;
 namespace WhatsdownAPI.Migrations
 {
     [DbContext(typeof(WhatsdownAPIContext))]
-    [Migration("20220524091100_init")]
+    [Migration("20220524130637_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -100,7 +100,6 @@ namespace WhatsdownAPI.Migrations
                         .HasColumnType("nvarchar(10)");
 
                     b.Property<string>("Password")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ProfilePicture")

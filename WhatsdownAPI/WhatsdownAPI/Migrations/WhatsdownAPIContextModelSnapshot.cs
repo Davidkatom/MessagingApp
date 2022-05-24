@@ -98,7 +98,6 @@ namespace WhatsdownAPI.Migrations
                         .HasColumnType("nvarchar(10)");
 
                     b.Property<string>("Password")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ProfilePicture")
