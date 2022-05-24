@@ -21,7 +21,8 @@ namespace WhatsdownAPI.Controllers
             _context = context;
         }
 
-        private Dictionary<string, string> Parse(Contact contact)
+        //Parse Contact information
+        private Dictionary<string, string> ParseContact(Contact contact)
         {
             Dictionary<string, string> summerized = new();
             summerized["id"] = contact.Contacted.Id;
@@ -35,58 +36,58 @@ namespace WhatsdownAPI.Controllers
 
         // GET: api/Contacts
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Contact>>> GetContactRelation()
+        public async Task<List<Dictionary<string, string>>> GetContactRelation()
         {
-            return await _context.ContactRelation.Include(c => c.Contacter).Include(c => c.Contacted).Where(c => c.Contacter.Id == "omer").ToListAsync();
+            //List of all contacts of connected user
+            var contacts = await _context.ContactRelation.Include(c => c.Contacter).Include(c => c.Contacted).Where(c => c.Contacter.Id == "omer").ToListAsync();
+            List<Dictionary<string, string>> parsedContacts = new();
+            foreach (var contact in contacts)
+            {
+                parsedContacts.Add(ParseContact(contact));
+            }
+            return parsedContacts;
         }
 
         // GET: api/Contacts/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Contact>> GetContact(string id)
-        {            
-            return await _context.ContactRelation.Include(c => c.Contacter).Include(c => c.Contacted).Where(c => c.Contacter.Id == "omer").SingleAsync(c => c.Contacted.Id == id); ;
+        public async Task<Dictionary<string, string>> GetContact(string id)
+        {
+            //Contact of connected user
+            var contact = await _context.ContactRelation.Include(c => c.Contacter).Include(c => c.Contacted).Where(c => c.Contacter.Id == "omer").SingleAsync(c => c.Contacted.Id == id);
+            return ParseContact(contact);
         }
 
         // PUT: api/Contacts/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutContact(int id, Contact contact)
+        public async Task<IActionResult> PutContact(string id, Dictionary<string, string> updated)
         {
-            if (id != contact.Id)
+            var exists = await _context.ContactRelation.Include(c => c.Contacter).Include(c => c.Contacted).Where(c => c.Contacter.Id == "omer").AnyAsync(c => c.Contacted.Id == id);
+            if (!exists)
             {
                 return BadRequest();
             }
+            var contact = await _context.ContactRelation.Include(c => c.Contacter).Include(c => c.Contacted).Where(c => c.Contacter.Id == "omer").SingleAsync(c => c.Contacted.Id == id);
+            contact.ContactedNickName = updated["name"];
+            contact.Server = updated["server"];
 
             _context.Entry(contact).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ContactExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
         // POST: api/Contacts
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        //Creates new contact
         [HttpPost]
-        public async Task<ActionResult<Contact>> PostContact(Dictionary<string,string> contact)
+        public async Task<ActionResult<Contact>> PostContact(Dictionary<string, string> contact)
         {
             string id = contact["id"];
             string name = contact["name"];
             string server = contact["server"];
 
+            //Check if contact exists
             var exists = await _context.ContactRelation.Include(c => c.Contacter).Include(c => c.Contacted).Where(c => c.Contacter.Id == "omer").AnyAsync(c => c.Contacted.Id == id);
             if (exists)
             {
@@ -97,11 +98,10 @@ namespace WhatsdownAPI.Controllers
             {
                 Contacted = await _context.User.FindAsync(id),
                 Contacter = await _context.User.FindAsync("Omer"), //TODO change to connected user
-                ContactedNickName = name,                
+                ContactedNickName = name,
                 Server = server,
             };
-            //string id = contact.Contacted.Id;
-            //string name = contact.Contacted.NickName;
+
 
             _context.ContactRelation.Add(newContact);
             await _context.SaveChangesAsync();
@@ -123,6 +123,108 @@ namespace WhatsdownAPI.Controllers
             await _context.SaveChangesAsync();
 
             return NoContent();
+        }
+
+        [HttpGet("{id}/messages")]
+        public async Task<IEnumerable<ParsedMessage>> GetMesseges(string id)
+        {
+            //Contact of connected user
+            //var contact = await _context.ContactRelation.Include(c => c.Contacter).Include(c => c.Contacted).Where(c => c.Contacter.Id == "omer").SingleAsync(c => c.Contacted.Id == id);
+            var sentMesseges = await _context.Message.Where(m => m.Sender.Id == "Omer" || m.Reciever.Id == id).ToListAsync();
+            var recMesseges = await _context.Message.Where(m => m.Reciever.Id == "Omer" || m.Sender.Id == id).ToListAsync();
+
+            var parsedSent = new List<ParsedMessage>();
+            var parsedRec = new List<ParsedMessage>();
+            foreach (var message in sentMesseges)
+            {
+                parsedSent.Add(ParseMessage(message, true));
+            }
+            foreach (var message in recMesseges)
+            {
+                parsedRec.Add(ParseMessage(message, false));
+            }
+
+            var combined = parsedRec.Concat(parsedSent).ToList().OrderByDescending(x => x.created);
+            return combined;
+
+        }
+
+        [HttpGet("{id}/messages/{messageId}")]
+        public async Task<ActionResult<ParsedMessage>> GetMessege(string id, int messageId)
+        {
+            //Contact of connected user
+            //var contact = await _context.ContactRelation.Include(c => c.Contacter).Include(c => c.Contacted).Where(c => c.Contacter.Id == "omer").SingleAsync(c => c.Contacted.Id == id);
+            var message = await _context.Message.Include(m => m.Sender).Include(m => m.Reciever).SingleAsync(m => m.Id == messageId);
+
+            if (message.Sender.Id != "Omer" && message.Reciever.Id != "Omer")
+            {
+                return BadRequest();
+            }
+            if (message.Sender.Id != id && message.Reciever.Id != id)
+            {
+                return BadRequest();
+            }
+
+            bool isSent = false;
+            if (message.Sender.Id == "Omer")
+                isSent = true;
+            return Ok(ParseMessage(message, isSent));
+
+            //return 
+        }
+
+        [HttpPost("invitations")]
+        public async Task<IActionResult> Invite(Dictionary<string,string> details)
+        {
+            User from = await _context.User.FindAsync(details["from"]);
+            if(from != null)
+            {
+                return BadRequest("Contact already exists");
+            }
+
+            from = new User()
+            {
+                Id = details["from"],
+                NickName = details["from"]
+            };
+            Contact newContact = new Contact()
+            {
+                Contacted = from,
+                Contacter = await _context.User.FindAsync(details["to"]),
+                Server = details["server"]
+            };
+            _context.User.Add(from);
+            _context.ContactRelation.Add(newContact);
+
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+        [HttpPost("transfer")]
+        public async Task<IActionResult> Transfer(Dictionary<string, string> details)
+        {
+            Message msg = new Message()
+            {
+                Sender = await _context.User.FindAsync(details["from"]),
+                Reciever = await _context.User.FindAsync(details["to"]),
+                Content = details["content"]
+            };
+            _context.Message.Add(msg);
+            if (msg.Reciever == null)
+                return BadRequest();
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
+
+            private ParsedMessage ParseMessage(Message message, bool sent)
+        {
+            return new ParsedMessage()
+            {
+                id = message.Id,
+                content = message.Content,
+                created = message.Time,
+                sent = sent
+            };
         }
 
         private bool ContactExists(int id)

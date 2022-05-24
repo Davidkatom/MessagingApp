@@ -5,7 +5,6 @@ namespace WhatsdownAPI.Models
     {
         [StringLength(10, MinimumLength = 3, ErrorMessage = "NickName Length must be between 3 and 10")]
         public string Id { get; set; }
-        [Required]
         [DataType(DataType.Password)]
         public string Password { get; set; }
         [Required]
