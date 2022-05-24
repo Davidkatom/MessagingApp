@@ -88,7 +88,7 @@ namespace WhatsdownAPI.Controllers
             _context.ContactRelation.Add(newContact);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetContact", new { id = contact.Id }, contact);
+            return CreatedAtAction("GetContact", new { id = newContact.Id }, contact);
         }
 
         // DELETE: api/Contacts/5
