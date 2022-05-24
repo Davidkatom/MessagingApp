@@ -29,7 +29,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Login  setToken={setToken} />} />
-          <Route path="/chat" element={<ChatScreen current_user={current_user} />} />
+          <Route path="/chat" element={<ChatScreen token={token} />} />
         </Routes>
       </BrowserRouter>
     </div>

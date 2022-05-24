@@ -15,13 +15,27 @@ import { useNavigate } from 'react-router-dom';
 var checked = false
 
 
-const ChatScreen = ({ current_user }) => {
+const ChatScreen = ({ token }) => {
     var emptyMsg = <MessageElm direction="send" src={'empty chat'} timeStamp={null} messagetype='text' />;
+
+    //set contacts
+    useEffect(async () => {
+        const res = await fetch('https://localhost:7144/api/Contacts', {
+            method: 'GET',});
+        const data = await res.json();
+        console.log("set ccontact list to:");
+        console.log(data);
+        setContact_List(data);
+    },)
+
+
     const navigate = useNavigate();
     const refresh = useCallback(() => navigate('/', { replace: true }), [navigate]);
     const [refreshed_contact, set_refreshed_contact] = useState(false);
-    var init_contact_list =current_user === 'No UserName'? []:current_user.contact_list;
-    const [contact_list, setContact_List] = useState(init_contact_list);
+    //var init_contact_list =current_user === 'No UserName'? []:current_user.contact_list;
+    console.log(res)
+    console.log(res.Json)
+    const [contact_list, setContact_List] = useState(res.Json);
     
 
     const [buttonSend, setButtonSend] = useState(null)
@@ -84,9 +98,9 @@ const ChatScreen = ({ current_user }) => {
         //set scrolling correctly
         document.getElementById('chatbox').scrollTop = document.getElementById('chatbox').scrollHeight;
         // make sure a user is logged in - otherwise redirect to login page
-        if (current_user === "No UserName") {
-            refresh()
-        }
+        //if (current_user === "No UserName") {
+        //    refresh()
+        //}
     });
 
     const [selected_contact, set_selected_contact] = useState("");
