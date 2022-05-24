@@ -79,31 +79,30 @@ const Register = ({close}) => {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                userName: u_name,
+                Id: u_name,
                 password: p_word1,
                 nickName: d_name,
                 profilePicture: profilePicture
             }),
         })
         if(!res.ok){
-            console.log('register failed!')
-
+            //console.log('register failed! ')
+            //log the res faile message:
+            //console.log(res.text().then(text => { throw new Error(text) }))
+            //console.log(res.errors())
             setAlert(["Username already exists", 'alert alert-danger'])
-            setAlert(["Register Failed", 'alert alert-danger'])
+            //setAlert(["Register Failed", 'alert alert-danger'])
             return
         }
-        console.log('user added')
+        // console.log('user added')
         setAlert(["Register Successful", 'alert alert-success'])
-
-        console.log(res.ok)
-
+        // console.log(res.ok)
         //clear all form inputs
-        // document.getElementById('user_name').value = ''
-        // document.getElementById('password1').value = ''
-        // document.getElementById('password2').value = ''
-        // document.getElementById('display_name').value = ''
-
-        //close()
+        document.getElementById('user_name').value = ''
+        document.getElementById('password1').value = ''
+        document.getElementById('password2').value = ''
+        document.getElementById('display_name').value = ''
+        close()
     }
 
     return (
