@@ -31,7 +31,10 @@ namespace WhatsdownAPI.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ContacterId = table.Column<string>(type: "nvarchar(10)", nullable: true),
                     ContactedId = table.Column<string>(type: "nvarchar(10)", nullable: true),
-                    ContactedNickName = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    ContactedNickName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Server = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastMessage = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {

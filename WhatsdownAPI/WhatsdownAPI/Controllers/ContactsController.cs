@@ -23,24 +23,16 @@ namespace WhatsdownAPI.Controllers
 
         // GET: api/Contacts
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Contact>>> GetContact()
+        public async Task<ActionResult<IEnumerable<Contact>>> GetContactRelation()
         {
-
-            var q = await _context.ContactRelation.Include(c => c.Contacter).Include(c => c.Contacted).Where(c => c.Contacter.Id == "omer").ToListAsync() ;
-            return q;
+            return await _context.ContactRelation.Include(c => c.Contacter).Include(c => c.Contacted).Where(c => c.Contacter.Id == "omer").ToListAsync();
         }
+
         // GET: api/Contacts/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<ContactRelation>> GetContactRelation(string id)
-        {
-            var contactRelation = await _context.ContactRelation.Include(c => c.Contacter).Include(c => c.Contacted).Where(c => c.Contacter.Id == "omer").SingleAsync(c => c.Contacted.Id == id);
-
-            if (contact == null)
-            {
-                return NotFound();
-            }
-
-            return contact;
+        public async Task<ActionResult<Contact>> GetContact(string id)
+        {            
+            return await _context.ContactRelation.Include(c => c.Contacter).Include(c => c.Contacted).Where(c => c.Contacter.Id == "omer").SingleAsync(c => c.Contacted.Id == id); ;
         }
 
         // PUT: api/Contacts/5
@@ -77,15 +69,23 @@ namespace WhatsdownAPI.Controllers
         // POST: api/Contacts
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Contact>> PostContact(Contact contact)
+        public async Task<ActionResult<Contact>> PostContact(Dictionary<string,string> contact)
         {
-            string id = contactRelation.Contacted.Id;
-            
-            string name = contactRelation.Contacted.NickName;
+            string id = contact["id"];
+            string name = contact["name"];
+            string server = contact["server"];
 
+            Contact newContact = new Contact()
+            {
+                Contacted = await _context.User.FindAsync(id),
+                Contacter = await _context.User.FindAsync("David"), //TODO change to connected user
+                ContactedNickName = name,
+                Server = server,
+            };
+            //string id = contact.Contacted.Id;
+            //string name = contact.Contacted.NickName;
 
-
-            _context.ContactRelation.Add(contactRelation);
+            _context.ContactRelation.Add(newContact);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetContact", new { id = contact.Id }, contact);

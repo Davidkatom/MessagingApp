@@ -12,7 +12,7 @@ using WhatsdownAPI.Data;
 namespace WhatsdownAPI.Migrations
 {
     [DbContext(typeof(WhatsdownAPIContext))]
-    [Migration("20220523113806_init")]
+    [Migration("20220524091100_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -40,6 +40,15 @@ namespace WhatsdownAPI.Migrations
 
                     b.Property<string>("ContacterId")
                         .HasColumnType("nvarchar(10)");
+
+                    b.Property<DateTime>("LastDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastMessage")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Server")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

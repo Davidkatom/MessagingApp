@@ -39,6 +39,15 @@ namespace WhatsdownAPI.Migrations
                     b.Property<string>("ContacterId")
                         .HasColumnType("nvarchar(10)");
 
+                    b.Property<DateTime>("LastDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastMessage")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Server")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ContactedId");
