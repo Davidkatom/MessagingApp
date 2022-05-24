@@ -31,9 +31,9 @@ namespace WhatsdownAPI.Controllers
 
         // GET: api/ContactRelations/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<ContactRelation>> GetContactRelation(int id)
+        public async Task<ActionResult<ContactRelation>> GetContactRelation(string id)
         {
-            var contactRelation = await _context.ContactRelation.FindAsync(id);
+            var contactRelation = await _context.ContactRelation.Include(c => c.Contacter).Include(c => c.Contacted).Where(c => c.Contacter.Id == "omer").SingleAsync(c => c.Contacted.Id == id);
 
             if (contactRelation == null)
             {
@@ -79,6 +79,12 @@ namespace WhatsdownAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<ContactRelation>> PostContactRelation(ContactRelation contactRelation)
         {
+            string id = contactRelation.Contacted.Id;
+            
+            string name = contactRelation.Contacted.NickName;
+
+
+
             _context.ContactRelation.Add(contactRelation);
             await _context.SaveChangesAsync();
 
