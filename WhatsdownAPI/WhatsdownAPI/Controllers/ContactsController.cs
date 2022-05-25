@@ -131,8 +131,8 @@ namespace WhatsdownAPI.Controllers
         {
             //Contact of connected user
             //var contact = await _context.ContactRelation.Include(c => c.Contacter).Include(c => c.Contacted).Where(c => c.Contacter.Id == "omer").SingleAsync(c => c.Contacted.Id == id);
-            var sentMesseges = await _context.Message.Where(m => m.Sender.Contacter == "Omer" || m.Reciever.Contacter == id).ToListAsync();
-            var recMesseges = await _context.Message.Where(m => m.Reciever.Contacter == "Omer" || m.Sender.Contacter == id).ToListAsync();
+            var sentMesseges = await _context.Message.Where(m => m.Sender == "Omer" || m.Reciever == id).ToListAsync();
+            var recMesseges = await _context.Message.Where(m => m.Reciever == "Omer" || m.Sender == id).ToListAsync();
 
             var parsedSent = new List<ParsedMessage>();
             var parsedRec = new List<ParsedMessage>();
@@ -157,17 +157,17 @@ namespace WhatsdownAPI.Controllers
             //var contact = await _context.ContactRelation.Include(c => c.Contacter).Include(c => c.Contacted).Where(c => c.Contacter.Id == "omer").SingleAsync(c => c.Contacted.Id == id);
             var message = await _context.Message.Include(m => m.Sender).Include(m => m.Reciever).SingleAsync(m => m.Id == messageId);
 
-            if (message.Sender.Contacter != "Omer" && message.Reciever.Contacter != "Omer")
+            if (message.Sender != "Omer" && message.Reciever != "Omer")
             {
                 return BadRequest();
             }
-            if (message.Sender.Contacter != id && message.Reciever.Contacter != id)
+            if (message.Sender != id && message.Reciever != id)
             {
                 return BadRequest();
             }
 
             bool isSent = false;
-            if (message.Sender.Contacter == "Omer")
+            if (message.Sender == "Omer")
                 isSent = true;
             return Ok(ParseMessage(message, isSent));
 
@@ -202,44 +202,48 @@ namespace WhatsdownAPI.Controllers
 
             return NoContent();
         }
-        [HttpPost("transfer")]
-        public async Task<IActionResult> Transfer(Dictionary<string, string> details)
-        {
-            Message msg = new Message()
-            {
-                Sender = await _context.ContactRelation.SingleAsync(c => c.Contacted == details["to"] && c.Contacter == details["from"]),
-                Reciever = await _context.ContactRelation.SingleAsync(c => c.Contacter == details["to"] && c.Contacted == details["from"]),
-                Content = details["content"]
-            };
-            msg.Sender.LastMessage = msg.Content;
-            msg.Reciever.LastMessage = msg.Content;
-            msg.Sender.LastDate = msg.Time;
-            msg.Reciever.LastDate = msg.Time;
+        /*
+       [HttpPost("transfer")]
+       public async Task<IActionResult> Transfer(Dictionary<string, string> details)
+       {
 
-            _context.Message.Add(msg);
-            if (msg.Reciever == null)
-                return BadRequest();
-            await _context.SaveChangesAsync();
-            return Ok();
-        }
+           Message msg = new Message()
+           {
+               Sender = await _context.ContactRelation.SingleAsync(c => c.Contacted == details["to"] && c.Contacter == details["from"]),
+               Reciever = await _context.ContactRelation.SingleAsync(c => c.Contacter == details["to"] && c.Contacted == details["from"]),
+               Content = details["content"]
+           };
+           msg.Sender.LastMessage = msg.Content;
+           msg.Reciever.LastMessage = msg.Content;
+           msg.Sender.LastDate = msg.Time;
+           msg.Reciever.LastDate = msg.Time;
+
+           _context.Message.Add(msg);
+           if (msg.Reciever == null)
+               return BadRequest();
+           await _context.SaveChangesAsync();
+           return Ok();
+          
+    }
+         */
 
         [HttpPost("{id}/messages")]
         public async Task<IActionResult> SendMessege(string id, string content)
         {
             Message msg = new Message()
             {
-                Sender = await _context.ContactRelation.SingleAsync(c => c.Contacted == id && c.Contacter == "Omer"),
-                Reciever = await _context.ContactRelation.SingleAsync(c => c.Contacter == id && c.Contacted == "Omer"),
+                Sender = "Omer",
+                Reciever = id,
                 Content = content,
                 Time = DateTime.Now
             };
-            msg.Sender.LastMessage = msg.Content;
-            msg.Reciever.LastMessage = msg.Content;
-            msg.Sender.LastDate = msg.Time;
-            msg.Reciever.LastDate = msg.Time;
+            Contact cont = await _context.ContactRelation.SingleAsync(c => c.Contacter == "Omer" && c.Contacted == id);
+            cont.LastMessage = msg.Content;
+            cont.LastDate = msg.Time;
             
 
             _context.Message.Add(msg);
+            _context.Entry(cont).State = EntityState.Modified;
             if (msg.Reciever == null)
                 return BadRequest();
             await _context.SaveChangesAsync();

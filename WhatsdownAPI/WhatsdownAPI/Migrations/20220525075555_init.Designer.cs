@@ -12,8 +12,8 @@ using WhatsdownAPI.Data;
 namespace WhatsdownAPI.Migrations
 {
     [DbContext(typeof(WhatsdownAPIContext))]
-    [Migration("20220525071023_Init")]
-    partial class Init
+    [Migration("20220525075555_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -66,20 +66,16 @@ namespace WhatsdownAPI.Migrations
                     b.Property<string>("Content")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("RecieverId")
-                        .HasColumnType("int");
+                    b.Property<string>("Reciever")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("SenderId")
-                        .HasColumnType("int");
+                    b.Property<string>("Sender")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Time")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("RecieverId");
-
-                    b.HasIndex("SenderId");
 
                     b.ToTable("Message");
                 });
@@ -104,21 +100,6 @@ namespace WhatsdownAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("User");
-                });
-
-            modelBuilder.Entity("WhatsdownAPI.Models.Message", b =>
-                {
-                    b.HasOne("WhatsdownAPI.Models.Contact", "Reciever")
-                        .WithMany()
-                        .HasForeignKey("RecieverId");
-
-                    b.HasOne("WhatsdownAPI.Models.Contact", "Sender")
-                        .WithMany()
-                        .HasForeignKey("SenderId");
-
-                    b.Navigation("Reciever");
-
-                    b.Navigation("Sender");
                 });
 #pragma warning restore 612, 618
         }
