@@ -16,7 +16,8 @@ const AddNewContact = ({ addContact }) => {
     function validateAndAddNewContact() {
         //loop throwe all contacts to see if already exists
         var name = document.getElementById('new_user_name')
-        var returnVal = addContact(name.value)
+        var server = document.getElementById('new_user_server')
+        var returnVal = addContact(name.value,server.value)
         if (returnVal === 'success') {
             cleanAndClose()
         } else {
@@ -26,6 +27,7 @@ const AddNewContact = ({ addContact }) => {
     }
     function cleanAndClose() {
         document.getElementById('new_user_name').value = ''
+        document.getElementById('new_user_server').value = ''
         document.getElementById('error_message').classList.add('collapse');
         handleClose()
     }
@@ -38,12 +40,14 @@ const AddNewContact = ({ addContact }) => {
                 <Modal.Header closeButton>
                     <h4 className="modal-title">Add new contact</h4>
                 </Modal.Header>
-                <Modal.Body><InputLine label='Contact-identifier:' type='text' id='new_user_name' placeholder='Contact-identifier' fun = {validateAndAddNewContact}/>
-                <div className="align-center collapse" id="error_message">
-                    <div className="alert alert-danger" role="alert" id="alert">
-                        {error_message}
+                <Modal.Body>
+                    <InputLine label='Contact-Identifier:' type='text' id='new_user_name' placeholder='Contact-Identifier' fun = {validateAndAddNewContact}/>
+                    <InputLine label='Contact-Server:' type='text' id='new_user_server' placeholder='Contact-Server' fun = {validateAndAddNewContact}/>
+                    <div className="align-center collapse" id="error_message">
+                        <div className="alert alert-danger" role="alert" id="alert">
+                            {error_message}
+                        </div>
                     </div>
-                </div>
                 </Modal.Body>
                 <Modal.Footer>
                     <button className="btn btn-primary" onClick={() => validateAndAddNewContact()}>

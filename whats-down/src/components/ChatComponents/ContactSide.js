@@ -1,7 +1,6 @@
 import MiniContant from './MiniContant';
 
-const ContactSide = ({ contact_list , selectContact, flag}) => {
-
+const ContactSide = ({ contact_list , selectContact}) => {
     return (
         <div className="col-5 scrollable" id = "contacts">
             <div className='direction-fix'>
