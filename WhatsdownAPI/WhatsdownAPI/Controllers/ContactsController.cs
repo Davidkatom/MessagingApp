@@ -145,7 +145,7 @@ namespace WhatsdownAPI.Controllers
                 parsedRec.Add(ParseMessage(message, false));
             }
 
-            var combined = parsedRec.Concat(parsedSent).ToList().OrderByDescending(x => x.created);
+            var combined = parsedRec.Concat(parsedSent).ToList().OrderBy(x => x.created);
             return combined;
 
         }
