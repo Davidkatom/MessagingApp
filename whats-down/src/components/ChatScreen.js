@@ -105,8 +105,13 @@ const ChatScreen = ({ token }) => {
                 },  
                 data:{},
                 success: function (data) {
-                        setContact_List(data);
-                    // console.log('contact list set!');
+                    console.log('contact list');
+                    console.log(data);
+
+                    setContact_List(data);
+                    console.log('contact list set!');
+                    console.log(data);
+
                     // console.log('add here chat loading for each contact')
                     for (const [key, value] of Object.entries(data)) {
                     // console.log(key, value);
@@ -123,7 +128,6 @@ const ChatScreen = ({ token }) => {
 
     const navigate = useNavigate();
     const refresh = useCallback(() => navigate('/', { replace: true }), [navigate]);
-    const [refreshed_contact, set_refreshed_contact] = useState(false);
 
     const [buttonSend, setButtonSend] = useState(null)
     const [sendingRef, setsendingRef] = useState(null)
@@ -193,17 +197,17 @@ const ChatScreen = ({ token }) => {
     }
 
     useEffect(() => {
-        if (messages) {
-            contact_chat_change(selected_contact.display_name)
-        }
+        // if (messages) {
+        //     contact_chat_change(selected_contact.display_name)
+        // }
         //set scrolling correctly
         document.getElementById('chatbox').scrollTop = document.getElementById('chatbox').scrollHeight;
     });
 
     //update the contact list when a new message sent/recived
-    const contact_chat_change = (cahnged_contact) => {
-        setContact_List(contact_list)
-    }
+    // const contact_chat_change = (cahnged_contact) => {
+    //     setContact_List(contact_list)
+    // }
     //select a spescific contact, update current chat history and last message
     const  selectContact = async (contact) => {
         console.log('Contact id selected: '+contact)
@@ -231,23 +235,19 @@ const ChatScreen = ({ token }) => {
     }
 
     //add a new contact to the contact list
-    const addContact = (newContactName) => {
-        /*
+    const addContact = (newContactName,server) => {
         //check if newContactName is already in the contact list
-        if (newContactName.length < 1) { return 'Please enter a valid name' }
+        if (newContactName.length < 3) { return 'Please enter a valid name (3 chars+)' }
         if (newContactName in contact_list) { return 'User already in contact list' }
+        console.log('add new Contact:')
+        
 
-        var temp = contact_list
-        temp[newContactName] = {
-            display_name: newContactName,
-            chat_history: [],
-            last_message: emptyMsg,
-            picture: "blank-profile-picture.png",
-        }
-        setContact_List(temp)
-        set_refreshed_contact(!refreshed_contact)
+        setContact_List([ { id: newContactName,id: newContactName, name: newContactName,server: server},...contact_list])
+
+
+
         return 'success'
-        */
+        
     }
 
     return (
@@ -268,7 +268,7 @@ const ChatScreen = ({ token }) => {
                     </div>
                 </div>
                 <CurrentContact contact={selected_contact} />
-                <ContactSide contact_list={contact_list} selectContact={selectContact} flag={refreshed_contact} />
+                <ContactSide contact_list={contact_list} selectContact={selectContact}  />
                 <div className="col-sm chat-space collapse" id='ChatSide'>
                     <div className="chat-box scrollable" id="chatbox">
                         {messages}
