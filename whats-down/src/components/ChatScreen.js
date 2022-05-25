@@ -18,7 +18,6 @@ var checked = false
 
 const ChatScreen = ({ token }) => {
     // console.log('render')
-    var emptyMsg = <MessageElm direction="send" src={'empty chat'} timeStamp={null} messagetype='text' />;
     //update current chat according to the contact id:
     const [selected_contact, set_selected_contact] = useState("");
     const [messages, setMessages] = useState([]);
