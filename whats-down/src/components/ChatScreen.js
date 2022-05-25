@@ -155,15 +155,16 @@ const ChatScreen = ({ token }) => {
                 },
                 data:JSON.stringify({content:input}),
                 success: function (data) {
-                    console.log('message sent')
-                    console.log(data)
+                    // console.log('message sent')
                 },
                 error: function (data) {
                     console.log("failed sending message");
                     console.log(data);
                     return null;
                 }
-            }).then(updateChatByContactId())
+            }).then(
+                setMessages([...messages, <MessageElm sent={true} src={input} timeStamp={new Date()} messagetype={"text"} />])
+                )
         }
         document.getElementById('message').value = ""
     }

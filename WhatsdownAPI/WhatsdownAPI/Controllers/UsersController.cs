@@ -50,31 +50,22 @@ namespace WhatsdownAPI.Controllers
         // GET: api/Users/Me
         [HttpGet("Me")]
         //public async Task<Dictionary<string,string>> GetMe()
-        public string GetUserMe(string tokey)
+        public string GetUserMe()
         {
             Dictionary<string, string> requestHeaders =new Dictionary<string, string>();
-            foreach (var header in Request.Headers)
-            {
-                requestHeaders.Add(header.Key, header.Value);
-            }
-            var val = requestHeaders["Authorization"];
-            var val2 = val.Replace("Bearer ", "");
+            string autho = Request.Headers["Authorization"];
+            var tokey = autho.Replace("Bearer ", "");
             var handler = new JwtSecurityTokenHandler();
-            //handler.ReadToken();
             try
             {
-                var jsonToken = handler.ReadToken(val2);
+                var jsonToken = handler.ReadToken(tokey);
                 var tokenS = jsonToken as JwtSecurityToken;
-                //var temp = tokenS.Claims.ToArray().GetValue(3);
-                return tokenS.Claims.ToArray().GetValue(3).ToString();
+                return tokenS.Claims.ToArray()[3].Value;
             }
             catch (Exception ex)
             {
                 return "Authontication Error";
             }
-            //var user = await _context.User.FindAsync(id);
-            //Dictionary<string, string> me = new Dictionary<string, string>();
-            //return me;
         }
 
         // GET: api/Users/5
