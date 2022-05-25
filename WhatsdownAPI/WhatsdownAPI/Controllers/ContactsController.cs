@@ -132,7 +132,7 @@ namespace WhatsdownAPI.Controllers
             //Contact of connected user
             //var contact = await _context.ContactRelation.Include(c => c.Contacter).Include(c => c.Contacted).Where(c => c.Contacter.Id == "omer").SingleAsync(c => c.Contacted.Id == id);
             var sentMesseges = await _context.Message.Where(m => m.Sender == "Omer" || m.Reciever == id).ToListAsync();
-            var recMesseges = await _context.Message.Where(m => m.Reciever == "Omer" || m.Sender == id).ToListAsync();
+            //var recMesseges = await _context.Message.Where(m => m.Reciever == "Omer" || m.Sender == id).ToListAsync();
 
             var parsedSent = new List<ParsedMessage>();
             var parsedRec = new List<ParsedMessage>();
@@ -140,10 +140,10 @@ namespace WhatsdownAPI.Controllers
             {
                 parsedSent.Add(ParseMessage(message, true));
             }
-            foreach (var message in recMesseges)
-            {
-                parsedRec.Add(ParseMessage(message, false));
-            }
+            //foreach (var message in recMesseges)
+            //{
+            //    parsedRec.Add(ParseMessage(message, false));
+            //}
 
             var combined = parsedRec.Concat(parsedSent).ToList().OrderBy(x => x.created);
             return combined;
