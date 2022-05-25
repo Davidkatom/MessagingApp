@@ -175,14 +175,14 @@ namespace WhatsdownAPI.Controllers
         }
 
         [HttpPost("invitations")]
-        public async Task<IActionResult> Invite(Dictionary<string,string> details)
+        public async Task<IActionResult> Invite(Dictionary<string, string> details)
         {
-            string id = details["id"];
-            string name = details["name"];
+            string from = details["from"];
+            string to = details["to"];
             string server = details["server"];
 
             //Check if contact exists
-            var exists = await _context.ContactRelation.Where(c => c.Contacted == "omer").AnyAsync(c => c.Contacter == id);
+            var exists = await _context.ContactRelation.Where(c => c.Contacter == from).AnyAsync(c => c.Contacted == to);
             if (exists)
             {
                 return BadRequest();
@@ -190,10 +190,11 @@ namespace WhatsdownAPI.Controllers
 
             Contact newContact = new Contact()
             {
-                Contacter = id,
-                Contacted = "Omer", //TODO change to connected user
-                ContactedNickName = name,
+                Contacted = from,
+                Contacter = to, //TODO change to connected user
+                ContactedNickName = to,
                 Server = server,
+                LastDate = DateTime.Now
             };
 
 
@@ -202,30 +203,33 @@ namespace WhatsdownAPI.Controllers
 
             return NoContent();
         }
-        /*
-       [HttpPost("transfer")]
-       public async Task<IActionResult> Transfer(Dictionary<string, string> details)
-       {
 
-           Message msg = new Message()
-           {
-               Sender = await _context.ContactRelation.SingleAsync(c => c.Contacted == details["to"] && c.Contacter == details["from"]),
-               Reciever = await _context.ContactRelation.SingleAsync(c => c.Contacter == details["to"] && c.Contacted == details["from"]),
-               Content = details["content"]
-           };
-           msg.Sender.LastMessage = msg.Content;
-           msg.Reciever.LastMessage = msg.Content;
-           msg.Sender.LastDate = msg.Time;
-           msg.Reciever.LastDate = msg.Time;
 
-           _context.Message.Add(msg);
-           if (msg.Reciever == null)
-               return BadRequest();
-           await _context.SaveChangesAsync();
-           return Ok();
-          
-    }
-         */
+        [HttpPost("transfer")]
+        public async Task<IActionResult> Transfer(Dictionary<string, string> details)
+        {
+
+            Message msg = new Message()
+            {
+                Sender = details["from"],
+                Reciever = details["to"],
+                Content = details["content"],
+                Time = DateTime.Now
+            };
+            Contact cont = await _context.ContactRelation.SingleAsync(c => c.Contacter == details["from"] && c.Contacted == details["to"]);
+            cont.LastMessage = msg.Content;
+            cont.LastDate = msg.Time;
+
+
+            _context.Message.Add(msg);
+            _context.Entry(cont).State = EntityState.Modified;
+            if (msg.Reciever == null)
+                return BadRequest();
+            await _context.SaveChangesAsync();
+            return Ok();
+
+        }
+
 
         [HttpPost("{id}/messages")]
         public async Task<IActionResult> SendMessege(string id, Dictionary<string, string> content)
@@ -240,7 +244,7 @@ namespace WhatsdownAPI.Controllers
             Contact cont = await _context.ContactRelation.SingleAsync(c => c.Contacter == "Omer" && c.Contacted == id);
             cont.LastMessage = msg.Content;
             cont.LastDate = msg.Time;
-            
+
 
             _context.Message.Add(msg);
             _context.Entry(cont).State = EntityState.Modified;
