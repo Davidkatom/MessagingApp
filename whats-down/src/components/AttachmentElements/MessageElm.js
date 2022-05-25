@@ -1,5 +1,6 @@
 import TimeStempCalc from "../../functions/TimeStempCalc";
-const MessageElm = ({ direction, src, messagetype, timeStamp }) => {
+const MessageElm = ({ sent, src, messagetype, timeStamp }) => {
+    let direction = sent? "send" : "receive";
     return (
         <div className={direction + '_cont'}>
             <div className={"message-elm" + direction} >
@@ -22,7 +23,7 @@ const MessageElm = ({ direction, src, messagetype, timeStamp }) => {
                                     :
                                     null
                     }
-                    <span className="time_stamp">{TimeStempCalc(timeStamp)}</span>
+                    {/* <span className="time_stamp">{TimeStempCalc(timeStamp)}</span> */}
                 </div>
             </div>
         </div>
