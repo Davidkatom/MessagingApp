@@ -150,7 +150,7 @@ const ChatScreen = ({ token }) => {
         if (input !== "") {
             $.ajax({
                 url: 'https://localhost:7144/api/Contacts/'+selected_contact+'/messages',
-                type: 'Post',
+                type: 'POST',
                 beforeSend: function (xhr) {
                     xhr.setRequestHeader("Authorization", "Bearer " + token);
                 },
@@ -235,15 +235,36 @@ const ChatScreen = ({ token }) => {
     }
 
     //add a new contact to the contact list
-    const addContact = (newContactName,server) => {
+    const addContact = (newContactName,Nickname,server) => {
         //check if newContactName is already in the contact list
-        if (newContactName.length < 3) { return 'Please enter a valid name (3 chars+)' }
+        if (newContactName.length < 3) { return 'Please enter a valid Id (3 chars+)' }
+        if (Nickname.length < 3) { return 'Please enter a valid Nickname (3 chars+)' }
         if (newContactName in contact_list) { return 'User already in contact list' }
         console.log('add new Contact:')
+        let newbie = { id: newContactName, name: Nickname,server: server}
+
         
-
-        setContact_List([ { id: newContactName,id: newContactName, name: newContactName,server: server},...contact_list])
-
+        $.ajax({
+            url: 'https://localhost:7144/api/Contacts/',
+            type: 'POST',
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("Authorization", "Bearer " + token);
+            },
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            data:JSON.stringify(newbie),
+            success: function (data) {
+                console.log('Contact Post sent')
+            },
+            error: function (data) {
+                console.log("failed adding new contact");
+                console.log(data);
+                return null;
+            }
+        }).then(
+            setContact_List([newbie ,...contact_list])
+            )
 
 
         return 'success'
@@ -257,7 +278,7 @@ const ChatScreen = ({ token }) => {
             <div> Current Token: {token}</div>
             <div className="row row-chat">
                 <div className="col-5">
-                    <div className="row row-chat">
+                    <div className="rodw row-chat">
                         <div className="col-6">
                             <img className="float-start img-thumbnail rounded-start right-padding-for-picture" src="omer.png" alt="Profile" />
                             <h2 className="card-title">{current_user.display_name}</h2>
