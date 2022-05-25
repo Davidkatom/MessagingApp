@@ -20,10 +20,12 @@ const ChatScreen = ({ token }) => {
     // console.log('render')
     //console.log(token)
     var emptyMsg = <MessageElm direction="send" src={'empty chat'} timeStamp={null} messagetype='text' />;
-    //fetch function for a specific contact's messages from server:
-    async function fetchChatByContactId(Contact_id){
+    //update current chat according to the contact id:
+    const [messages, setMessages] = useState([]);
+    async function updateChatByContactId(){
+        let Contact_id = selected_contact
         console.log('messages load for: '+Contact_id);
-        var a =$.ajax({
+        $.ajax({
             url: 'https://localhost:7144/api/Contacts/'+Contact_id+'/messages',
             type: 'GET',
             beforeSend: function (xhr) {
@@ -31,23 +33,18 @@ const ChatScreen = ({ token }) => {
             },
             data:{},
             success: function (data) {
-                console.log('messages loaded are: '+data);
-                console.log(data);
-                return data;
+                var newMsgs = [];
+                for (let i = 0; i < data.length; i++) {
+                    newMsgs.push(<MessageElm sent={data[i].sent} src={data[i].content} timeStamp={data[i].created} messagetype={"text"} />)
+                }
+                setMessages(newMsgs)
             },
             error: function (data) {
                 console.log("failed getting messages");
                 return null;
             }
-        });
-        console.log('a: ')
-        console.log(await a.json)
-
+        })
     }
-    
-
-
-
     //fetch Cuurent User
     const [current_user, set_current_user] = useState('No UserName');
     useEffect( () => {
@@ -123,26 +120,6 @@ const ChatScreen = ({ token }) => {
         fetchContactList();
     },[])
     
-    //fetch conversations
-    const [conversation_list, setConversation_List] = useState(); // will be an array of conversation objects
-    /*
-    useEffect(async () => {
-        var dict = [];
-        contact_list.array.forEach(element => {
-            //TODO: add here awaits for each conversation
-            console.log('loading conversation for ' + element.user_name);
-            console.log('fetching from: '+'https://localhost:7144/api/Contacts/'+element.contactId+ '/messages')
-            const res =  fetch('https://localhost:7144/api/Contacts/'+element.contactId+ '/messages', {
-                method: 'GET',});
-            const data =  res.json();
-            console.log('messages data'+data);
-            setContact_List(data);
-            dict.push({
-                key: element.user_name,
-                value: data
-            });
-        });
-    },)*/
 
     const navigate = useNavigate();
     const refresh = useCallback(() => navigate('/', { replace: true }), [navigate]);
@@ -150,7 +127,8 @@ const ChatScreen = ({ token }) => {
 
     const [buttonSend, setButtonSend] = useState(null)
     const [sendingRef, setsendingRef] = useState(null)
-    //check
+    //toggle media buttons
+    const [classes, setClasses] = useState("btn btn-light collapse");
     const toggle = () => {
         if (checked === false) {
             setClasses("btn btn-light attachments")
@@ -161,19 +139,28 @@ const ChatScreen = ({ token }) => {
         checked = !checked
     }
 
-    const [classes, setClasses] = useState("btn btn-light collapse");
-    const [messages, setMessages] = useState([]);
-
-
-
 
     const sendText = () => {
+        console.log('send message')
         var input = document.getElementById('message').value
         if (input !== "") {
-            var elm = (<MessageElm direction="send" src={input} timeStamp={new Date()} messagetype='text' />)
-            setMessages([...messages, elm])
-            selected_contact.chat_history.push(elm)
-            selected_contact.last_message = elm
+            $.ajax({
+                url: 'https://localhost:7144/api/Contacts/'+selected_contact+'/messages',
+                type: 'Post',
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("Authorization", "Bearer " + token);
+                },
+                data:{content: input},
+                success: function (data) {
+                    console.log('message sent')
+                    console.log(data)
+                },
+                error: function (data) {
+                    console.log("failed sending message");
+                    console.log(data);
+                    return null;
+                }
+            }).then(updateChatByContactId())
         }
         document.getElementById('message').value = ""
     }
@@ -223,12 +210,7 @@ const ChatScreen = ({ token }) => {
         document.getElementById(contact).classList.add('selected-chat') //add selection
         set_selected_contact(contact)
         document.getElementById("message").value = '' //erase the messageBox when switching contacts
-        //setMessages(contact.chat_history)
-        var newMessages =await fetchChatByContactId(contact)
-        console.log('ahhhhhhhhhhhhhh')
-        setMessages(newMessages)
-        console.log('newMessages are: '+newMessages)
-        setMessages(newMessages)
+        updateChatByContactId()
 
         document.getElementById('ChatSide').classList.remove('collapse')
         document.getElementById("selected-contact-image").classList.remove('collapse')
