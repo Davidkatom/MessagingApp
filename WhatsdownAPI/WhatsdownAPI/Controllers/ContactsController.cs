@@ -25,8 +25,8 @@ namespace WhatsdownAPI.Controllers
         private Dictionary<string, string> ParseContact(Contact contact)
         {
             Dictionary<string, string> summerized = new();
-            summerized["id"] = contact.Contacted.Id;
-            summerized["name"] = contact.Contacted.NickName;
+            summerized["id"] = contact.Contacted;
+            summerized["name"] = contact.ContactedNickName;
             summerized["server"] = contact.Server;
             summerized["last"] = contact.LastMessage;
             summerized["lastdate"] = contact.LastDate.ToString();
@@ -39,7 +39,7 @@ namespace WhatsdownAPI.Controllers
         public async Task<List<Dictionary<string, string>>> GetContactRelation()
         {
             //List of all contacts of connected user
-            var contacts = await _context.ContactRelation.Include(c => c.Contacter).Include(c => c.Contacted).Where(c => c.Contacter.Id == "omer").ToListAsync();
+            var contacts = await _context.ContactRelation.Where(c => c.Contacter == "omer").ToListAsync();
             List<Dictionary<string, string>> parsedContacts = new();
             foreach (var contact in contacts)
             {
@@ -53,7 +53,7 @@ namespace WhatsdownAPI.Controllers
         public async Task<Dictionary<string, string>> GetContact(string id)
         {
             //Contact of connected user
-            var contact = await _context.ContactRelation.Include(c => c.Contacter).Include(c => c.Contacted).Where(c => c.Contacter.Id == "omer").SingleAsync(c => c.Contacted.Id == id);
+            var contact = await _context.ContactRelation.Where(c => c.Contacter == "omer").SingleAsync(c => c.Contacted == id);
             return ParseContact(contact);
         }
 
@@ -62,12 +62,12 @@ namespace WhatsdownAPI.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutContact(string id, Dictionary<string, string> updated)
         {
-            var exists = await _context.ContactRelation.Include(c => c.Contacter).Include(c => c.Contacted).Where(c => c.Contacter.Id == "omer").AnyAsync(c => c.Contacted.Id == id);
+            var exists = await _context.ContactRelation.Where(c => c.Contacter == "omer").AnyAsync(c => c.Contacted == id);
             if (!exists)
             {
                 return BadRequest();
             }
-            var contact = await _context.ContactRelation.Include(c => c.Contacter).Include(c => c.Contacted).Where(c => c.Contacter.Id == "omer").SingleAsync(c => c.Contacted.Id == id);
+            var contact = await _context.ContactRelation.Where(c => c.Contacter == "omer").SingleAsync(c => c.Contacted == id);
             contact.ContactedNickName = updated["name"];
             contact.Server = updated["server"];
 
@@ -88,7 +88,7 @@ namespace WhatsdownAPI.Controllers
             string server = contact["server"];
 
             //Check if contact exists
-            var exists = await _context.ContactRelation.Include(c => c.Contacter).Include(c => c.Contacted).Where(c => c.Contacter.Id == "omer").AnyAsync(c => c.Contacted.Id == id);
+            var exists = await _context.ContactRelation.Where(c => c.Contacter == "omer").AnyAsync(c => c.Contacted == id);
             if (exists)
             {
                 return BadRequest();
@@ -96,10 +96,11 @@ namespace WhatsdownAPI.Controllers
 
             Contact newContact = new Contact()
             {
-                Contacted = await _context.User.FindAsync(id),
-                Contacter = await _context.User.FindAsync("Omer"), //TODO change to connected user
+                Contacted = id,
+                Contacter = "Omer", //TODO change to connected user
                 ContactedNickName = name,
                 Server = server,
+                LastDate = DateTime.Now
             };
 
 
@@ -130,8 +131,8 @@ namespace WhatsdownAPI.Controllers
         {
             //Contact of connected user
             //var contact = await _context.ContactRelation.Include(c => c.Contacter).Include(c => c.Contacted).Where(c => c.Contacter.Id == "omer").SingleAsync(c => c.Contacted.Id == id);
-            var sentMesseges = await _context.Message.Where(m => m.Sender.Id == "Omer" || m.Reciever.Id == id).ToListAsync();
-            var recMesseges = await _context.Message.Where(m => m.Reciever.Id == "Omer" || m.Sender.Id == id).ToListAsync();
+            var sentMesseges = await _context.Message.Where(m => m.Sender.Contacter == "Omer" || m.Reciever.Contacter == id).ToListAsync();
+            var recMesseges = await _context.Message.Where(m => m.Reciever.Contacter == "Omer" || m.Sender.Contacter == id).ToListAsync();
 
             var parsedSent = new List<ParsedMessage>();
             var parsedRec = new List<ParsedMessage>();
@@ -156,17 +157,17 @@ namespace WhatsdownAPI.Controllers
             //var contact = await _context.ContactRelation.Include(c => c.Contacter).Include(c => c.Contacted).Where(c => c.Contacter.Id == "omer").SingleAsync(c => c.Contacted.Id == id);
             var message = await _context.Message.Include(m => m.Sender).Include(m => m.Reciever).SingleAsync(m => m.Id == messageId);
 
-            if (message.Sender.Id != "Omer" && message.Reciever.Id != "Omer")
+            if (message.Sender.Contacter != "Omer" && message.Reciever.Contacter != "Omer")
             {
                 return BadRequest();
             }
-            if (message.Sender.Id != id && message.Reciever.Id != id)
+            if (message.Sender.Contacter != id && message.Reciever.Contacter != id)
             {
                 return BadRequest();
             }
 
             bool isSent = false;
-            if (message.Sender.Id == "Omer")
+            if (message.Sender.Contacter == "Omer")
                 isSent = true;
             return Ok(ParseMessage(message, isSent));
 
@@ -176,26 +177,27 @@ namespace WhatsdownAPI.Controllers
         [HttpPost("invitations")]
         public async Task<IActionResult> Invite(Dictionary<string,string> details)
         {
-            User from = await _context.User.FindAsync(details["from"]);
-            if(from != null)
+            string id = details["id"];
+            string name = details["name"];
+            string server = details["server"];
+
+            //Check if contact exists
+            var exists = await _context.ContactRelation.Where(c => c.Contacted == "omer").AnyAsync(c => c.Contacter == id);
+            if (exists)
             {
-                return BadRequest("Contact already exists");
+                return BadRequest();
             }
 
-            from = new User()
-            {
-                Id = details["from"],
-                NickName = details["from"]
-            };
             Contact newContact = new Contact()
             {
-                Contacted = from,
-                Contacter = await _context.User.FindAsync(details["to"]),
-                Server = details["server"]
+                Contacter = id,
+                Contacted = "Omer", //TODO change to connected user
+                ContactedNickName = name,
+                Server = server,
             };
-            _context.User.Add(from);
-            _context.ContactRelation.Add(newContact);
 
+
+            _context.ContactRelation.Add(newContact);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -205,10 +207,15 @@ namespace WhatsdownAPI.Controllers
         {
             Message msg = new Message()
             {
-                Sender = await _context.User.FindAsync(details["from"]),
-                Reciever = await _context.User.FindAsync(details["to"]),
+                Sender = await _context.ContactRelation.SingleAsync(c => c.Contacted == details["to"] && c.Contacter == details["from"]),
+                Reciever = await _context.ContactRelation.SingleAsync(c => c.Contacter == details["to"] && c.Contacted == details["from"]),
                 Content = details["content"]
             };
+            msg.Sender.LastMessage = msg.Content;
+            msg.Reciever.LastMessage = msg.Content;
+            msg.Sender.LastDate = msg.Time;
+            msg.Reciever.LastDate = msg.Time;
+
             _context.Message.Add(msg);
             if (msg.Reciever == null)
                 return BadRequest();
@@ -216,7 +223,31 @@ namespace WhatsdownAPI.Controllers
             return Ok();
         }
 
-            private ParsedMessage ParseMessage(Message message, bool sent)
+        [HttpPost("{id}/messages")]
+        public async Task<IActionResult> SendMessege(string id, string content)
+        {
+            Message msg = new Message()
+            {
+                Sender = await _context.ContactRelation.SingleAsync(c => c.Contacted == id && c.Contacter == "Omer"),
+                Reciever = await _context.ContactRelation.SingleAsync(c => c.Contacter == id && c.Contacted == "Omer"),
+                Content = content,
+                Time = DateTime.Now
+            };
+            msg.Sender.LastMessage = msg.Content;
+            msg.Reciever.LastMessage = msg.Content;
+            msg.Sender.LastDate = msg.Time;
+            msg.Reciever.LastDate = msg.Time;
+            
+
+            _context.Message.Add(msg);
+            if (msg.Reciever == null)
+                return BadRequest();
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
+
+
+        private ParsedMessage ParseMessage(Message message, bool sent)
         {
             return new ParsedMessage()
             {
@@ -233,3 +264,4 @@ namespace WhatsdownAPI.Controllers
         }
     }
 }
+

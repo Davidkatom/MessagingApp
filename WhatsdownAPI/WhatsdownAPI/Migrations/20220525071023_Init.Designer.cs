@@ -12,7 +12,7 @@ using WhatsdownAPI.Data;
 namespace WhatsdownAPI.Migrations
 {
     [DbContext(typeof(WhatsdownAPIContext))]
-    [Migration("20220524142111_Init")]
+    [Migration("20220525071023_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -32,14 +32,14 @@ namespace WhatsdownAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("ContactedId")
-                        .HasColumnType("nvarchar(10)");
+                    b.Property<string>("Contacted")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ContactedNickName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ContacterId")
-                        .HasColumnType("nvarchar(10)");
+                    b.Property<string>("Contacter")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("LastDate")
                         .HasColumnType("datetime2");
@@ -51,10 +51,6 @@ namespace WhatsdownAPI.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ContactedId");
-
-                    b.HasIndex("ContacterId");
 
                     b.ToTable("ContactRelation");
                 });
@@ -70,11 +66,11 @@ namespace WhatsdownAPI.Migrations
                     b.Property<string>("Content")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("RecieverId")
-                        .HasColumnType("nvarchar(10)");
+                    b.Property<int?>("RecieverId")
+                        .HasColumnType("int");
 
-                    b.Property<string>("SenderId")
-                        .HasColumnType("nvarchar(10)");
+                    b.Property<int?>("SenderId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("Time")
                         .HasColumnType("datetime2");
@@ -110,28 +106,13 @@ namespace WhatsdownAPI.Migrations
                     b.ToTable("User");
                 });
 
-            modelBuilder.Entity("WhatsdownAPI.Models.Contact", b =>
-                {
-                    b.HasOne("WhatsdownAPI.Models.User", "Contacted")
-                        .WithMany()
-                        .HasForeignKey("ContactedId");
-
-                    b.HasOne("WhatsdownAPI.Models.User", "Contacter")
-                        .WithMany()
-                        .HasForeignKey("ContacterId");
-
-                    b.Navigation("Contacted");
-
-                    b.Navigation("Contacter");
-                });
-
             modelBuilder.Entity("WhatsdownAPI.Models.Message", b =>
                 {
-                    b.HasOne("WhatsdownAPI.Models.User", "Reciever")
+                    b.HasOne("WhatsdownAPI.Models.Contact", "Reciever")
                         .WithMany()
                         .HasForeignKey("RecieverId");
 
-                    b.HasOne("WhatsdownAPI.Models.User", "Sender")
+                    b.HasOne("WhatsdownAPI.Models.Contact", "Sender")
                         .WithMany()
                         .HasForeignKey("SenderId");
 
