@@ -12,12 +12,8 @@ using WhatsdownAPI.Data;
 namespace WhatsdownAPI.Migrations
 {
     [DbContext(typeof(WhatsdownAPIContext))]
-<<<<<<<< HEAD:WhatsdownAPI/WhatsdownAPI/Migrations/20220524095535_init.Designer.cs
-    [Migration("20220524095535_init")]
-========
-    [Migration("20220524130637_init")]
->>>>>>>> 90c88aae5a78515844d86de08b053b9c10651270:WhatsdownAPI/WhatsdownAPI/Migrations/20220524130637_init.Designer.cs
-    partial class init
+    [Migration("20220524142111_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

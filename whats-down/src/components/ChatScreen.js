@@ -17,11 +17,38 @@ var checked = false
 
 
 const ChatScreen = ({ token }) => {
-    console.log('render')
+    // console.log('render')
     //console.log(token)
     var emptyMsg = <MessageElm direction="send" src={'empty chat'} timeStamp={null} messagetype='text' />;
+    //fetch function for a specific contact's messages from server:
+    async function fetchChatByContactId(Contact_id){
+        console.log('messages load for: '+Contact_id);
+        var a =$.ajax({
+            url: 'https://localhost:7144/api/Contacts/'+Contact_id+'/messages',
+            type: 'GET',
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("Authorization", "Bearer " + token);
+            },
+            data:{},
+            success: function (data) {
+                console.log('messages loaded are: '+data);
+                console.log(data);
+                return data;
+            },
+            error: function (data) {
+                console.log("failed getting messages");
+                return null;
+            }
+        });
+        console.log('a: ')
+        console.log(await a.json)
+
+    }
     
-    //set Cuurent User
+
+
+
+    //fetch Cuurent User
     const [current_user, set_current_user] = useState('No UserName');
     useEffect( () => {
         async function fetchMe(){
@@ -67,8 +94,10 @@ const ChatScreen = ({ token }) => {
         }
         GetMeFunc();
         },[])
-    //set contacts to contact list from server
-    const [contact_list, setContact_List] = useState(); // will be an array of contact objects without conversations
+
+    //fetch contacts to contact list
+    const [contact_list, setContact_List] = useState([]); // will be an array of contact objects without conversations
+    //var init_contact_list =current_user === 'No UserName'? []:current_user.contact_list;
     useEffect( () => {
         async function fetchContactList(){
             $.ajax({
@@ -79,8 +108,12 @@ const ChatScreen = ({ token }) => {
                 },  
                 data:{},
                 success: function (data) {
-                    console.log('omer is here');
-                    console.log(data)
+                        setContact_List(data);
+                    // console.log('contact list set!');
+                    // console.log('add here chat loading for each contact')
+                    for (const [key, value] of Object.entries(data)) {
+                    // console.log(key, value);
+                }
                 },
                 error: function (data) {
                     console.log("failed getting Contacts");
@@ -88,14 +121,9 @@ const ChatScreen = ({ token }) => {
             });
         }
         fetchContactList();
-        // const res = await fetch('https://localhost:7144/api/Contacts', {
-        //     method: 'GET',});
-        // const data = await res.json;
-        // console.log("set ccontact list to:");
-        // console.log(data);
-        // setContact_List(data);
     },[])
-    //set conversations
+    
+    //fetch conversations
     const [conversation_list, setConversation_List] = useState(); // will be an array of conversation objects
     /*
     useEffect(async () => {
@@ -119,11 +147,10 @@ const ChatScreen = ({ token }) => {
     const navigate = useNavigate();
     const refresh = useCallback(() => navigate('/', { replace: true }), [navigate]);
     const [refreshed_contact, set_refreshed_contact] = useState(false);
-    //var init_contact_list =current_user === 'No UserName'? []:current_user.contact_list;
 
     const [buttonSend, setButtonSend] = useState(null)
     const [sendingRef, setsendingRef] = useState(null)
-
+    //check
     const toggle = () => {
         if (checked === false) {
             setClasses("btn btn-light attachments")
@@ -180,10 +207,6 @@ const ChatScreen = ({ token }) => {
         }
         //set scrolling correctly
         document.getElementById('chatbox').scrollTop = document.getElementById('chatbox').scrollHeight;
-        // make sure a user is logged in - otherwise redirect to login page
-        //if (current_user === "No UserName") {
-        //    refresh()
-        //}
     });
 
     const [selected_contact, set_selected_contact] = useState("");
@@ -192,18 +215,21 @@ const ChatScreen = ({ token }) => {
         setContact_List(contact_list)
     }
     //select a spescific contact, update current chat history and last message
-    const selectContact = (contact) => {
+    const  selectContact = async (contact) => {
+        console.log('Contact id selected: '+contact)
         if (selected_contact !== '') {
-            document.getElementById(selected_contact.display_name).classList.remove('selected-chat')
+            document.getElementById(selected_contact).classList.remove('selected-chat') //remove eselection
         }
-        var temp_contact = document.getElementById(contact.display_name)
-        if (temp_contact !== null) {
-            document.getElementById(contact.display_name).classList.add('selected-chat')
-        }
-        document.getElementById("message").value = ''
-
+        document.getElementById(contact).classList.add('selected-chat') //add selection
         set_selected_contact(contact)
-        setMessages(contact.chat_history)
+        document.getElementById("message").value = '' //erase the messageBox when switching contacts
+        //setMessages(contact.chat_history)
+        var newMessages =await fetchChatByContactId(contact)
+        console.log('ahhhhhhhhhhhhhh')
+        setMessages(newMessages)
+        console.log('newMessages are: '+newMessages)
+        setMessages(newMessages)
+
         document.getElementById('ChatSide').classList.remove('collapse')
         document.getElementById("selected-contact-image").classList.remove('collapse')
         resetSendMedia()
@@ -222,6 +248,7 @@ const ChatScreen = ({ token }) => {
 
     //add a new contact to the contact list
     const addContact = (newContactName) => {
+        /*
         //check if newContactName is already in the contact list
         if (newContactName.length < 1) { return 'Please enter a valid name' }
         if (newContactName in contact_list) { return 'User already in contact list' }
@@ -236,6 +263,7 @@ const ChatScreen = ({ token }) => {
         setContact_List(temp)
         set_refreshed_contact(!refreshed_contact)
         return 'success'
+        */
     }
 
     return (
@@ -247,7 +275,7 @@ const ChatScreen = ({ token }) => {
                 <div className="col-5">
                     <div className="row row-chat">
                         <div className="col-6">
-                            <img className="float-start img-thumbnail rounded-start right-padding-for-picture" src={current_user.picture} alt="Profile" />
+                            <img className="float-start img-thumbnail rounded-start right-padding-for-picture" src="omer.png" alt="Profile" />
                             <h2 className="card-title">{current_user.display_name}</h2>
                         </div>
                         <div className="col-6 align-right">
@@ -256,7 +284,7 @@ const ChatScreen = ({ token }) => {
                     </div>
                 </div>
                 <CurrentContact contact={selected_contact} />
-                {/* <ContactSide contact_list={contact_list} selectContact={selectContact} flag={refreshed_contact} /> */}
+                <ContactSide contact_list={contact_list} selectContact={selectContact} flag={refreshed_contact} />
                 <div className="col-sm chat-space collapse" id='ChatSide'>
                     <div className="chat-box scrollable" id="chatbox">
                         {messages}
