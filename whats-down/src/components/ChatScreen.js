@@ -18,15 +18,14 @@ var checked = false
 
 const ChatScreen = ({ token }) => {
     // console.log('render')
-    //console.log(token)
     var emptyMsg = <MessageElm direction="send" src={'empty chat'} timeStamp={null} messagetype='text' />;
     //update current chat according to the contact id:
+    const [selected_contact, set_selected_contact] = useState("");
     const [messages, setMessages] = useState([]);
     async function updateChatByContactId(){
-        let Contact_id = selected_contact
-        console.log('messages load for: '+Contact_id);
+        console.log('update chat for: '+selected_contact);
         $.ajax({
-            url: 'https://localhost:7144/api/Contacts/'+Contact_id+'/messages',
+            url: 'https://localhost:7144/api/Contacts/'+selected_contact+'/messages',
             type: 'GET',
             beforeSend: function (xhr) {
                 xhr.setRequestHeader("Authorization", "Bearer " + token);
@@ -45,6 +44,7 @@ const ChatScreen = ({ token }) => {
             }
         })
     }
+    useEffect(() => {updateChatByContactId()}, [selected_contact])//useEffect for when contact is changed to update the chat
     //fetch Cuurent User
     const [current_user, set_current_user] = useState('No UserName');
     useEffect( () => {
@@ -150,7 +150,10 @@ const ChatScreen = ({ token }) => {
                 beforeSend: function (xhr) {
                     xhr.setRequestHeader("Authorization", "Bearer " + token);
                 },
-                data:{content: input},
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                data:JSON.stringify({content:input}),
                 success: function (data) {
                     console.log('message sent')
                     console.log(data)
@@ -196,7 +199,6 @@ const ChatScreen = ({ token }) => {
         document.getElementById('chatbox').scrollTop = document.getElementById('chatbox').scrollHeight;
     });
 
-    const [selected_contact, set_selected_contact] = useState("");
     //update the contact list when a new message sent/recived
     const contact_chat_change = (cahnged_contact) => {
         setContact_List(contact_list)
@@ -210,7 +212,6 @@ const ChatScreen = ({ token }) => {
         document.getElementById(contact).classList.add('selected-chat') //add selection
         set_selected_contact(contact)
         document.getElementById("message").value = '' //erase the messageBox when switching contacts
-        updateChatByContactId()
 
         document.getElementById('ChatSide').classList.remove('collapse')
         document.getElementById("selected-contact-image").classList.remove('collapse')

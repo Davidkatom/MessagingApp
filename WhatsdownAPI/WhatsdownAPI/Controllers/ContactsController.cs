@@ -228,13 +228,13 @@ namespace WhatsdownAPI.Controllers
          */
 
         [HttpPost("{id}/messages")]
-        public async Task<IActionResult> SendMessege(string id, string content)
+        public async Task<IActionResult> SendMessege(string id, Dictionary<string, string> content)
         {
             Message msg = new Message()
             {
                 Sender = "Omer",
                 Reciever = id,
-                Content = content,
+                Content = content["content"],
                 Time = DateTime.Now
             };
             Contact cont = await _context.ContactRelation.SingleAsync(c => c.Contacter == "Omer" && c.Contacted == id);
