@@ -103,7 +103,6 @@ const ChatScreen = ({ token }) => {
     const [contact_list, setContact_List] = useState([]); // will be an array of contact objects without conversations
     //var init_contact_list =current_user === 'No UserName'? []:current_user.contact_list;
     useEffect( () => {
-
         //Signalr
         const connectToSignalR = async () => {
             const connect = new signalR.HubConnectionBuilder().withUrl(local_server+"/myHub").configureLogging(signalR.LogLevel.Information).build();
@@ -114,12 +113,9 @@ const ChatScreen = ({ token }) => {
             });
             await connect.start().then(connect.invoke("Connect", current_user.user_name));
             setConnection(connect);
-            
         }
-
-        
+        connectToSignalR();
         //Signalr
-
         async function fetchContactList(){
             $.ajax({
                 url: local_server+'/api/Contacts',
@@ -146,7 +142,6 @@ const ChatScreen = ({ token }) => {
                 }
             });
         }
-        connectToSignalR();
         fetchContactList();
     },[])
     
@@ -194,8 +189,10 @@ const ChatScreen = ({ token }) => {
                 }
             }).then(
                 setMessages([...messages, <MessageElm sent={true} src={input} timeStamp={new Date()} messagetype={"text"} />])
-                ).then(()=>{console.log('send message')
-                connection.invoke("SentMessage",current_user.user_name,  selected_contact, input)})
+                ).then(()=>{
+                    console.log('send message')
+                    connection.invoke("SentMessage",current_user.user_name,  selected_contact)
+                })
         }
         document.getElementById('message').value = ""
     }
