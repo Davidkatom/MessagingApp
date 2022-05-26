@@ -9,6 +9,7 @@ import InputLine from './InputLine';
 import Register from './Register';
 import Modal from 'react-bootstrap/Modal'
 import { useState } from "react"
+var local_server = "https://192.168.1.20:7144"
 
 
 const Login = ({  setToken,token }) => {
@@ -29,7 +30,7 @@ const Login = ({  setToken,token }) => {
         let myCollapseS = document.getElementById('success')
         let myCollapseE = document.getElementById('error_message')
         $.ajax({
-            url: 'https://localhost:7144/api/Login?username='+user_name+'&password='+user_password,
+            url: local_server+'/api/Login?username='+user_name+'&password='+user_password,
             type: 'POST',
             contentType: 'application/json',
             success: function (data) {
@@ -48,7 +49,7 @@ const Login = ({  setToken,token }) => {
     }
     async function TestFunc(){
         $.ajax({
-            url: 'https://localhost:7144/WeatherForecast',
+            url: local_server+'/WeatherForecast',
             type: 'GET',
             beforeSend: function (xhr) {
                 xhr.setRequestHeader("Authorization", "Bearer " + token);

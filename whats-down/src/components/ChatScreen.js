@@ -15,6 +15,9 @@ import * as signalR from "@microsoft/signalr";
 import $ from 'jquery';
 
 var checked = false
+//var local_server = "https://localhost:7144"
+var local_server = "https://192.168.1.20:7144"
+
 
 
 const ChatScreen = ({ token }) => {
@@ -29,7 +32,7 @@ const ChatScreen = ({ token }) => {
     async function updateChatByContactId(selected = selected_contact ){
         console.log('update chat for: '+selected);
         $.ajax({
-            url: 'https://localhost:7144/api/Contacts/'+selected+'/messages',
+            url: local_server+'/api/Contacts/'+selected+'/messages',
             type: 'GET',
             beforeSend: function (xhr) {
                 xhr.setRequestHeader("Authorization", "Bearer " + token);
@@ -54,7 +57,7 @@ const ChatScreen = ({ token }) => {
     useEffect( () => {
         async function fetchMe(){
             console.log('fetch Users')
-            const res = await fetch('https://localhost:7144/api/Users');
+            const res = await fetch(local_server+'/api/Users');
             const data = await res.json();
             // console.log(res.status);
             // console.log(data);   
@@ -63,7 +66,7 @@ const ChatScreen = ({ token }) => {
             console.log(current_user[0].id)     
             console.log("Step 2 for authorized:")
             //--------------------------
-            const res2 = await fetch('https://localhost:7144/WeatherForecast');
+            const res2 = await fetch(local_server+'/WeatherForecast');
             console.log("Whether Request:")     
             console.log(res2)     
             console.log('Status is: '+res2.status)     
@@ -74,7 +77,7 @@ const ChatScreen = ({ token }) => {
         // fetchMe();
         async function GetMeFunc(){
             $.ajax({
-                url: 'https://localhost:7144/api/Users/Me',
+                url: local_server+'/api/Users/Me',
                 type: 'GET',
                 beforeSend: function (xhr) {
                     xhr.setRequestHeader("Authorization", "Bearer " + token);
@@ -103,7 +106,7 @@ const ChatScreen = ({ token }) => {
 
         //Signalr
         const connectToSignalR = async () => {
-            const connect = new signalR.HubConnectionBuilder().withUrl("https://localhost:7144/myHub").configureLogging(signalR.LogLevel.Information).build();
+            const connect = new signalR.HubConnectionBuilder().withUrl(local_server+"/myHub").configureLogging(signalR.LogLevel.Information).build();
             connect.on("SentMessage", (user) => {
                 console.log("Message received: " + selected_contact);
                 console.log(user)
@@ -119,7 +122,7 @@ const ChatScreen = ({ token }) => {
 
         async function fetchContactList(){
             $.ajax({
-                url: 'https://localhost:7144/api/Contacts',
+                url: local_server+'/api/Contacts',
                 type: 'GET',
                 beforeSend: function (xhr) {
                     xhr.setRequestHeader("Authorization", "Bearer " + token);
@@ -172,7 +175,7 @@ const ChatScreen = ({ token }) => {
         if (input !== "") {           
     
             $.ajax({
-                url: 'https://localhost:7144/api/Contacts/'+selected_contact+'/messages',
+                url: local_server+'/api/Contacts/'+selected_contact+'/messages',
                 type: 'POST',
                 beforeSend: function (xhr) {
                     xhr.setRequestHeader("Authorization", "Bearer " + token);
@@ -270,7 +273,7 @@ const ChatScreen = ({ token }) => {
 
         
         $.ajax({
-            url: 'https://localhost:7144/api/Contacts/',
+            url: local_server+'/api/Contacts/',
             type: 'POST',
             beforeSend: function (xhr) {
                 xhr.setRequestHeader("Authorization", "Bearer " + token);
