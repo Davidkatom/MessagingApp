@@ -23,7 +23,7 @@ const MiniContant = ( {args} ) => {
                 </div>
                 <div className="col">
                   <p className="card-text" style={{ textAlign: 'right' }}><small className="text-muted">
-                    {TimeStempCalc(new Date())}
+                    {TimeStempCalc(args.contact.lastdate)}
                     {/* {TimeStempCalc(args.contact.last_message.props.timeStamp)} */}
                   </small></p>
                 </div>
