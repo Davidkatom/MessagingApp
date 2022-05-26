@@ -4,9 +4,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using WhatsdownAPI.Data;
+using Microsoft.AspNetCore.SignalR;
+
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<WhatsdownAPIContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("WhatsdownAPIContext") ?? throw new InvalidOperationException("Connection string 'WhatsdownAPIContext' not found.")));
+
 
 // Add services to the container.
 
@@ -14,6 +17,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddSignalR();
 //Token login 24:15
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {
@@ -57,6 +61,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseRouting();
 app.UseCors("Allow All"); //33:00
 
 app.UseHttpsRedirection();
@@ -64,5 +69,10 @@ app.UseAuthentication(); //25:30
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapHub<MyHub>("/myHub");
+});
 
 app.Run();

@@ -11,6 +11,7 @@ import CurrentContact from './ChatComponents/CurrentContact';
 import SendVideo from './AttachmentElements/SendVideo';
 import AddNewContact from './ChatComponents/AddNewContact';
 import { useNavigate } from 'react-router-dom';
+import * as signalR from "@aspnet/signalr";
 import $ from 'jquery';
 
 var checked = false
@@ -20,6 +21,9 @@ const ChatScreen = ({ token }) => {
     // console.log('render')
     var emptyMsg = <MessageElm direction="send" src={'empty chat'} timeStamp={null} messagetype='text' />;
     //update current chat according to the contact id:
+    //SignalR Connection
+    const [connection, setConnection] = useState(null);
+
     const [selected_contact, set_selected_contact] = useState("");
     const [messages, setMessages] = useState([]);
     async function updateChatByContactId(){
@@ -96,6 +100,21 @@ const ChatScreen = ({ token }) => {
     const [contact_list, setContact_List] = useState([]); // will be an array of contact objects without conversations
     //var init_contact_list =current_user === 'No UserName'? []:current_user.contact_list;
     useEffect( () => {
+
+        //Signalr
+        const connectToSignalR = async () => {
+            const connect = new signalR.HubConnectionBuilder().withUrl("https://localhost:7144/myHub").configureLogging(signalR.LogLevel.Information).build();
+            connect.on("SentMessage", () => {
+            console.log("Message received: " + selected_contact);
+            updateChatByContactId();        
+        });
+            await connect.start();
+            setConnection(connect);
+        }
+
+        
+        //Signalr
+
         async function fetchContactList(){
             $.ajax({
                 url: 'https://localhost:7144/api/Contacts',
@@ -122,6 +141,7 @@ const ChatScreen = ({ token }) => {
                 }
             });
         }
+        connectToSignalR();
         fetchContactList();
     },[])
     
@@ -146,6 +166,8 @@ const ChatScreen = ({ token }) => {
 
     const sendText = () => {
         console.log('send message')
+        connection.invoke("SentMessage")
+
         var input = document.getElementById('message').value
         if (input !== "") {
             $.ajax({
