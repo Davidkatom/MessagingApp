@@ -17,7 +17,7 @@ Installation guide:
 4. Run  npm install react-bootstrap
 5. Run  npm install react-router-dom
 6. Run  npm install react-icons --save
-
+7. Run npm install @microsoft/signalr
 To lunch the app, write inside the terminal of you favourite softwere development environment 'npm start'
 
 LogIn example:

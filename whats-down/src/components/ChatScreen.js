@@ -105,6 +105,7 @@ const ChatScreen = ({ token }) => {
             const connect = new signalR.HubConnectionBuilder().withUrl("https://localhost:7144/myHub").configureLogging(signalR.LogLevel.Information).build();
             connect.on("SentMessage", () => {
             console.log("Message received: " + selected_contact);
+            console.log(token)
             updateChatByContactId();        
         });
             await connect.start();
@@ -164,11 +165,10 @@ const ChatScreen = ({ token }) => {
 
 
     const sendText = () => {
-        console.log('send message')
-        connection.invoke("SentMessage")
 
         var input = document.getElementById('message').value
-        if (input !== "") {
+        if (input !== "") {           
+    
             $.ajax({
                 url: 'https://localhost:7144/api/Contacts/'+selected_contact+'/messages',
                 type: 'POST',
@@ -189,7 +189,8 @@ const ChatScreen = ({ token }) => {
                 }
             }).then(
                 setMessages([...messages, <MessageElm sent={true} src={input} timeStamp={new Date()} messagetype={"text"} />])
-                )
+                ).then(()=>{console.log('send message')
+                connection.invoke("SentMessage")})
         }
         document.getElementById('message').value = ""
     }

@@ -4,7 +4,7 @@
     {
         public async Task SentMessage()
         {
-            await Clients.All.SendAsync("SentMessage");
+            await Clients.AllExcept(Context.ConnectionId).SendAsync("SentMessage");
         }
     }
 
