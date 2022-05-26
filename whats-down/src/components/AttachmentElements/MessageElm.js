@@ -1,7 +1,6 @@
 import TimeStempCalc from "../../functions/TimeStempCalc";
 const MessageElm = ({ sent, src, messagetype, timeStamp }) => {
-    console.log('timeStamp:');
-    console.log(TimeStempCalc(timeStamp));
+
     let direction = sent? "send" : "receive";
     return (
         <div className={direction + '_cont'}>
@@ -19,14 +18,11 @@ const MessageElm = ({ sent, src, messagetype, timeStamp }) => {
                                 <audio controls src={src}></audio>
                                 :
                                 messagetype === "text" ?
-
                                     src
-
                                     :
                                     null
                     }
-                    {/* <span className="time_stamp">{TimeStempCalc(timeStamp)}</span> */}
-
+                    <span className="time_stamp">{TimeStempCalc(timeStamp)}</span>
                 </div>
             </div>
         </div>
