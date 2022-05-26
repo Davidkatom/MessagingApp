@@ -11,7 +11,7 @@ import CurrentContact from './ChatComponents/CurrentContact';
 import SendVideo from './AttachmentElements/SendVideo';
 import AddNewContact from './ChatComponents/AddNewContact';
 import { useNavigate } from 'react-router-dom';
-import * as signalR from "@aspnet/signalr";
+import * as signalR from "@microsoft/signalr";
 import $ from 'jquery';
 
 var checked = false
@@ -25,10 +25,11 @@ const ChatScreen = ({ token }) => {
 
     const [selected_contact, set_selected_contact] = useState("");
     const [messages, setMessages] = useState([]);
-    async function updateChatByContactId(){
-        console.log('update chat for: '+selected_contact);
+    
+    async function updateChatByContactId(selected = selected_contact ){
+        console.log('update chat for: '+selected);
         $.ajax({
-            url: 'https://localhost:7144/api/Contacts/'+selected_contact+'/messages',
+            url: 'https://localhost:7144/api/Contacts/'+selected+'/messages',
             type: 'GET',
             beforeSend: function (xhr) {
                 xhr.setRequestHeader("Authorization", "Bearer " + token);
@@ -103,13 +104,14 @@ const ChatScreen = ({ token }) => {
         //Signalr
         const connectToSignalR = async () => {
             const connect = new signalR.HubConnectionBuilder().withUrl("https://localhost:7144/myHub").configureLogging(signalR.LogLevel.Information).build();
-            connect.on("SentMessage", () => {
-            console.log("Message received: " + selected_contact);
-            console.log(token)
-            updateChatByContactId();        
-        });
-            await connect.start();
+            connect.on("SentMessage", (user) => {
+                console.log("Message received: " + selected_contact);
+                console.log(user)
+                updateChatByContactId(user);        
+            });
+            await connect.start().then(connect.invoke("Connect", current_user.user_name));
             setConnection(connect);
+            
         }
 
         
@@ -165,7 +167,7 @@ const ChatScreen = ({ token }) => {
 
 
     const sendText = () => {
-
+        
         var input = document.getElementById('message').value
         if (input !== "") {           
     
@@ -190,7 +192,7 @@ const ChatScreen = ({ token }) => {
             }).then(
                 setMessages([...messages, <MessageElm sent={true} src={input} timeStamp={new Date()} messagetype={"text"} />])
                 ).then(()=>{console.log('send message')
-                connection.invoke("SentMessage")})
+                connection.invoke("SentMessage",current_user.user_name,  selected_contact, input)})
         }
         document.getElementById('message').value = ""
     }
@@ -232,6 +234,7 @@ const ChatScreen = ({ token }) => {
     // }
     //select a spescific contact, update current chat history and last message
     const  selectContact = async (contact) => {
+        connection.invoke("Connect", current_user.user_name)
         console.log('Contact id selected: '+contact)
         if (selected_contact !== '') {
             document.getElementById(selected_contact).classList.remove('selected-chat') //remove eselection
