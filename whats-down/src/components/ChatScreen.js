@@ -191,7 +191,7 @@ const ChatScreen = ({ token }) => {
                 setMessages([...messages, <MessageElm sent={true} src={input} timeStamp={new Date()} messagetype={"text"} />])
                 ).then(()=>{
                     console.log('send message')
-                    connection.invoke("SentMessage",current_user.user_name,  selected_contact)
+                    connection.invoke("SentMessage",current_user.user_name, selected_contact)
                 })
         }
         document.getElementById('message').value = ""

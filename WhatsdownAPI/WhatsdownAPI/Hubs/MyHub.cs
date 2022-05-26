@@ -8,7 +8,7 @@
             connectionIDs[id] = Context.ConnectionId;
             Console.WriteLine(connectionIDs);
         }
-        public async Task SentMessage(string from, string to, string content)
+        public async Task SentMessage(string from, string to)
         {
             await Clients.Client(connectionIDs[to]).SendAsync("SentMessage",from);
             Console.WriteLine("ID:   -  " + Context.ConnectionId);

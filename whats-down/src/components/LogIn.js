@@ -11,7 +11,6 @@ import Modal from 'react-bootstrap/Modal'
 import { useState } from "react"
 var local_server = "https://192.168.1.20:7144"
 
-
 const Login = ({  setToken,token }) => {
     //modal show handle and so:
     const [show, setShow] = useState(false);

@@ -6,7 +6,6 @@ import { useState } from "react"
 
 var local_server = "https://192.168.1.20:7144"
 
-
 const Register = ({close}) => {
     const [down_alert, setAlert] = useState(['', ''])
 
@@ -74,7 +73,7 @@ const Register = ({close}) => {
         }
         //add user to userlist after all validation
         
-        var res = await fetch(local_server+'api/Users', {
+        var res = await fetch(local_server+'/api/Users', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
