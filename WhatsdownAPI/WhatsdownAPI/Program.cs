@@ -20,6 +20,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddSignalR();
 //Token login 24:15
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+
 {
     options.RequireHttpsMetadata = false;
     options.SaveToken = true;
