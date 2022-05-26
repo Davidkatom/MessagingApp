@@ -100,27 +100,19 @@ const ChatScreen = ({ token }) => {
     const [contact_list, setContact_List] = useState([]); // will be an array of contact objects without conversations
     //var init_contact_list =current_user === 'No UserName'? []:current_user.contact_list;
     useEffect( () => {
-
         //Signalr
         const connectToSignalR = async () => {
             const connect = new signalR.HubConnectionBuilder().withUrl("https://localhost:7144/myHub").configureLogging(signalR.LogLevel.Information).build();
-            connect.on("SentMessage", (user) => {
-                console.log("Message received: " + selected_contact);
-                console.log(user)
-                updateChatByContactId(user);        
-            });
+            connect.on("SentMessage", (user) => {updateChatByContactId(user);});
             await connect.start().then(connect.invoke("Connect", current_user.user_name));
             setConnection(connect);
-            
         }
-
-        
+        connectToSignalR();
         //Signalr
-
         async function fetchContactList(){
             $.ajax({
-                url: 'https://localhost:7144/api/Contacts',
-                type: 'GET',
+                    url: 'https://localhost:7144/api/Contacts',
+                    type: 'GET',
                 beforeSend: function (xhr) {
                     xhr.setRequestHeader("Authorization", "Bearer " + token);
                 },  
@@ -143,7 +135,6 @@ const ChatScreen = ({ token }) => {
                 }
             });
         }
-        connectToSignalR();
         fetchContactList();
     },[])
     
@@ -191,8 +182,10 @@ const ChatScreen = ({ token }) => {
                 }
             }).then(
                 setMessages([...messages, <MessageElm sent={true} src={input} timeStamp={new Date()} messagetype={"text"} />])
-                ).then(()=>{console.log('send message')
-                connection.invoke("SentMessage",current_user.user_name,  selected_contact, input)})
+                ).then(()=>{
+                    console.log('send message')
+                    connection.invoke("SentMessage",current_user.user_name,  selected_contact)
+                })
         }
         document.getElementById('message').value = ""
     }
