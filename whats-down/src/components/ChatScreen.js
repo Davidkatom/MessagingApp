@@ -95,8 +95,9 @@ const ChatScreen = ({ token }) => {
                     console.log("failed getting userMe");
                 }
             });
-        }
+        }        
         GetMeFunc();
+        
         },[])
 
     //fetch contacts to contact list
@@ -125,7 +126,9 @@ const ChatScreen = ({ token }) => {
                 console.log("failed getting Contacts");
             }
         });
-    }
+            
+        }
+        
     const [contact_list, setContact_List] = useState([]); // will be an array of contact objects without conversations
     //var init_contact_list =current_user === 'No UserName'? []:current_user.contact_list;
     useEffect( () => {
@@ -137,11 +140,15 @@ const ChatScreen = ({ token }) => {
                 console.log(user)
                 updateChatByContactId(user);        
             });
-            connect.on("NewContact", fetchContactList);
-            await connect.start();
-            setConnection(connect);
+            connect.on("NewContact", fetchContactList);            
+            await connect.start()
+            setConnection(connect); 
+            //connect.onreconnected(connect.invoke("Connect", current_user.user_name));
+            
+                      
         }
         connectToSignalR();
+        
         //Signalr        
         fetchContactList();
     },[])

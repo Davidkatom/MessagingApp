@@ -6,7 +6,7 @@
 
         public void Connect(string id) {
             connectionIDs[id] = Context.ConnectionId;
-            Console.WriteLine(connectionIDs);
+           Console.WriteLine(connectionIDs);
         }
         public async Task SentMessage(string from, string to)
         {
@@ -14,10 +14,9 @@
             Console.WriteLine("ID:   -  " + Context.ConnectionId);
         }
 
-    public async Task UpdateContacts(string to)
-    {
-        await Clients.Client(connectionIDs[to]).SendAsync("NewContact");
-        Console.WriteLine("ID:   -  " + Context.ConnectionId);
-    }
+        public async Task UpdateContacts(string to)
+        {
+            await Clients.Client(connectionIDs[to]).SendAsync("NewContact");
+        }
 }
 
