@@ -309,7 +309,8 @@ const ChatScreen = ({ token }) => {
                 // console.log(data);
                 return null;
             }            
-        }).then(setContact_List([newbie ,...contact_list])).then(connection.invoke("UpdateContacts", newbie.id))
+        }).then(setContact_List([newbie ,...contact_list]))
+        connection.invoke("UpdateContacts", newbie.id)
         let foreignNewbie = { from: current_user.user_name, to: newContactName,server: local_server}
         $.ajax({// INVITATION new contact to the OTHER server
             url: newbie.server+'/api/invitations/',
