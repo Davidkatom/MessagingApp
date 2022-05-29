@@ -10,7 +10,7 @@ import Register from './Register';
 import Modal from 'react-bootstrap/Modal'
 import { useState } from "react"
 
-var local_server = "https://localhost:7144"
+var local_server = "http://whatsdown.epizy.com/server/"
 
 const Login = ({  setToken,token }) => {
     //modal show handle and so:

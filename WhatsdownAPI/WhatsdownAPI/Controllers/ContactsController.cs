@@ -157,18 +157,21 @@ namespace WhatsdownAPI.Controllers
             //var contact = await _context.ContactRelation.Include(c => c.Contacter).Include(c => c.Contacted).Where(c => c.Contacter.Id == "omer").SingleAsync(c => c.Contacted.Id == id);
 
             var sentMesseges = await _context.Message.Where(m => m.Sender == ConnectedUser && m.Reciever == id).ToListAsync();
-            var recMesseges = await _context.Message.Where(m => m.Reciever == ConnectedUser && m.Sender == id).ToListAsync();
+            //var recMesseges = await _context.Message.Where(m => m.Reciever == ConnectedUser && m.Sender == id).ToListAsync();
 
             var parsedSent = new List<ParsedMessage>();
             var parsedRec = new List<ParsedMessage>();
             foreach (var message in sentMesseges)
-            {
-                parsedSent.Add(ParseMessage(message, true));
+            {             
+               parsedSent.Add(ParseMessage(message));
             }
-            foreach (var message in recMesseges)
+            
+            /*foreach (var message in recMesseges)
             {
-                parsedRec.Add(ParseMessage(message, false));
+                if (message.local)
+                    parsedRec.Add(ParseMessage(message, false));
             }
+            */
 
             var combined = parsedRec.Concat(parsedSent).ToList().OrderBy(x => x.created);
             return combined;
@@ -191,11 +194,8 @@ namespace WhatsdownAPI.Controllers
             {
                 return BadRequest();
             }
-
-            bool isSent = false;
-            if (message.Sender == ConnectedUser)
-                isSent = true;
-            return Ok(ParseMessage(message, isSent));
+           
+            return Ok(ParseMessage(message));
 
             //return 
         }
@@ -217,7 +217,7 @@ namespace WhatsdownAPI.Controllers
             Contact newContact = new Contact()
             {
                 Contacted = from,
-                Contacter = to, //TODO change to connected user
+                Contacter = to, 
                 ContactedNickName = to,
                 Server = server,
                 LastDate = DateTime.Now
@@ -240,7 +240,8 @@ namespace WhatsdownAPI.Controllers
                 Sender = details["from"],
                 Reciever = details["to"],
                 Content = details["content"],
-                Time = DateTime.Now
+                Time = DateTime.Now,
+                isSent = false
             };
             Contact cont = await _context.ContactRelation.SingleAsync(c => c.Contacter == details["from"] && c.Contacted == details["to"]);
             cont.LastMessage = msg.Content;
@@ -266,7 +267,8 @@ namespace WhatsdownAPI.Controllers
                 Sender = ConnectedUser,
                 Reciever = id,
                 Content = content["content"],
-                Time = DateTime.Now
+                Time = DateTime.Now,
+                isSent = true                
             };
             Contact cont = await _context.ContactRelation.SingleAsync(c => c.Contacter == ConnectedUser && c.Contacted == id);
             cont.LastMessage = msg.Content;
@@ -282,14 +284,14 @@ namespace WhatsdownAPI.Controllers
         }
 
 
-        private ParsedMessage ParseMessage(Message message, bool sent)
+        private ParsedMessage ParseMessage(Message message)
         {
             return new ParsedMessage()
             {
                 id = message.Id,
                 content = message.Content,
                 created = message.Time,
-                sent = sent
+                sent = message.isSent
             };
         }
 

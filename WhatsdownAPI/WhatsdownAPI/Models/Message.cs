@@ -9,6 +9,7 @@ namespace WhatsdownAPI.Models
         public string Content { get; set; }
         [Required]
         public DateTime Time { get; set; }
+        public bool isSent { get; set; }
 
         //public string Type { get; set; }
     }
