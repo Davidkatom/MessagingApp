@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace WhatsdownAPI.Migrations
 {
-    public partial class @int : Migration
+    public partial class Init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -36,7 +36,8 @@ namespace WhatsdownAPI.Migrations
                     Sender = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Reciever = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Time = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    Time = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    isSent = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {

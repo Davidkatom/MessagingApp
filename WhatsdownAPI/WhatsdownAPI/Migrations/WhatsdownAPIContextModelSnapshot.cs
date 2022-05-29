@@ -73,6 +73,9 @@ namespace WhatsdownAPI.Migrations
                     b.Property<DateTime>("Time")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("isSent")
+                        .HasColumnType("bit");
+
                     b.HasKey("Id");
 
                     b.ToTable("Message");

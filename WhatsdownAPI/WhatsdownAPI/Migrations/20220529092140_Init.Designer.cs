@@ -12,8 +12,8 @@ using WhatsdownAPI.Data;
 namespace WhatsdownAPI.Migrations
 {
     [DbContext(typeof(WhatsdownAPIContext))]
-    [Migration("20220525081812_int")]
-    partial class @int
+    [Migration("20220529092140_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -74,6 +74,9 @@ namespace WhatsdownAPI.Migrations
 
                     b.Property<DateTime>("Time")
                         .HasColumnType("datetime2");
+
+                    b.Property<bool>("isSent")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
