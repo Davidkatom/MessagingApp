@@ -110,12 +110,12 @@ const ChatScreen = ({ token }) => {
             },  
             data:{},
             success: function (data) {
-                console.log('contact list');
-                console.log(data);
+                // console.log('contact list');
+                // console.log(data);
 
                 setContact_List(data);
-                console.log('contact list set!');
-                console.log(data);
+                // console.log('contact list set!');
+                // console.log(data);
 
                 // console.log('add here chat loading for each contact')
                 //for (const [key, value] of Object.entries(data)) {

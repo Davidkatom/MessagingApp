@@ -16,7 +16,13 @@ const Login = ({  setToken,token }) => {
     //modal show handle and so:
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+    const handleShow = () => {
+        document.getElementById('username').value="";
+        document.getElementById('password').value="";
+        (document.getElementById('success')).classList.add('collapse');
+        (document.getElementById('error_message')).classList.add('collapse');
+        setShow(true);
+    }
 
 
     const navigate = useNavigate();
@@ -41,7 +47,8 @@ const Login = ({  setToken,token }) => {
                 handleOnClick();
             },
             error: function(data){
-                setloginError(data.responseText)
+                //print error message from data
+                data.status === 0 ? setloginError("Connection error - server not reachable"):setloginError(data.responseText)
                 myCollapseE.classList.remove('collapse');
                 myCollapseS.classList.add('collapse');
             },
