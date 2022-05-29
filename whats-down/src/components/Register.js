@@ -63,8 +63,8 @@ const Register = ({close}) => {
             return
         }
         //check display name
-        if (d_name.length < 3) {
-            setAlert(["Display name must be at least 3 characters long", 'alert alert-danger'])
+        if (d_name.length < 3 || d_name.length > 10) {
+            setAlert(["Display Name Length must be between 3 and 10 characters", 'alert alert-danger'])
             return
         }
         //check profile picture:
@@ -87,12 +87,12 @@ const Register = ({close}) => {
             }),
         })
         if(!res.ok){
-            //console.log('register failed! ')
-            //log the res faile message:
-            //console.log(res.text().then(text => { throw new Error(text) }))
-            //console.log(res.errors())
+            // console.log('register failed! ')
+            // log the res faile message:
+            // console.log(res.text().then(text => { throw new Error(text) }))
+            // console.log(res.errors())
             setAlert(["Username already exists", 'alert alert-danger'])
-            //setAlert(["Register Failed", 'alert alert-danger'])
+            // setAlert(["Register Failed", 'alert alert-danger'])
             return
         }
         // console.log('user added')
