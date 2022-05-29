@@ -34,7 +34,7 @@ namespace WhatsdownAPI.Controllers
             {
                 Contacted = from,
                 Contacter = to,
-                ContactedNickName = to,
+                ContactedNickName = from,
                 Server = server,
                 LastDate = DateTime.Now
             };

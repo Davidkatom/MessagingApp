@@ -100,6 +100,32 @@ const ChatScreen = ({ token }) => {
         },[])
 
     //fetch contacts to contact list
+    async function fetchContactList(){
+        $.ajax({
+            url: local_server+'/api/Contacts',
+            type: 'GET',
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("Authorization", "Bearer " + token);
+            },  
+            data:{},
+            success: function (data) {
+                console.log('contact list');
+                console.log(data);
+
+                setContact_List(data);
+                console.log('contact list set!');
+                console.log(data);
+
+                // console.log('add here chat loading for each contact')
+                //for (const [key, value] of Object.entries(data)) {
+                // console.log(key, value);
+                //}
+            },
+            error: function (data) {
+                console.log("failed getting Contacts");
+            }
+        });
+    }
     const [contact_list, setContact_List] = useState([]); // will be an array of contact objects without conversations
     //var init_contact_list =current_user === 'No UserName'? []:current_user.contact_list;
     useEffect( () => {
@@ -111,36 +137,11 @@ const ChatScreen = ({ token }) => {
                 console.log(user)
                 updateChatByContactId(user);        
             });
-            await connect.start().then(connect.invoke("Connect", current_user.user_name));
+            connect.on("NewContact", fetchContactList);
+            await connect.start();
             setConnection(connect);
         }
         connectToSignalR();
-        //Signalr
-        async function fetchContactList(){
-            $.ajax({
-                url: local_server+'/api/Contacts',
-                type: 'GET',
-                beforeSend: function (xhr) {
-                    xhr.setRequestHeader("Authorization", "Bearer " + token);
-                },  
-                data:{},
-                success: function (data) {
-                    console.log('contact list');
-                    console.log(data);
-
-                    setContact_List(data);
-                    console.log('contact list set!');
-                    console.log(data);
-
-                    // console.log('add here chat loading for each contact')
-                    //for (const [key, value] of Object.entries(data)) {console.log(key, value);}
-                
-                },
-                error: function (data) {
-                    console.log("failed getting Contacts");
-                }
-            });
-        }
         fetchContactList();
     },[])
     
@@ -305,8 +306,8 @@ const ChatScreen = ({ token }) => {
                 // console.log("failed adding new contact");
                 // console.log(data);
                 return null;
-            }
-        }).then(setContact_List([newbie ,...contact_list]))
+            }            
+        }).then(setContact_List([newbie ,...contact_list])).then(connection.invoke("UpdateContacts", newbie.id))
         let foreignNewbie = { from: current_user.user_name, to: newContactName,server: local_server}
         $.ajax({// INVITATION new contact to the OTHER server
             url: newbie.server+'/api/invitations/',

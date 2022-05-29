@@ -13,5 +13,11 @@
             await Clients.Client(connectionIDs[to]).SendAsync("SentMessage",from);
             Console.WriteLine("ID:   -  " + Context.ConnectionId);
         }
+
+    public async Task UpdateContacts(string to)
+    {
+        await Clients.Client(connectionIDs[to]).SendAsync("NewContact");
+        Console.WriteLine("ID:   -  " + Context.ConnectionId);
     }
+}
 
