@@ -20,8 +20,8 @@ namespace WhatsdownAPI.Controllers
         {
             Message msg = new Message()
             {
-                Sender = details["from"],
-                Reciever = details["to"],
+                Sender = details["to"],
+                Reciever = details["from"],
                 Content = details["content"],
                 Time = DateTime.Now,
                 isSent = false
