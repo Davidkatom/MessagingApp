@@ -118,9 +118,9 @@ const ChatScreen = ({ token }) => {
                 console.log(data);
 
                 // console.log('add here chat loading for each contact')
-                for (const [key, value] of Object.entries(data)) {
+                //for (const [key, value] of Object.entries(data)) {
                 // console.log(key, value);
-            }
+                //}
             },
             error: function (data) {
                 console.log("failed getting Contacts");
@@ -177,7 +177,7 @@ const ChatScreen = ({ token }) => {
         var input = document.getElementById('message').value
         if (input !== "") {           
     
-            $.ajax({
+            $.ajax({//POST new Message
                 url: local_server+'/api/Contacts/'+selected_contact+'/messages',
                 type: 'POST',
                 beforeSend: function (xhr) {
@@ -201,6 +201,26 @@ const ChatScreen = ({ token }) => {
                     console.log('send message')
                     connection.invoke("SentMessage",current_user.user_name, selected_contact)
                 })
+            //go through contact list and find:
+            let transfer_to_server = contact_list.find(contact => contact.id === selected_contact).server;
+
+            console.log("aaaaaaaaaaaaaaa")
+            $.ajax({//Transfer new Message
+                url: transfer_to_server+'/api/Transfer/',
+                type: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                data:JSON.stringify({from:current_user.user_name, to:selected_contact, content:input}),
+                success: function (data) {
+                    // console.log('message sent')
+                },
+                error: function (data) {
+                    console.log("failed transfer message");
+                    console.log(data);
+                    return null;
+                }
+            }) 
         }
         document.getElementById('message').value = ""
     }

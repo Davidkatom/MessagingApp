@@ -200,11 +200,6 @@ namespace WhatsdownAPI.Controllers
             //return 
         }
 
-        
-
-
-
-
         [HttpPost("{id}/messages")]
         public async Task<IActionResult> SendMessege(string id, Dictionary<string, string> content)
         {
@@ -221,7 +216,6 @@ namespace WhatsdownAPI.Controllers
             cont.LastMessage = msg.Content;
             cont.LastDate = msg.Time;
 
-
             _context.Message.Add(msg);
             _context.Entry(cont).State = EntityState.Modified;
             if (msg.Reciever == null)
@@ -229,7 +223,6 @@ namespace WhatsdownAPI.Controllers
             await _context.SaveChangesAsync();
             return Ok();
         }
-
 
         private ParsedMessage ParseMessage(Message message)
         {
