@@ -4,7 +4,7 @@
 import InputLine from "./InputLine"
 import { useState } from "react"
 
-var local_server = "https://localhost:7144"
+var local_server = "http://whatsdown.epizy.com/server/"
 
 const Register = ({close}) => {
     const [down_alert, setAlert] = useState(['', ''])
