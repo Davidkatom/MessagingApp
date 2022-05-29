@@ -138,10 +138,10 @@ const ChatScreen = ({ token }) => {
                 updateChatByContactId(user);        
             });
             connect.on("NewContact", fetchContactList);
-            await connect.start().then(connect.invoke("Connect", current_user.user_name));
+            await connect.start();
             setConnection(connect);
         }
-        connectToSignalR();
+        connectToSignalR().then(connection.invoke("Connect", current_user.user_name));
         //Signalr        
         fetchContactList();
     },[])
