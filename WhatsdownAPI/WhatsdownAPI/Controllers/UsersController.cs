@@ -60,10 +60,11 @@ namespace WhatsdownAPI.Controllers
             {
                 var jsonToken = handler.ReadToken(tokey);
                 var tokenS = jsonToken as JwtSecurityToken;
-                return tokenS.Claims.ToArray()[3].Value;
+                var me_userid = tokenS.Claims.ToArray()[3].Value;
+                var nickynick = _context.User.Where(c => c.Id == me_userid).ToList().First().NickName;
+                return me_userid+'$'+ nickynick;
             }
-            catch (Exception ex)
-            {
+            catch{
                 return "Authontication Error";
             }
         }

@@ -55,6 +55,7 @@ const ChatScreen = ({ token }) => {
     //fetch Cuurent User
     const [current_user, set_current_user] = useState('No UserName');
     useEffect( () => {
+        /*
         async function fetchMe(){
             console.log('fetch Users')
             const res = await fetch(local_server+'/api/Users');
@@ -74,7 +75,7 @@ const ChatScreen = ({ token }) => {
             console.log("Whether:")     
             console.log(data2)     
         }
-        // fetchMe();
+        fetchMe();*/
         async function GetMeFunc(){
             $.ajax({
                 url: local_server+'/api/Users/Me',
@@ -84,10 +85,10 @@ const ChatScreen = ({ token }) => {
                 },  
                 data:{},
                 success: function (data) {
-                    console.log('User loaded is: '+data);
+                    // console.log('User loaded is: '+data);
                     set_current_user({
-                    user_name: data,
-                    display_name: "nickname",
+                    user_name: data.split("$")[0],
+                    display_name: data.split("$")[1],
                     picture: "picture",
                 })
                 },
@@ -97,7 +98,6 @@ const ChatScreen = ({ token }) => {
             });
         }        
         GetMeFunc();
-        
         },[])
 
     //fetch contacts to contact list
@@ -110,17 +110,7 @@ const ChatScreen = ({ token }) => {
             },  
             data:{},
             success: function (data) {
-                // console.log('contact list');
-                // console.log(data);
-
                 setContact_List(data);
-                // console.log('contact list set!');
-                // console.log(data);
-
-                // console.log('add here chat loading for each contact')
-                //for (const [key, value] of Object.entries(data)) {
-                // console.log(key, value);
-                //}
             },
             error: function (data) {
                 console.log("failed getting Contacts");

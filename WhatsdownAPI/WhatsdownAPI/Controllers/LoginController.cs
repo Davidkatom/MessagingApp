@@ -31,8 +31,7 @@ namespace WhatsdownAPI.Controllers
                 var tokenS = jsonToken as JwtSecurityToken;
                 return tokenS.Claims.ToArray().GetValue(3).ToString();
             }
-            catch (Exception ex)
-            {
+            catch{
                 return "Authontication Error";
             }
         }
