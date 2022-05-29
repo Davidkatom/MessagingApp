@@ -21,14 +21,23 @@ var local_server = "https://localhost:7144"
 
 
 const ChatScreen = ({ token }) => {
-    // console.log('render')
-    //update current chat according to the contact id:
+    const navigate = useNavigate();
+    const refresh = useCallback(() => navigate('/', { replace: true }), [navigate]); //brings back to default home page and refreshes the page
+    //token use Effect check if token is null or not
+    useEffect(() => {
+        if (token === null|| token === undefined|| token ==="") {
+            refresh();
+            alert("Please Login First");
+        }
+    }, [token])
+
     //SignalR Connection
     const [connection, setConnection] = useState(null);
-
+    
     const [selected_contact, set_selected_contact] = useState("");
     const [messages, setMessages] = useState([]);
     
+    //update current chat according to the contact id:
     async function updateChatByContactId(selected = selected_contact ){
         console.log('update chat for: '+selected);
         $.ajax({
@@ -85,7 +94,6 @@ const ChatScreen = ({ token }) => {
                 },  
                 data:{},
                 success: function (data) {
-                    // console.log('User loaded is: '+data);
                     set_current_user({
                     user_name: data.split("$")[0],
                     display_name: data.split("$")[1],
@@ -126,8 +134,6 @@ const ChatScreen = ({ token }) => {
         const connectToSignalR = async () => {
             const connect = new signalR.HubConnectionBuilder().withUrl(local_server+"/myHub").configureLogging(signalR.LogLevel.Information).build();
             connect.on("SentMessage", (user) => {
-                console.log("Message received: " + selected_contact);
-                console.log(user)
                 updateChatByContactId(user);        
             });
             connect.on("NewContact", fetchContactList);            
@@ -148,8 +154,6 @@ const ChatScreen = ({ token }) => {
     },[connection, current_user])
 
 
-    const navigate = useNavigate();
-    const refresh = useCallback(() => navigate('/', { replace: true }), [navigate]);
 
     const [buttonSend, setButtonSend] = useState(null)
     const [sendingRef, setsendingRef] = useState(null)
@@ -165,9 +169,9 @@ const ChatScreen = ({ token }) => {
         checked = !checked
     }
 
+    function getFullSelectedContact (){return contact_list.find(contact => contact.id === selected_contact);}
 
     const sendText = () => {
-        
         var input = document.getElementById('message').value
         if (input !== "") {           
     
@@ -182,7 +186,6 @@ const ChatScreen = ({ token }) => {
                 },
                 data:JSON.stringify({content:input}),
                 success: function (data) {
-                    // console.log('message sent')
                 },
                 error: function (data) {
                     console.log("failed sending message");
@@ -192,22 +195,17 @@ const ChatScreen = ({ token }) => {
             }).then(
                 setMessages([...messages, <MessageElm sent={true} src={input} timeStamp={new Date()} messagetype={"text"} />])
                 ).then(()=>{
-                    console.log('send message')
                     connection.invoke("SentMessage",current_user.user_name, selected_contact)
                 })
             //go through contact list and find:
-            let transfer_to_server = contact_list.find(contact => contact.id === selected_contact).server;
-
-            console.log("aaaaaaaaaaaaaaa")
             $.ajax({//Transfer new Message
-                url: transfer_to_server+'/api/Transfer/',
+                url: getFullSelectedContact.server+'/api/Transfer/',
                 type: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 data:JSON.stringify({from:current_user.user_name, to:selected_contact, content:input}),
                 success: function (data) {
-                    // console.log('message sent')
                 },
                 error: function (data) {
                     console.log("failed transfer message");
@@ -250,10 +248,6 @@ const ChatScreen = ({ token }) => {
         document.getElementById('chatbox').scrollTop = document.getElementById('chatbox').scrollHeight;
     });
 
-    //update the contact list when a new message sent/recived
-    // const contact_chat_change = (cahnged_contact) => {
-    //     setContact_List(contact_list)
-    // }
     //select a spescific contact, update current chat history and last message
     const  selectContact = async (contact) => {
         connection.invoke("Connect", current_user.user_name)
@@ -287,7 +281,6 @@ const ChatScreen = ({ token }) => {
         if (newContactName.length < 3) { return 'Please enter a valid Id (3 chars+)' }
         if (Nickname.length < 3) { return 'Please enter a valid Nickname (3 chars+)' }
         if (newContactName in contact_list) { return 'User already in contact list' }
-        console.log('add new Contact:')
         if (server === "localhost" ||server === "local"|| server ===""|| server === null) {server = local_server}      
         let newbie = { id: newContactName, name: Nickname,server: server}
 
@@ -302,11 +295,10 @@ const ChatScreen = ({ token }) => {
             },
             data:JSON.stringify(newbie),
             success: function (data) {
-                // console.log('Contact Post sent')
             },
             error: function (data) {
-                // console.log("failed adding new contact");
-                // console.log(data);
+                console.log("failed posting new contact");
+                console.log(data);
                 return null;
             }            
         }).then(setContact_List([newbie ,...contact_list]))
@@ -322,34 +314,29 @@ const ChatScreen = ({ token }) => {
             success: function (data) {
             },
             error: function (data) {
-                // console.log(data);
+                console.log("failed inviting new contact");
+                console.log(data);
                 return null;
             }
         })
-
-
         return 'success'
-        
     }
-
     return (
 
         <div className='container large'>
-            <div> Current UserName: {current_user.user_name}</div>
-            <div> Current Token: {token}</div>
             <div className="row row-chat">
-                <div className="col-5">
-                    <div className="rodw row-chat">
-                        <div className="col-6">
+                <div className="col-sm"> {/*left side - above contactlist*/} 
+                    <div className="row row-chat">
+                        <div className="col-10">
                             <img className="float-start img-thumbnail rounded-start right-padding-for-picture" src="omer.png" alt="Profile" />
                             <h2 className="card-title">{current_user.display_name}</h2>
                         </div>
-                        <div className="col-6 align-right">
+                        <div className="col-2 align-right">
                             <AddNewContact addContact={addContact} />
                         </div>
                     </div>
                 </div>
-                <CurrentContact contact={selected_contact} />
+                <CurrentContact contact={getFullSelectedContact} />
                 <ContactSide contact_list={contact_list} selectContact={selectContact}  />
                 <div className="col-sm chat-space collapse" id='ChatSide'>
                     <div className="chat-box scrollable" id="chatbox">
@@ -357,7 +344,8 @@ const ChatScreen = ({ token }) => {
                     </div>
                     <div className="toolbar row row-cols-3">
                         <div className='col-1'>
-                            <div>
+                            <div><button className="btn btn-light" id="attach" ><ImAttachment /></button></div>
+                            {/* <div>
                                 <button className="btn btn-light" id="attach" onClick={toggle}><ImAttachment /></button>
                                 <button className={classes} type="checkbox" id='photo' data-bs-toggle="modal" data-bs-target="#PopupModal" onClick={() => {
                                     setsendingRef((<SendPhoto />))
@@ -372,7 +360,7 @@ const ChatScreen = ({ token }) => {
                                     setButtonSend(() => sendMedia("audio"))
                                 }}><BiMicrophone /></button>
                                 <button className={classes} type="checkbox" id='close' onClick={toggle}><RiCloseCircleLine /></button>
-                            </div>
+                            </div> */}
                         </div>
                         <div className='col-9'>
                             <input type="text" className="form-control" placeholder="message" id='message' onKeyDown={(e) => { e.key === 'Enter' && sendText() }} />

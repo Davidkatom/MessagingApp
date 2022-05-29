@@ -41,59 +41,18 @@ const Login = ({  setToken,token }) => {
             contentType: 'application/json',
             success: function (data) {
                 setToken(data)
-                // console.log(token)
                 myCollapseE.classList.add('collapse');
                 myCollapseS.classList.remove('collapse');
                 handleOnClick();
             },
             error: function(data){
                 //print error message from data
-                data.status === 0 ? setloginError("Connection error - server not reachable"):setloginError(data.responseText)
+                data.status === 0 ? setloginError("Connection error - server not found"):setloginError(data.responseText)
                 myCollapseE.classList.remove('collapse');
                 myCollapseS.classList.add('collapse');
             },
         });
     }
-    async function TestFunc(){
-        $.ajax({
-            url: local_server+'/WeatherForecast',
-            type: 'GET',
-            beforeSend: function (xhr) {
-                xhr.setRequestHeader("Authorization", "Bearer " + token);
-            },  
-            data:{},
-            success: function (data) {
-                console.log('omer is here');
-
-                console.log(data);
-            },
-            error: function (data) {
-                console.log("failed");
-                console.log(data);
-                console.log(token);
-            }
-        });
-    }
-/*    async function GetMeFunc(){
-        $.ajax({
-            url: 'https://localhost:7144/api/Users/Me',
-            type: 'GET',
-            beforeSend: function (xhr) {
-                xhr.setRequestHeader("Authorization", "Bearer " + token);
-            },  
-            data:{tokey:token},
-            success: function (data) {
-                console.log('omer is here');
-                
-                console.log(data);
-            },
-            error: function (data) {
-                console.log("failed");
-                console.log(data);
-                console.log(token);
-            }
-        });
-    }*/
 
     return (
         <div className='container'>

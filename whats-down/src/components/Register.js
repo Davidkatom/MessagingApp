@@ -13,11 +13,6 @@ const Register = ({close}) => {
     const [profilePicture, setProfilePicture] = useState();
     const handlePicture = (e) => {
         var a = document.getElementById('picture').value
-        // console.log(a)
-        // console.log('here')
-        // console.log(e)
-        // console.log(e.target.files[0])
-        // console.log(URL.createObjectURL(e.target.files[0]))
         setProfilePicture(URL.createObjectURL(e.target.files[0]))
         document.getElementById('profile_mini_pic').classList.remove('collapse');
         // let picture = e.target.value
