@@ -200,35 +200,7 @@ namespace WhatsdownAPI.Controllers
             //return 
         }
 
-        [HttpPost("invitations")]
-        public async Task<IActionResult> Invite(Dictionary<string, string> details)
-        {
-            string from = details["from"];
-            string to = details["to"];
-            string server = details["server"];
-
-            //Check if contact exists
-            var exists = await _context.ContactRelation.Where(c => c.Contacter == from).AnyAsync(c => c.Contacted == to);
-            if (exists)
-            {
-                return BadRequest();
-            }
-
-            Contact newContact = new Contact()
-            {
-                Contacted = from,
-                Contacter = to, 
-                ContactedNickName = to,
-                Server = server,
-                LastDate = DateTime.Now
-            };
-
-
-            _context.ContactRelation.Add(newContact);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
+        
 
 
         [HttpPost("transfer")]

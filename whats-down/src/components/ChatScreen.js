@@ -15,8 +15,8 @@ import * as signalR from "@microsoft/signalr";
 import $ from 'jquery';
 
 var checked = false
-//var local_server = "https://localhost:7144"
-var local_server = "http://whatsdown.epizy.com/server/"
+var local_server = "https://localhost:7144"
+// var local_server = "http://whatsdown.epizy.com/server/"
 
 
 
@@ -290,7 +290,7 @@ const ChatScreen = ({ token }) => {
         }).then(setContact_List([newbie ,...contact_list]))
         let foreignNewbie = { from: current_user.user_name, to: newContactName,server: local_server}
         $.ajax({// INVITATION new contact to the OTHER server
-            url: newbie.server+'/api/invitaions/',
+            url: newbie.server+'/api/invitations/',
             type: 'POST',
             headers: {
                 'Content-Type': 'application/json'
