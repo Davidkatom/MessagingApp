@@ -4,7 +4,7 @@ import TimeStempCalc from "../../functions/TimeStempCalc"
 const MiniContant = ( {args} ) => {
   let lastMessage = args.contact.last
   if (lastMessage ==null){
-    lastMessage =  {} //empty message
+    lastMessage =  "a" //empty message
   }
 
   return (

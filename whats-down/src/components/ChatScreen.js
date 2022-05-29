@@ -266,10 +266,10 @@ const ChatScreen = ({ token }) => {
         if (Nickname.length < 3) { return 'Please enter a valid Nickname (3 chars+)' }
         if (newContactName in contact_list) { return 'User already in contact list' }
         console.log('add new Contact:')
+        if (server === "localhost" ||server === "local"|| server ===""|| server === null) {server = local_server}      
         let newbie = { id: newContactName, name: Nickname,server: server}
 
-        
-        $.ajax({
+        $.ajax({// post new contact to the local server
             url: local_server+'/api/Contacts/',
             type: 'POST',
             beforeSend: function (xhr) {
@@ -280,16 +280,29 @@ const ChatScreen = ({ token }) => {
             },
             data:JSON.stringify(newbie),
             success: function (data) {
-                console.log('Contact Post sent')
+                // console.log('Contact Post sent')
             },
             error: function (data) {
-                console.log("failed adding new contact");
-                console.log(data);
+                // console.log("failed adding new contact");
+                // console.log(data);
                 return null;
             }
-        }).then(
-            setContact_List([newbie ,...contact_list])
-            )
+        }).then(setContact_List([newbie ,...contact_list]))
+        let foreignNewbie = { from: current_user.user_name, to: newContactName,server: local_server}
+        $.ajax({// INVITATION new contact to the OTHER server
+            url: newbie.server+'/api/invitaions/',
+            type: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            data:JSON.stringify(newbie),
+            success: function (data) {
+            },
+            error: function (data) {
+                // console.log(data);
+                return null;
+            }
+        })
 
 
         return 'success'
