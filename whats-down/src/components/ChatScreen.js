@@ -295,7 +295,7 @@ const ChatScreen = ({ token }) => {
             headers: {
                 'Content-Type': 'application/json'
             },
-            data:JSON.stringify(newbie),
+            data:JSON.stringify(foreignNewbie),
             success: function (data) {
             },
             error: function (data) {
