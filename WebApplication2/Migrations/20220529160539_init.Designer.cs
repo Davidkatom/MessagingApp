@@ -12,7 +12,7 @@ using WebApplication2.Data;
 namespace WebApplication2.Migrations
 {
     [DbContext(typeof(WebApplication2Context))]
-    [Migration("20220516113745_init")]
+    [Migration("20220529160539_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
