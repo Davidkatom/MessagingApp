@@ -141,7 +141,7 @@ const ChatScreen = ({ token }) => {
             await connect.start();
             setConnection(connect);
         }
-        connectToSignalR().then(connection.invoke("Connect", current_user.user_name));
+        connectToSignalR();
         //Signalr        
         fetchContactList();
     },[])
