@@ -142,9 +142,7 @@ const ChatScreen = ({ token }) => {
             });
             connect.on("NewContact", fetchContactList);            
             await connect.start()
-            setConnection(connect); 
-            //connect.onreconnected(connect.invoke("Connect", current_user.user_name));
-            
+            setConnection(connect);            
                       
         }
         connectToSignalR();
@@ -153,6 +151,12 @@ const ChatScreen = ({ token }) => {
         fetchContactList();
     },[])
     
+    useEffect( () => {
+        if(connection != null && current_user.user_name != null){
+            connection.invoke("Connect", current_user.user_name)
+        }
+    },[connection, current_user])
+
 
     const navigate = useNavigate();
     const refresh = useCallback(() => navigate('/', { replace: true }), [navigate]);
