@@ -203,31 +203,6 @@ namespace WhatsdownAPI.Controllers
         
 
 
-        [HttpPost("transfer")]
-        public async Task<IActionResult> Transfer(Dictionary<string, string> details)
-        {
-
-            Message msg = new Message()
-            {
-                Sender = details["from"],
-                Reciever = details["to"],
-                Content = details["content"],
-                Time = DateTime.Now,
-                isSent = false
-            };
-            Contact cont = await _context.ContactRelation.SingleAsync(c => c.Contacter == details["from"] && c.Contacted == details["to"]);
-            cont.LastMessage = msg.Content;
-            cont.LastDate = msg.Time;
-
-
-            _context.Message.Add(msg);
-            _context.Entry(cont).State = EntityState.Modified;
-            if (msg.Reciever == null)
-                return BadRequest();
-            await _context.SaveChangesAsync();
-            return Ok();
-
-        }
 
 
         [HttpPost("{id}/messages")]
