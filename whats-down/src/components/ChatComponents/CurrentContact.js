@@ -12,7 +12,7 @@ const CurrentContact = ({ contact }) => {
         )
 
     }
-    return (<div></div>)
+    return (<div className="col-7 contact-header"></div>)
 }
 
 export default CurrentContact

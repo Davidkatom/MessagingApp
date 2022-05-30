@@ -2,10 +2,7 @@
 import LastMessageCalc from "../../functions/LastMessageCalc"
 import TimeStempCalc from "../../functions/TimeStempCalc"
 const MiniContant = ( {args} ) => {
-  let lastMessage = args.contact.last
-  if (lastMessage ==null){
-    lastMessage =  "a" //empty message
-  }
+  let lastMessage = args.contact.last ==null? {messagetype: "text",src:"empty chat"}:{messagetype: "text",src:args.contact.last}
 
   return (
     <div>
@@ -24,7 +21,6 @@ const MiniContant = ( {args} ) => {
                 <div className="col">
                   <p className="card-text" style={{ textAlign: 'right' }}><small className="text-muted">
                     {TimeStempCalc(args.contact.lastdate)}
-                    {/* {TimeStempCalc(args.contact.last_message.props.timeStamp)} */}
                   </small></p>
                 </div>
               </div>
