@@ -5,18 +5,24 @@
     public static Dictionary<string, string> connectionIDs = new Dictionary<string, string>();
 
         public void Connect(string id) {
+            if(id == null)
+            {
+                return;
+            }
+
             connectionIDs[id] = Context.ConnectionId;
-           Console.WriteLine(connectionIDs);
+            Console.WriteLine(connectionIDs);
         }
-        public async Task SentMessage(string from, string to)
+        public async Task SentMessage(string from, string to, string content)
         {
-            await Clients.Client(connectionIDs[to]).SendAsync("SentMessage",from);
-            Console.WriteLine("ID:   -  " + Context.ConnectionId);
+            if(connectionIDs.ContainsKey(to))
+                await Clients.Client(connectionIDs[to]).SendAsync("SentMessage",from,content);            
         }
 
         public async Task UpdateContacts(string to)
         {
-            await Clients.Client(connectionIDs[to]).SendAsync("NewContact");
+            if (connectionIDs.ContainsKey(to))
+                await Clients.Client(connectionIDs[to]).SendAsync("NewContact");
         }
 }
 

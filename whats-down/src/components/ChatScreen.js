@@ -17,6 +17,7 @@ import $ from 'jquery';
 var checked = false
 var local_server = "https://localhost:7144"
 // var local_server = "http://whatsdown.epizy.com/server/"
+var signal_selected_user = ""
 
 
 
@@ -49,7 +50,7 @@ const ChatScreen = ({ token }) => {
                 for (let i = 0; i < data.length; i++) {
                     newMsgs.push(<MessageElm sent={data[i].sent} src={data[i].content} timeStamp={data[i].created} messagetype={"text"} />)
                 }
-                setMessages(newMsgs)
+                setMessages(newMsgs)                             
             },
             error: function (data) {
                 console.log("failed getting messages");
@@ -139,8 +140,11 @@ const ChatScreen = ({ token }) => {
     useEffect( () => { //signalR connection 
         const connectToSignalR = async () => {
             const connect = new signalR.HubConnectionBuilder().withUrl(local_server+"/myHub").configureLogging(signalR.LogLevel.Information).build();
-            connect.on("SentMessage", (user) => {
-                updateChatByContactId(user);        
+            connect.on("SentMessage", (user, message) => {    
+                if(user == signal_selected_user){            
+                    updateChatByContactId(user)                
+                }
+                updateContactLastMsg(user, message)
             });
             connect.on("NewContact", fetchContactList);            
             await connect.start()
@@ -178,6 +182,7 @@ const ChatScreen = ({ token }) => {
 
     function updateContactLastMsg(contact_id, msg){
         var contact = getFullContact(contact_id);
+        console.log(contact)
         contact.last = msg;
         contact.lastdate = new Date();
         var filterd = contact_list.filter(contact => contact.id !== contact_id);
@@ -207,11 +212,11 @@ const ChatScreen = ({ token }) => {
             }).then(
                 setMessages([...messages, <MessageElm sent={true} src={input} timeStamp={new Date()} messagetype={"text"} />])
                 ).then(()=>{
-                    connection.invoke("SentMessage",current_user.user_name, selected_contact)
+                    connection.invoke("SentMessage",current_user.user_name, selected_contact, input)
                 })
             //go through contact list and find:
             $.ajax({//Transfer new Message
-                url: getFullSelectedContact.server+'/api/Transfer/',
+                url: getFullSelectedContact().server+'/api/Transfer/',
                 type: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -266,6 +271,7 @@ const ChatScreen = ({ token }) => {
         }
         document.getElementById(contact).classList.add('selected-chat') //add selection
         set_selected_contact(contact)
+        signal_selected_user = contact
         document.getElementById("message").value = '' //erase the messageBox when switching contacts
 
         document.getElementById('ChatSide').classList.remove('collapse')
@@ -353,7 +359,6 @@ const ChatScreen = ({ token }) => {
                     </div>
                     <div className="toolbar row row-cols-3">
                         <div className='col-1'>
-                            <div><button className="btn btn-light" id="attach" ><ImAttachment /></button></div>
                             {/* <div>
                                 <button className="btn btn-light" id="attach" onClick={toggle}><ImAttachment /></button>
                                 <button className={classes} type="checkbox" id='photo' data-bs-toggle="modal" data-bs-target="#PopupModal" onClick={() => {
