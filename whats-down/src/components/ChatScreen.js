@@ -135,7 +135,7 @@ const ChatScreen = ({ token }) => {
             let elem =document.getElementById(contact_list[i].id)
             if(elem !== null){ elem.classList.remove('selected-chat')}
         }
-        selectContact(selected_contact)
+        if(selected_contact!=""){selectContact(selected_contact)}
     },[contact_list])
     useEffect( () => { //signalR connection 
         const connectToSignalR = async () => {
@@ -272,7 +272,6 @@ const ChatScreen = ({ token }) => {
         set_selected_contact(contact)
         signal_selected_user = contact
         document.getElementById("message").value = '' //erase the messageBox when switching contacts
-
         document.getElementById('ChatSide').classList.remove('collapse')
         // document.getElementById("selected-contact-image").classList.remove('collapse')
         resetSendMedia()

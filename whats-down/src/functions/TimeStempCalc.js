@@ -5,7 +5,11 @@ function sqlToJsDate(sqlDate){
 }
 function fixDateWithT(dateWithT) {
     let dateTimeParts= dateWithT.split(/[- : // T .]/); // regular expression split that creates array with: year, month, day, hour, minutes, seconds values
-    return new Date(parseInt(dateTimeParts[2]), parseInt(dateTimeParts[1])-1, parseInt(dateTimeParts[0]), parseInt(dateTimeParts[3]), parseInt(dateTimeParts[4]), parseInt(dateTimeParts[5]));
+    if(parseInt(dateTimeParts[2])>999){
+        return new Date(parseInt(dateTimeParts[2]), parseInt(dateTimeParts[1])-1, parseInt(dateTimeParts[0]), parseInt(dateTimeParts[3]), parseInt(dateTimeParts[4]), parseInt(dateTimeParts[5]));
+    }else{
+        return new Date(parseInt(dateTimeParts[0]), parseInt(dateTimeParts[1])-1, parseInt(dateTimeParts[2]), parseInt(dateTimeParts[3]), parseInt(dateTimeParts[4]), parseInt(dateTimeParts[5]));
+    }
 }
 
 export default function TimeStempCalc(timeStamp) {
@@ -20,7 +24,7 @@ export default function TimeStempCalc(timeStamp) {
                 sqlToJsDate(timeStamp).toLocaleDateString();
                 timeStamp = sqlToJsDate(timeStamp)
             }catch{
-                return "just now";
+                timeStamp = new Date();
             }
         }
     }
