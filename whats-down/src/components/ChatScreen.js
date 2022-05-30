@@ -179,6 +179,7 @@ const ChatScreen = ({ token }) => {
     function updateContactLastMsg(contact_id, msg){
         var contact = getFullContact(contact_id);
         contact.last = msg;
+        contact.lastdate = new Date();
         var filterd = contact_list.filter(contact => contact.id !== contact_id);
         setContact_List([contact,...filterd]);
     }
@@ -225,8 +226,8 @@ const ChatScreen = ({ token }) => {
                     return null;
                 }
             }) 
+            updateContactLastMsg(selected_contact, input)
         }
-        updateContactLastMsg(selected_contact, input)
         document.getElementById('message').value = ""
     }
 

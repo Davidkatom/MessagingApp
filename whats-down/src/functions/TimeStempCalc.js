@@ -1,14 +1,19 @@
 
 function sqlToJsDate(sqlDate){
     let dateTimeParts= sqlDate.split(/[- : //]/); // regular expression split that creates array with: year, month, day, hour, minutes, seconds values
+    console.log("parts sql:")
+    console.log(dateTimeParts)
     return new Date(parseInt(dateTimeParts[2]), parseInt(dateTimeParts[1])-1, parseInt(dateTimeParts[0]), parseInt(dateTimeParts[3]), parseInt(dateTimeParts[4]), parseInt(dateTimeParts[5]));
 }
 function fixDateWithT(dateWithT) {
     let dateTimeParts= dateWithT.split(/[- : // T .]/); // regular expression split that creates array with: year, month, day, hour, minutes, seconds values
-    return new Date(parseInt(dateTimeParts[0]), parseInt(dateTimeParts[1])-1, parseInt(dateTimeParts[2]), parseInt(dateTimeParts[3]), parseInt(dateTimeParts[4]), parseInt(dateTimeParts[5]));
+    console.log("parts T:")
+    console.log(dateTimeParts)
+    return new Date(parseInt(dateTimeParts[2]), parseInt(dateTimeParts[1])-1, parseInt(dateTimeParts[0]), parseInt(dateTimeParts[3]), parseInt(dateTimeParts[4]), parseInt(dateTimeParts[5]));
 }
 
 export default function TimeStempCalc(timeStamp) {
+    console.log("timmmeeeeStamooss")
     try{
         timeStamp.toLocaleDateString();
     }catch{
