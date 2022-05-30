@@ -120,8 +120,6 @@ const ChatScreen = ({ token }) => {
             },  
             data:{},
             success: function (data) {
-                console.log("setting C list")
-                console.log(data)
                 setContact_List(data);
             },
             error: function (data) {
@@ -139,37 +137,6 @@ const ChatScreen = ({ token }) => {
         }
         selectContact(selected_contact)
     },[contact_list])
-    async function updateContactByContactId(selected = selected_contact ){//update current contact according to the contact id:
-        console.log("before fetch")
-        console.log(contact_list)
-
-        fetchContactList().then(
-        console.log("after fetch"),
-        console.log(contact_list))
-        // $.ajax({
-        //     url: local_server+'/api/Contacts/'+selected,
-        //     type: 'GET',
-        //     beforeSend: function (xhr) {
-        //         xhr.setRequestHeader("Authorization", "Bearer " + token);
-        //     },
-        //     data:{},
-        //     success: function (data) {
-        //         console.log("fetched the contact because he messaged me")
-        //         console.log(data)
-        //         console.log("current contact list:")
-        //         console.log(contact_list)
-        //         // var newMsgs = [];
-        //         // for (let i = 0; i < data.length; i++) {
-        //         //     newMsgs.push(<MessageElm sent={data[i].sent} src={data[i].content} timeStamp={data[i].created} messagetype={"text"} />)
-        //         // }
-        //         // setMessages(newMsgs)                             
-        //     },
-        //     error: function (data) {
-        //         console.log("failed fetching the contact after update");
-        //         return null;
-        //     }
-        // })
-    }
     useEffect( () => { //signalR connection 
         const connectToSignalR = async () => {
             const connect = new signalR.HubConnectionBuilder().withUrl(local_server+"/myHub").configureLogging(signalR.LogLevel.Information).build();
@@ -177,7 +144,7 @@ const ChatScreen = ({ token }) => {
                 if(user == signal_selected_user){            
                     updateChatByContactId(user)                
                 }
-                updateContactByContactId(user)
+                fetchContactList(user)
             });
             connect.on("NewContact", fetchContactList);            
             await connect.start()
@@ -214,12 +181,7 @@ const ChatScreen = ({ token }) => {
     function getFullContact (cont_id){return contact_list.find(contact => contact.id === cont_id);}
 
     function updateContactLastMsg(contact_id, msg){
-        console.log("here")
-        console.log("contact_list:")
-        console.log(contact_list)
-
         var contact = getFullContact(contact_id);
-        console.log(contact)
         contact.last = msg;
         contact.lastdate = new Date();
         var filterd = contact_list.filter(contact => contact.id !== contact_id);
@@ -251,7 +213,6 @@ const ChatScreen = ({ token }) => {
                 ).then(()=>{
                     connection.invoke("SentMessage",current_user.user_name, selected_contact, input)
                 })
-            //go through contact list and find:
             $.ajax({//Transfer new Message
                 url: getFullSelectedContact().server+'/api/Transfer/',
                 type: 'POST',
@@ -266,8 +227,9 @@ const ChatScreen = ({ token }) => {
                     console.log(data);
                     return null;
                 }
-            }) 
+            })
             updateContactLastMsg(selected_contact, input)
+            
         }
         document.getElementById('message').value = ""
     }
@@ -302,7 +264,6 @@ const ChatScreen = ({ token }) => {
     //select a spescific contact, update current chat history and last message
     const  selectContact = async (contact) => {
         connection.invoke("Connect", current_user.user_name)
-        // console.log('Contact id selected: '+contact)
         if (selected_contact !== '') {
             document.getElementById(selected_contact).classList.remove('selected-chat') //remove eselection
         }
