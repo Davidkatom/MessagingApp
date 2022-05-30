@@ -6,17 +6,18 @@
 
         public void Connect(string id) {
             connectionIDs[id] = Context.ConnectionId;
-           Console.WriteLine(connectionIDs);
+            Console.WriteLine(connectionIDs);
         }
         public async Task SentMessage(string from, string to)
         {
-            await Clients.Client(connectionIDs[to]).SendAsync("SentMessage",from);
-            Console.WriteLine("ID:   -  " + Context.ConnectionId);
+            if(connectionIDs.ContainsKey(to))
+                await Clients.Client(connectionIDs[to]).SendAsync("SentMessage",from);            
         }
 
         public async Task UpdateContacts(string to)
         {
-            await Clients.Client(connectionIDs[to]).SendAsync("NewContact");
+            if (connectionIDs.ContainsKey(to))
+                await Clients.Client(connectionIDs[to]).SendAsync("NewContact");
         }
 }
 

@@ -59,7 +59,7 @@ const Login = ({  setToken,token }) => {
             <span className='contact-header'>Log in to Whats Down</span>
 
             <InputLine label='Username' placeholder='Username' type='text' id='username' />
-            <InputLine label='Password' placeholder='Password' type='password' id='password' />
+            <InputLine label='Password' placeholder='Password' type='password' id='password' fun={loginButton} />
 
             <div className="collapse" id="error_message">
                 <div className="alert alert-danger" role="alert" id="alert">
@@ -73,7 +73,7 @@ const Login = ({  setToken,token }) => {
             </div>
 
             <div className="buttons">
-                <button label='Login' className="btn btn-primary" onClick={loginButton} id='login_button' >Login</button>
+                <button label='Login' className="btn btn-primary" onClick={loginButton} id='login_button'  >Login</button>
                 <button className="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={handleShow} >Sign Up</button>
             </div>
   

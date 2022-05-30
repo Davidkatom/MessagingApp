@@ -134,9 +134,9 @@ namespace WhatsdownAPI.Controllers
 
         // DELETE: api/Contacts/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteContact(int id)
+        public async Task<IActionResult> DeleteContact(string id)
         {
-            var contact = await _context.ContactRelation.FindAsync(id);
+            var contact = await _context.ContactRelation.Where(c => c.Contacter == ConnectedUser).SingleAsync(c => c.Contacted == id);
             if (contact == null)
             {
                 return NotFound();
@@ -153,27 +153,14 @@ namespace WhatsdownAPI.Controllers
         {
             ConnectedUser = GetConnectedUserId(Request.Headers["Authorization"]);
             //Contact of connected user
-            //var contact = await _context.ContactRelation.Include(c => c.Contacter).Include(c => c.Contacted).Where(c => c.Contacter.Id == "omer").SingleAsync(c => c.Contacted.Id == id);
-
             var sentMesseges = await _context.Message.Where(m => m.Sender == ConnectedUser && m.Reciever == id).ToListAsync();
-            //var recMesseges = await _context.Message.Where(m => m.Reciever == ConnectedUser && m.Sender == id).ToListAsync();
 
             var parsedSent = new List<ParsedMessage>();
-            var parsedRec = new List<ParsedMessage>();
             foreach (var message in sentMesseges)
             {             
                parsedSent.Add(ParseMessage(message));
-            }
-            
-            /*foreach (var message in recMesseges)
-            {
-                if (message.local)
-                    parsedRec.Add(ParseMessage(message, false));
-            }
-            */
-
-            var combined = parsedRec.Concat(parsedSent).ToList().OrderBy(x => x.created);
-            return combined;
+            }            
+            return parsedSent.ToList().OrderBy(x => x.created); 
 
         }
 
@@ -182,7 +169,6 @@ namespace WhatsdownAPI.Controllers
         {
             ConnectedUser = GetConnectedUserId(Request.Headers["Authorization"]);
             //Contact of connected user
-            //var contact = await _context.ContactRelation.Include(c => c.Contacter).Include(c => c.Contacted).Where(c => c.Contacter.Id == "omer").SingleAsync(c => c.Contacted.Id == id);
             var message = await _context.Message.Include(m => m.Sender).Include(m => m.Reciever).SingleAsync(m => m.Id == messageId);
 
             if (message.Sender != ConnectedUser && message.Reciever != ConnectedUser)
@@ -194,6 +180,31 @@ namespace WhatsdownAPI.Controllers
                 return BadRequest();
             }
            
+            return Ok(ParseMessage(message));
+
+            //return 
+        }
+        [HttpPut("{id}/messages/{messageId}")]
+        public async Task<ActionResult<ParsedMessage>> UpdateMessege(string id, int messageId, Dictionary<string, string> details)
+        {
+            ConnectedUser = GetConnectedUserId(Request.Headers["Authorization"]);
+            //Contact of connected user
+            var message = await _context.Message.Include(m => m.Sender).Include(m => m.Reciever).SingleAsync(m => m.Id == messageId);
+            if(message == null)
+            {
+                return BadRequest();
+            }
+            if (message.Sender != ConnectedUser && message.Reciever != ConnectedUser)
+            {
+                return BadRequest();
+            }
+            if (message.Sender != id && message.Reciever != id)
+            {
+                return BadRequest();
+            }
+            message.Content = details["content"];
+            _context.Entry(message).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
             return Ok(ParseMessage(message));
 
             //return 
@@ -232,12 +243,7 @@ namespace WhatsdownAPI.Controllers
                 created = message.Time,
                 sent = message.isSent
             };
-        }
-
-        private bool ContactExists(int id)
-        {
-            return _context.ContactRelation.Any(e => e.Id == id);
-        }
+        }    
     }
 }
 
