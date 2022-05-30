@@ -187,7 +187,6 @@ const ChatScreen = ({ token }) => {
     const sendText = () => {
         var input = document.getElementById('message').value
         if (input !== "") {           
-    
             $.ajax({//POST new Message
                 url: local_server+'/api/Contacts/'+selected_contact+'/messages',
                 type: 'POST',
