@@ -26,10 +26,7 @@ const ChatScreen = ({ token }) => {
     const refresh = useCallback(() => navigate('/', { replace: true }), [navigate]); //brings back to default home page and refreshes the page
     //token use Effect check if token is null or not
     useEffect(() => {
-        if (token === null|| token === undefined|| token ==="") {
-            refresh();
-            alert("Please Login First");
-        }
+        if (token === null|| token === undefined|| token ==="") {refresh();}
     }, [token])
 
     //SignalR Connection
@@ -95,11 +92,15 @@ const ChatScreen = ({ token }) => {
                 },  
                 data:{},
                 success: function (data) {
-                    set_current_user({
-                    user_name: data.split("$")[0],
-                    display_name: data.split("$")[1],
-                    picture: "picture",
-                })
+                    if(data["Error"] !==""  ){
+                        console.log(data["Error"]);
+                    }else{
+                        set_current_user({
+                        user_name: data["Id"],
+                        display_name: data["NickName"],
+                        picture: data["ProfilePicture"],
+                        })  
+                    }
                 },
                 error: function (data) {
                     console.log("failed getting userMe");
@@ -129,14 +130,21 @@ const ChatScreen = ({ token }) => {
         }
         
     const [contact_list, setContact_List] = useState([]); // will be an array of contact objects without conversations
-    useEffect( () => {
-        //Signalr
+    useEffect( () => {// reselect current chat when contact list is changed
+        for (let i = 0; i < contact_list.length; i++) {
+            document.getElementById(contact_list[i].id).classList.remove('selected-chat') //remove selection
+        }
+        selectContact(selected_contact)
+    },[contact_list])
+    
+    useEffect( () => { //signalR connection 
         const connectToSignalR = async () => {
             const connect = new signalR.HubConnectionBuilder().withUrl(local_server+"/myHub").configureLogging(signalR.LogLevel.Information).build();
-            connect.on("SentMessage", (user) => {    
+            connect.on("SentMessage", (user, message) => {    
                 if(user == signal_selected_user){            
                     updateChatByContactId(user)                
                 }
+                updateContactLastMsg(user, message)
             });
             connect.on("NewContact", fetchContactList);            
             await connect.start()
@@ -144,12 +152,10 @@ const ChatScreen = ({ token }) => {
                       
         }
         connectToSignalR();
-        
-        //Signalr        
         fetchContactList();
     },[])
     
-    useEffect( () => {
+    useEffect( () => { // link connection with active username when connection is established
         if(connection != null && current_user.user_name != null){
             connection.invoke("Connect", current_user.user_name)
         }
@@ -172,6 +178,16 @@ const ChatScreen = ({ token }) => {
     }
 
     function getFullSelectedContact (){return contact_list.find(contact => contact.id === selected_contact);}
+    function getFullContact (cont_id){return contact_list.find(contact => contact.id === cont_id);}
+
+    function updateContactLastMsg(contact_id, msg){
+        var contact = getFullContact(contact_id);
+        console.log(contact)
+        contact.last = msg;
+        contact.lastdate = new Date();
+        var filterd = contact_list.filter(contact => contact.id !== contact_id);
+        setContact_List([contact,...filterd]);
+    }
 
     const sendText = () => {
         var input = document.getElementById('message').value
@@ -197,7 +213,7 @@ const ChatScreen = ({ token }) => {
             }).then(
                 setMessages([...messages, <MessageElm sent={true} src={input} timeStamp={new Date()} messagetype={"text"} />])
                 ).then(()=>{
-                    connection.invoke("SentMessage",current_user.user_name, selected_contact)
+                    connection.invoke("SentMessage",current_user.user_name, selected_contact, input)
                 })
             //go through contact list and find:
             $.ajax({//Transfer new Message
@@ -215,6 +231,7 @@ const ChatScreen = ({ token }) => {
                     return null;
                 }
             }) 
+            updateContactLastMsg(selected_contact, input)
         }
         document.getElementById('message').value = ""
     }
@@ -242,11 +259,7 @@ const ChatScreen = ({ token }) => {
 
     }
 
-    useEffect(() => {
-        // if (messages) {
-        //     contact_chat_change(selected_contact.display_name)
-        // }
-        //set scrolling correctly
+    useEffect(() => {//set scrolling correctly
         document.getElementById('chatbox').scrollTop = document.getElementById('chatbox').scrollHeight;
     });
 
