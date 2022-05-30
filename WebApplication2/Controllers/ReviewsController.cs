@@ -5,16 +5,16 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using WebApplication2.Data;
+using WhatsdownAPI.Data;
 using WebApplication2.Models;
 
 namespace WebApplication2.Controllers
 {
     public class ReviewsController : Controller
     {
-        private readonly WebApplication2Context _context;
+        private readonly WhatsdownAPIContext _context;
 
-        public ReviewsController(WebApplication2Context context)
+        public ReviewsController(WhatsdownAPIContext context)
         {
             _context = context;
         }

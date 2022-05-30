@@ -10,7 +10,7 @@ import Register from './Register';
 import Modal from 'react-bootstrap/Modal'
 import { useState } from "react"
 
-var local_server = "https://localhost:7144"
+var local_server = "https://localhost:7087"
 
 const Login = ({  setToken,token }) => {
     //modal show handle and so:
@@ -75,6 +75,9 @@ const Login = ({  setToken,token }) => {
             <div className="buttons">
                 <button label='Login' className="btn btn-primary" onClick={loginButton} id='login_button'  >Login</button>
                 <button className="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={handleShow} >Sign Up</button>
+            </div>
+            <div className="ratings">
+                <a label='Leave a review' className="btn btn-primary" href={local_server} id='review_button'  >Leave a review</a>
             </div>
   
 
