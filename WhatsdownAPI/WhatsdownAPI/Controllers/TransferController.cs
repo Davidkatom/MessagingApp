@@ -26,7 +26,7 @@ namespace WhatsdownAPI.Controllers
                 Time = DateTime.Now,
                 isSent = false
             };
-            Contact cont = await _context.ContactRelation.SingleAsync(c => c.Contacter == details["from"] && c.Contacted == details["to"]);
+            Contact cont = await _context.ContactRelation.SingleAsync(c => c.Contacter == details["to"] && c.Contacted == details["from"]);
             cont.LastMessage = msg.Content;
             cont.LastDate = msg.Time;
 
