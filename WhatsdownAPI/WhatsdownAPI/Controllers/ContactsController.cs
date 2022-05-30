@@ -60,7 +60,7 @@ namespace WhatsdownAPI.Controllers
             //List of all contacts of connected user
             var contacts = await _context.ContactRelation.Where(c => c.Contacter == ConnectedUser).ToListAsync();
             List<Dictionary<string, string>> parsedContacts = new();
-            foreach (var contact in contacts.OrderBy(x => x.LastDate))
+            foreach (var contact in contacts.OrderByDescending(x => x.LastDate))
             {
                 parsedContacts.Add(ParseContact(contact));
             }
