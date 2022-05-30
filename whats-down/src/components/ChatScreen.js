@@ -291,6 +291,7 @@ const ChatScreen = ({ token }) => {
     //add a new contact to the contact list
     const addContact = (newContactName,Nickname,server) => {
         //check if newContactName is already in the contact list
+        if (newContactName ===current_user.user_name) { return 'You can not add yourself! find some friends!' }
         if (newContactName.length < 3) { return 'Please enter a valid Id (3 chars+)' }
         if (Nickname.length < 3) { return 'Please enter a valid Nickname (3 chars+)' }
         if (newContactName in contact_list) { return 'User already in contact list' }
