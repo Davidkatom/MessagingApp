@@ -20,7 +20,7 @@ NPM Installation guide:
 6. Run  npm install react-icons --save
 7. Run npm install @microsoft/signalr
 To lunch the app, write inside the terminal of you favourite softwere development environment 'npm start'
-
+<br/>note that when adding a new contact - you may choose to leave it empty in order for default local host
 
 Note that the server the app is connecting to is: https://localhost:7087
 
@@ -39,3 +39,4 @@ Installation guide:
 7. login
 8. don't forget to leave an honest reveiw :)
  -Make sure the server is running on https://localhost:7087:
+
