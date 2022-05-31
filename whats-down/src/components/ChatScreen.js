@@ -26,7 +26,7 @@ const ChatScreen = ({ token }) => {
     const refresh = useCallback(() => navigate('/', { replace: true }), [navigate]); //brings back to default home page and refreshes the page
     //token use Effect check if token is null or not
     useEffect(() => {
-        console.log("token in useEffect: ", token)
+        let x = token
         fetchContactList()
         if (token === null|| token === undefined|| token ==="") {refresh();}
     }, [token])
@@ -39,7 +39,7 @@ const ChatScreen = ({ token }) => {
     
     
     async function updateChatByContactId(selected = selected_contact ){//update current chat according to the contact id:
-        // console.log('update chat for: '+selected);
+        console.log('update chat for: '+selected);
         if (signal_selected_user !== "") { 
         $.ajax({
             url: local_server+'/api/Contacts/'+selected+'/messages',
@@ -56,7 +56,7 @@ const ChatScreen = ({ token }) => {
                 setMessages(newMsgs)                             
             },
             error: function (data) {
-                console.log("failed getting messages");
+                // console.log("failed getting messages");
                 return null;
             }
         })
@@ -97,7 +97,7 @@ const ChatScreen = ({ token }) => {
                 data:{},
                 success: function (data) {
                     if(data["Error"] !==""  ){
-                        console.log(data["Error"]);
+                        //console.log(data["Error"]);
                     }else{
                         set_current_user({
                         user_name: data["Id"],
@@ -107,7 +107,7 @@ const ChatScreen = ({ token }) => {
                     }
                 },
                 error: function (data) {
-                    console.log("failed getting userMe");
+                    //console.log("failed getting userMe");
                 }
             });
         }        
@@ -116,8 +116,8 @@ const ChatScreen = ({ token }) => {
 
     //fetch contacts to contact list
     async function fetchContactList(){
-        console.log('fetch Contacts')
-        console.log(token)
+        // console.log('fetch Contacts')
+        // console.log(token)
         $.ajax({
             url: local_server+'/api/Contacts',
             type: 'GET',
@@ -126,10 +126,11 @@ const ChatScreen = ({ token }) => {
             },  
             data:{},
             success: function (data) {
+                console.log("t11")
                 setContact_List(data);
             },
             error: function (data) {
-                console.log("failed getting Contacts");
+                //console.log("failed getting Contacts");
             }
         });
             
@@ -147,12 +148,17 @@ const ChatScreen = ({ token }) => {
         const connectToSignalR = async () => {
             const connect = new signalR.HubConnectionBuilder().withUrl(local_server+"/myHub").configureLogging(signalR.LogLevel.Information).build();
             connect.on("SentMessage", (user, message) => {    
-                if(user == signal_selected_user){            
+                if(user == signal_selected_user){   
+                    console.log("ha?")         
                     updateChatByContactId(user)
                 }
+                console.log("invokation")         
                 fetchContactList(user)
             });
-            connect.on("NewContact", fetchContactList);            
+            connect.on("NewContact", ()=>{
+                console.log("invokation2")
+                fetchContactList()
+            });            
             connect.onreconnected = () => {connect.invoke("Connect", current_user.user_name)};
             await connect.start()
             connection = connect;
@@ -214,8 +220,8 @@ const ChatScreen = ({ token }) => {
                 success: function (data) {
                 },
                 error: function (data) {
-                    console.log("failed sending message");
-                    console.log(data);
+                    // console.log("failed sending message");
+                    // console.log(data);
                     return null;
                 }
             }).then(
@@ -233,8 +239,8 @@ const ChatScreen = ({ token }) => {
                 success: function (data) {
                 },
                 error: function (data) {
-                    console.log("failed transfer message");
-                    console.log(data);
+                    // console.log("failed transfer message");
+                    // console.log(data);
                     return null;
                 }
             })
@@ -322,11 +328,13 @@ const ChatScreen = ({ token }) => {
             success: function (data) {
             },
             error: function (data) {
-                console.log("failed posting new contact");
-                console.log(data);
+                // console.log("failed posting new contact");
+                // console.log(data);
                 return null;
             }            
-        }).then(setContact_List([newbie ,...contact_list]))
+        }).then(
+            console.log("new contact added"),
+            setContact_List([newbie ,...contact_list]))
         try {connection.invoke("UpdateContacts", newbie.id)}
         catch (error) {console.log(error)}
         let foreignNewbie = { from: current_user.user_name, to: newContactName,server: local_server}
@@ -340,8 +348,8 @@ const ChatScreen = ({ token }) => {
             success: function (data) {
             },
             error: function (data) {
-                console.log("failed inviting new contact");
-                console.log(data);
+                // console.log("failed inviting new contact");
+                // console.log(data);
                 return null;
             }
         })
@@ -361,7 +369,7 @@ const ChatScreen = ({ token }) => {
                         </div>
                         <div className="col align-right">
                             <AddNewContact addContact={addContact} />
-                            <button className="btn btn-primary" onClick={() => {fetchContactList()}}>Refresh</button>
+                            {/* <button className="btn btn-primary" onClick={() => {fetchContactList()}}>Refresh</button> */}
                         </div>
                     </div>
                 </div>

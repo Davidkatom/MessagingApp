@@ -46,7 +46,7 @@ namespace WhatsdownAPI.Controllers
 
             _context.ContactRelation.Add(newContact);
             await _context.SaveChangesAsync();
-            await UpdateContacts(from);
+            await UpdateContacts(to);
             return NoContent();
         }
 
