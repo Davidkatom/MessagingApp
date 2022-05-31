@@ -26,7 +26,7 @@ const ChatScreen = ({ token }) => {
     const refresh = useCallback(() => navigate('/', { replace: true }), [navigate]); //brings back to default home page and refreshes the page
     //token use Effect check if token is null or not
     useEffect(() => {
-        console.log("token in useEffect: ", token)
+        // console.log("token in useEffect: ", token)
         full_token = token
         fetchContactList()
         if (token === null|| token === undefined|| token ==="") {refresh();}
@@ -40,7 +40,7 @@ const ChatScreen = ({ token }) => {
     
     
     async function updateChatByContactId(selected = selected_contact ){//update current chat according to the contact id:
-        console.log('update chat for: '+selected);
+        // console.log('update chat for: '+selected);
         if (signal_selected_user !== "") { 
         $.ajax({
             url: local_server+'/api/Contacts/'+selected+'/messages',
@@ -128,7 +128,6 @@ const ChatScreen = ({ token }) => {
             },  
             data:{},
             success: function (data) {
-                console.log("t11")
                 setContact_List(data);
             },
             error: function (data) {
@@ -151,14 +150,11 @@ const ChatScreen = ({ token }) => {
             const connect = new signalR.HubConnectionBuilder().withUrl(local_server+"/myHub").configureLogging(signalR.LogLevel.Information).build();
             connect.on("SentMessage", (user, message) => {    
                 if(user == signal_selected_user){   
-                    console.log("ha?")         
                     updateChatByContactId(user)
                 }
-                console.log("invokation")         
                 fetchContactList(user)
             });
             connect.on("NewContact", ()=>{
-                console.log("invokation2")
                 fetchContactList()
             });            
             connect.onreconnected = () => {connect.invoke("Connect", current_user.user_name)};
@@ -179,14 +175,13 @@ const ChatScreen = ({ token }) => {
             if(connection != null && current_user.user_name != null){            
                 if(connection.state == signalR.HubConnectionState.Connected){
                     connection.invoke("Connect", current_user.user_name)
-                    console.log("connecting")
+                    // console.log("connecting")
                 }
                 else{
-                    console.log("cant connect")
+                    // console.log("cant connect")
     
                 }
             }
-            console.log("after delay")
         }
         asycnConnection();
         
@@ -347,10 +342,10 @@ const ChatScreen = ({ token }) => {
                 return null;
             }            
         }).then(
-            console.log("new contact added"),
+            // console.log("new contact added"),
             setContact_List([newbie ,...contact_list]))
         try {connection.invoke("UpdateContacts", newbie.id)}
-        catch (error) {console.log(error)}
+        catch (error) {/*console.log(error)*/}
         let foreignNewbie = { from: current_user.user_name, to: newContactName,server: local_server}
         $.ajax({// INVITATION new contact to the OTHER server
             url: newbie.server+'/api/invitations/',
