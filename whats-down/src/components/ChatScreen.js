@@ -26,6 +26,7 @@ const ChatScreen = ({ token }) => {
     const refresh = useCallback(() => navigate('/', { replace: true }), [navigate]); //brings back to default home page and refreshes the page
     //token use Effect check if token is null or not
     useEffect(() => {
+        console.log("token in useEffect: ", token)
         fetchContactList()
         if (token === null|| token === undefined|| token ==="") {refresh();}
     }, [token])
