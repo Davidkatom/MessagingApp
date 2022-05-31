@@ -18,7 +18,7 @@ var checked = false
 var local_server = "https://localhost:7087"
 // var local_server = "http://whatsdown.epizy.com/server/"
 var signal_selected_user = ""
-
+var connection = null;
 
 
 const ChatScreen = ({ token }) => {
@@ -30,7 +30,7 @@ const ChatScreen = ({ token }) => {
     }, [token])
 
     //SignalR Connection
-    const [connection, setConnection] = useState(null);
+    //const [connection, setConnection] = useState(null);
     
     const [selected_contact, set_selected_contact] = useState("");
     const [messages, setMessages] = useState([]);
@@ -147,8 +147,9 @@ const ChatScreen = ({ token }) => {
                 fetchContactList(user)
             });
             connect.on("NewContact", fetchContactList);            
-            await connect.start()
-            setConnection(connect);            
+            connect.onreconnected(connect.invoke("Connect", current_user.user_name));
+            await connect.start().then(connect.invoke("Connect", current_user.user_name))                        
+            connection = connect;
                       
         }
         connectToSignalR();
@@ -156,7 +157,7 @@ const ChatScreen = ({ token }) => {
     },[])
     
     useEffect( () => { // link connection with active username when connection is established
-        if(connection != null && current_user.user_name != null&& contact_list != []){
+        if(connection != null && current_user.user_name != null&& contact_list != []){            
             connection.invoke("Connect", current_user.user_name)
         }
     },[connection, current_user,contact_list])
@@ -316,7 +317,8 @@ const ChatScreen = ({ token }) => {
                 return null;
             }            
         }).then(setContact_List([newbie ,...contact_list]))
-        connection.invoke("UpdateContacts", newbie.id)
+        try {connection.invoke("UpdateContacts", newbie.id)}
+        catch (error) {console.log(error)}
         let foreignNewbie = { from: current_user.user_name, to: newContactName,server: local_server}
         $.ajax({// INVITATION new contact to the OTHER server
             url: newbie.server+'/api/invitations/',
