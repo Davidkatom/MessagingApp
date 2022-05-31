@@ -346,24 +346,26 @@ const ChatScreen = ({ token }) => {
 
         <div className='container large'>
             <div className="row row-chat">
-                <div className="col-sm"> {/*left side - above contactlist*/} 
+                <div className="col"> {/*left side - above contactlist*/} 
                     <div className="row row-chat">
-                        <div className="col-10">
+                        <div className="col">
                             <img className="float-start img-thumbnail rounded-start right-padding-for-picture" src="default.png" alt="Profile" />
-                            <h2 className="card-title">{current_user.display_name}</h2>
                         </div>
-                        <div className="col-2 align-right">
+                        <div className="col">
+                            <h2 className="card-title align-left">{current_user.display_name}</h2>
+                        </div>
+                        <div className="col align-right">
                             <AddNewContact addContact={addContact} />
                         </div>
                     </div>
                 </div>
                 <CurrentContact contact={getFullSelectedContact} />
                 <ContactSide contact_list={contact_list} selectContact={selectContact}  />
-                <div className="col-sm chat-space collapse" id='ChatSide'>
+                <div className="col chat-space collapse" id='ChatSide'>
                     <div className="chat-box scrollable" id="chatbox">
                         {messages}
                     </div>
-                    <div className="toolbar row row-cols-3">
+                    <div className="toolbar row ">
                         <div className='col-1'>
                             {/* <div>
                                 <button className="btn btn-light" id="attach" onClick={toggle}><ImAttachment /></button>
@@ -385,24 +387,25 @@ const ChatScreen = ({ token }) => {
                         <div className='col-9'>
                             <input type="text" className="form-control" placeholder="message" id='message' onKeyDown={(e) => { e.key === 'Enter' && sendText() }} />
                         </div>
-                        <div className='col-1'>
+                        <div className='col-2'>
                             <input type="submit" value="Send" className="btn btn-primary" onClick={sendText} id='send' />
                         </div>
                     </div>
-                </div>
-            </div>
+            
 
-            <div className="modal fade" id="PopupModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
-                <div className="modal-dialog">
-                    <div className="modal-content">
-                        <button type="button" className="btn-close" onClick={clearMedia} id="close-button" data-bs-dismiss="modal"></button>
-                        {sendingRef}
-                        <button className="btn btn-primary collapse" onClick={buttonSend} id='send_button' data-bs-dismiss="modal">Send</button>
+                    <div className="modal fade" id="PopupModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+                        <div className="modal-dialog">
+                            <div className="modal-content">
+                                <button type="button" className="btn-close" onClick={clearMedia} id="close-button" data-bs-dismiss="modal"></button>
+                                {sendingRef}
+                                <button className="btn btn-primary collapse" onClick={buttonSend} id='send_button' data-bs-dismiss="modal">Send</button>
 
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
 
+            </div>
         </div>
 
     )
