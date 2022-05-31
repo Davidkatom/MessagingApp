@@ -1,21 +1,24 @@
 ﻿@model IEnumerable<WebApplication2.Models.Review>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Search";
 }
 
-<h1>Reviews Page</h1>
 
 <p>
-    <a class="btn btn-primary" asp-action="Create">Create New</a>
+<div class="row">
+<div class="col"><h1>Reviews Page</h1></div>
+    
+<div class="col align-right"><a class="btn btn-primary btn-lg" asp-action="Create">Create New</a></div>
+</div>
 </p>
 <form asp-action="Search" id="SeacrhForm">
-    <input  Name=query id="SearchQuery" />
-    <input class="btn btn-secondary btn-sm"type='submit' value='search' />
+    <input Name=query id="SearchQuery" />
+    <input class="btn btn-secondary btn-sm" type='submit' value='search' />
 </form>
 <div class="container">
     <div class="row">
-        <div class="col-8">
+        <div >
             <table class="table">
                 <thead>
                     <tr>
@@ -60,11 +63,19 @@
                 </tbody>
             </table>
         </div>
-        <div class="col-4">
-            dasda
-        </div>
-    </div>
 
+    </div>
+    <div id="scoreSide">
+        Avarage Rating is:
+        @{
+            var summy = 0;
+            foreach (var item in Model)
+            {
+                summy += item.Rate;
+            }
+            @summy
+        }
+    </div>
 </div>
 @section Scripts{
 <script type="text/html" id="reviewRowTemplate">

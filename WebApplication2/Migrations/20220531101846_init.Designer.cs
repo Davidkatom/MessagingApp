@@ -12,8 +12,8 @@ using WhatsdownAPI.Data;
 namespace WebApplication2.Migrations
 {
     [DbContext(typeof(WhatsdownAPIContext))]
-    [Migration("20220530183414_Init")]
-    partial class Init
+    [Migration("20220531101846_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

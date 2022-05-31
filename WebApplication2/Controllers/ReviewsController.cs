@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WhatsdownAPI.Data;
 using WebApplication2.Models;
+using System.Diagnostics;
 
 namespace WebApplication2.Controllers
 {
@@ -20,10 +21,6 @@ namespace WebApplication2.Controllers
         }
 
         // GET: Reviews
-        public async Task<IActionResult> Index()
-        {
-            return View(await _context.Review.ToListAsync());
-        }
         public async Task<IActionResult> Search()
         {
             return View(await _context.Review.ToListAsync());
@@ -31,20 +28,33 @@ namespace WebApplication2.Controllers
 
         public async Task<IActionResult> SearchToJson(string query)
         {
+
             if (query == null)
             {
-                var q = from review in _context.Review select review;
+                       var q = from review in _context.Review select review;
                 return Json(await q.ToListAsync());
             }
             else
             {
-                var q = from review in _context.Review
-                        where review.Name.Contains(query) ||
-                                review.Details.Contains(query) ||
-                                review.Name.Contains(query)
-                        select review;
+                if (int.TryParse(query, out int value))
+                {
+                    var q = from review in _context.Review
+                            where review.Name.Contains(query) ||
+                                    review.Details.Contains(query) ||
+                                    review.Rate.Equals(Int32.Parse(query))
+                            select review;
+                    return Json(await q.ToListAsync());
+                }
+                else
+                {
+                    var q = from review in _context.Review
+                            where review.Name.Contains(query) ||
+                                    review.Details.Contains(query)
+                            select review;
+                    return Json(await q.ToListAsync());
+                }
 
-                return Json(await q.ToListAsync());
+
             }
         }
         // GET: Reviews/Details/5
@@ -172,6 +182,10 @@ namespace WebApplication2.Controllers
         private bool ReviewExists(int id)
         {
             return _context.Review.Any(e => e.Id == id);
+        }
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }
