@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WhatsdownAPI.Data;
 using WhatsdownAPI.Models;
+using Microsoft.AspNetCore.SignalR;
 
 namespace WhatsdownAPI.Controllers
 {
@@ -11,9 +12,12 @@ namespace WhatsdownAPI.Controllers
     public class InvitationsController : ControllerBase
     {
         private readonly WhatsdownAPIContext _context;
-        public InvitationsController( WhatsdownAPIContext context)
+        private readonly IHubContext<MyHub> _hubContext;
+
+        public InvitationsController( WhatsdownAPIContext context, IHubContext<MyHub> hubContext)
         {
             _context = context;
+            _hubContext = hubContext;
         }
 
         [HttpPost]
@@ -42,8 +46,14 @@ namespace WhatsdownAPI.Controllers
 
             _context.ContactRelation.Add(newContact);
             await _context.SaveChangesAsync();
-
+            await UpdateContacts(from);
             return NoContent();
+        }
+
+        public async Task UpdateContacts(string to)
+        {
+            if (MyHub.connectionIDs.ContainsKey(to))
+                await _hubContext.Clients.Client(MyHub.connectionIDs[to]).SendAsync("NewContact");
         }
 
     }

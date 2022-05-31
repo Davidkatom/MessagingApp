@@ -1,28 +1,40 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 
-    public class MyHub : Hub
-    {
+public class MyHub : Hub
+{
+    public static MyHub Instance { get; set; }
     public static Dictionary<string, string> connectionIDs = new Dictionary<string, string>();
 
-        public void Connect(string id) {
-            if(id == null)
-            {
-                return;
-            }
+    public MyHub()
+    {
+        Instance = this;
+    }
 
-            connectionIDs[id] = Context.ConnectionId;
-            Console.WriteLine(connectionIDs);
-        }
-        public async Task SentMessage(string from, string to, string content)
+    public static MyHub GetHub()
+    {
+        return Instance;
+    }
+
+    public void Connect(string id)
+    {
+        if (id == null)
         {
-            if(connectionIDs.ContainsKey(to))
-                await Clients.Client(connectionIDs[to]).SendAsync("SentMessage",from,content);            
+            return;
         }
 
-        public async Task UpdateContacts(string to)
-        {
-            if (connectionIDs.ContainsKey(to))
-                await Clients.Client(connectionIDs[to]).SendAsync("NewContact");
-        }
+        connectionIDs[id] = Context.ConnectionId;
+        Console.WriteLine(connectionIDs);
+    }
+    public async Task SentMessage(string from, string to, string content)
+    {
+        if (connectionIDs.ContainsKey(to))
+            await Clients.Client(connectionIDs[to]).SendAsync("SentMessage", from, content);
+    }
+
+    public async Task UpdateContacts(string to)
+    {
+        if (connectionIDs.ContainsKey(to))
+            await Clients.Client(connectionIDs[to]).SendAsync("NewContact");
+    }
 }
 
