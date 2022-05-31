@@ -30,8 +30,8 @@ Web API and App containing the review page and the public API.
 Installation guide:
 1. start visual studio - open the sln project inside "WebApplication2" folder.
 2. In the package manager type: 
-	-Add-Migration Init
-	-Update-Database
+<br/>	-Add-Migration Init
+<br/>	-Update-Database
 3. Start the Web server inside Visual Studio.
 4. open visual code for the react project inside "whats-down" folder.
 5. inside the console - write: "npm start" to start the front side server.
