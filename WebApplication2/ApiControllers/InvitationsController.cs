@@ -14,7 +14,7 @@ namespace WhatsdownAPI.Controllers
         private readonly WhatsdownAPIContext _context;
         private readonly IHubContext<MyHub> _hubContext;
 
-        public InvitationsController( WhatsdownAPIContext context, IHubContext<MyHub> hubContext)
+        public InvitationsController(WhatsdownAPIContext context, IHubContext<MyHub> hubContext)
         {
             _context = context;
             _hubContext = hubContext;
@@ -53,8 +53,10 @@ namespace WhatsdownAPI.Controllers
         public async Task UpdateContacts(string to)
         {
             if (MyHub.connectionIDs.ContainsKey(to))
+            {
                 await _hubContext.Clients.Client(MyHub.connectionIDs[to]).SendAsync("NewContact");
                 Console.WriteLine(to);
+            }
             else
                 Console.WriteLine(to + "not found");
         }
