@@ -15,7 +15,7 @@ import * as signalR from "@microsoft/signalr";
 import $ from 'jquery';
 
 var checked = false
-var local_server = "https://localhost:7087"
+var local_server = "https://192.168.1.20:7087"
 // var local_server = "http://whatsdown.epizy.com/server/"
 var signal_selected_user = ""
 var connection = null;
