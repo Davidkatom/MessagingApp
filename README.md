@@ -38,4 +38,4 @@ Installation guide:
 6. sign up
 7. login
 8. don't forget to leave an honest reveiw :)
-
+ -Make sure the server is running on https://localhost:7087:
