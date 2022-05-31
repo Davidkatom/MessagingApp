@@ -15,7 +15,7 @@ import * as signalR from "@microsoft/signalr";
 import $ from 'jquery';
 
 var checked = false
-var local_server = "https://192.168.1.20:7087"
+var local_server = "https://192.168.1.18:7087"
 // var local_server = "http://whatsdown.epizy.com/server/"
 var signal_selected_user = ""
 var connection = null;
@@ -26,6 +26,7 @@ const ChatScreen = ({ token }) => {
     const refresh = useCallback(() => navigate('/', { replace: true }), [navigate]); //brings back to default home page and refreshes the page
     //token use Effect check if token is null or not
     useEffect(() => {
+        fetchContactList()
         if (token === null|| token === undefined|| token ==="") {refresh();}
     }, [token])
 
@@ -114,6 +115,8 @@ const ChatScreen = ({ token }) => {
 
     //fetch contacts to contact list
     async function fetchContactList(){
+        console.log('fetch Contacts')
+        console.log(token)
         $.ajax({
             url: local_server+'/api/Contacts',
             type: 'GET',
@@ -298,6 +301,7 @@ const ChatScreen = ({ token }) => {
     const addContact = (newContactName,Nickname,server) => {
         //check if newContactName is already in the contact list
         if (newContactName ===current_user.user_name) { return 'You can not add yourself! find some friends!' }
+        if (contact_list.map(contact => contact.id).includes(newContactName)) { return 'This user is already in your contact list!' }
         if (newContactName.length < 3) { return 'Please enter a valid Id (3 chars+)' }
         if (Nickname.length < 3) { return 'Please enter a valid Nickname (3 chars+)' }
         if (newContactName in contact_list) { return 'User already in contact list' }
@@ -356,6 +360,7 @@ const ChatScreen = ({ token }) => {
                         </div>
                         <div className="col align-right">
                             <AddNewContact addContact={addContact} />
+                            <button className="btn btn-primary" onClick={() => {fetchContactList()}}>Refresh</button>
                         </div>
                     </div>
                 </div>

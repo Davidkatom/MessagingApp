@@ -6,7 +6,7 @@ import { useState } from "react"
 
 
 //var local_server = "https://localhost:7087"
-var local_server = "https://192.168.1.20:7087"
+var local_server = "https://192.168.1.18:7087"
 
 const Register = ({close}) => {
     const [down_alert, setAlert] = useState(['', ''])
