@@ -38,6 +38,7 @@ const ChatScreen = ({ token }) => {
     
     async function updateChatByContactId(selected = selected_contact ){//update current chat according to the contact id:
         // console.log('update chat for: '+selected);
+        if (signal_selected_user !== "") { 
         $.ajax({
             url: local_server+'/api/Contacts/'+selected+'/messages',
             type: 'GET',
@@ -57,6 +58,7 @@ const ChatScreen = ({ token }) => {
                 return null;
             }
         })
+        }
     }
     useEffect(() => {updateChatByContactId()}, [selected_contact])//useEffect for when contact is changed to update the chat
     //fetch Cuurent User
@@ -142,14 +144,15 @@ const ChatScreen = ({ token }) => {
             const connect = new signalR.HubConnectionBuilder().withUrl(local_server+"/myHub").configureLogging(signalR.LogLevel.Information).build();
             connect.on("SentMessage", (user, message) => {    
                 if(user == signal_selected_user){            
-                    updateChatByContactId(user)                
+                    updateChatByContactId(user)
                 }
                 fetchContactList(user)
             });
             connect.on("NewContact", fetchContactList);            
-            connect.onreconnected(connect.invoke("Connect", current_user.user_name));
-            await connect.start().then(connect.invoke("Connect", current_user.user_name))                        
+            connect.onreconnected = () => {connect.invoke("Connect", current_user.user_name)};
+            await connect.start()
             connection = connect;
+            
                       
         }
         connectToSignalR();
@@ -158,7 +161,9 @@ const ChatScreen = ({ token }) => {
     
     useEffect( () => { // link connection with active username when connection is established
         if(connection != null && current_user.user_name != null&& contact_list != []){            
-            connection.invoke("Connect", current_user.user_name)
+            if(connection.state == signalR.HubConnectionState.Connected){
+                connection.invoke("Connect", current_user.user_name)
+            }
         }
     },[connection, current_user,contact_list])
 
@@ -344,7 +349,7 @@ const ChatScreen = ({ token }) => {
                 <div className="col-sm"> {/*left side - above contactlist*/} 
                     <div className="row row-chat">
                         <div className="col-10">
-                            <img className="float-start img-thumbnail rounded-start right-padding-for-picture" src="omer.png" alt="Profile" />
+                            <img className="float-start img-thumbnail rounded-start right-padding-for-picture" src="default.png" alt="Profile" />
                             <h2 className="card-title">{current_user.display_name}</h2>
                         </div>
                         <div className="col-2 align-right">

@@ -9,10 +9,11 @@ var local_server = "https://localhost:7087"
 
 const Register = ({close}) => {
     const [down_alert, setAlert] = useState(['', ''])
-
-    const [profilePicture, setProfilePicture] = useState();
+    const [imageSrc, setImageSrc] = useState('')
+    const [profilePicture, setProfilePicture] = useState("");
     const handlePicture = (e) => {
         // var a = document.getElementById('picture').value
+
         setProfilePicture(URL.createObjectURL(e.target.files[0]))
         document.getElementById('profile_mini_pic').classList.remove('collapse');
         // let picture = e.target.value
@@ -78,7 +79,7 @@ const Register = ({close}) => {
                 Id: u_name,
                 password: p_word1,
                 nickName: d_name,
-                profilePicture: profilePicture
+                profilePicture: imageSrc
             }),
         })
         if(!res.ok){
@@ -113,8 +114,8 @@ const Register = ({close}) => {
                     <InputLine label='Display Name:' type='text' id='display_name' placeholder='Enter Display Name' />
                     <div className="row">
                         <div className="col-sm">
-                            <label className="input-group-text" htmlFor='picture'>Upload a Profile Picture:</label>
-                            <input type="file" className="form-control" id='picture' onChange={handlePicture}></input>
+                            {/* <label className="input-group-text" htmlFor='picture'>Upload a Profile Picture:</label> */}
+                            {/* <input type="file" className="form-control" id='picture' onChange={handlePicture}></input> */}
                         </div>
                         <div className="col-sm collapse" id='profile_mini_pic'>
                             <img src={profilePicture} alt="profile" className="img-thumbnail" width="140" height="140" />

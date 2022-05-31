@@ -10,7 +10,7 @@ const MiniContant = ( {args} ) => {
         <div className="row g-0">
           {/*picture of mini contact */}
           {/* <div className="col-sm-2"><img src={args.contact.picture} className="img-thumbnail " alt="..." /></div> */}
-          <div className="col-sm-2"><img src={"david.png"} className="img-thumbnail " alt="..." /></div>
+          <div className="col-sm-2"><img src={"default.png"} className="img-thumbnail " alt="..." /></div>
           {/* body of mini contact */}
           <div className="col-sm-10 contact_selection" id={args.contact.id}> {/*the id is the username for easy key refrence */}
             <div className="card-body low-padding">
