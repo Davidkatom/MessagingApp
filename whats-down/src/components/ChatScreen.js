@@ -171,15 +171,27 @@ const ChatScreen = ({ token }) => {
         fetchContactList();
     },[])
     
+    const delay = ms => new Promise(res => setTimeout(res, ms));
+
     useEffect( () => { // link connection with active username when connection is established
-        if(connection != null && current_user.user_name != null){            
-            if(connection.state == signalR.HubConnectionState.Connected){
-                connection.invoke("Connect", current_user.user_name)
+        const asycnConnection = async () =>{
+            await delay(2000);
+            if(connection != null && current_user.user_name != null){            
+                if(connection.state == signalR.HubConnectionState.Connected){
+                    connection.invoke("Connect", current_user.user_name)
+                    console.log("connecting")
+                }
+                else{
+                    console.log("cant connect")
+    
+                }
             }
+            console.log("after delay")
         }
+        asycnConnection();
+        
     },[connection, current_user,contact_list])
-
-
+        
 
     const [buttonSend, setButtonSend] = useState(null)
     const [sendingRef, setsendingRef] = useState(null)
