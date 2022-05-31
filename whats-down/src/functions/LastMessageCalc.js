@@ -1,6 +1,6 @@
 
 const LastMessageCalc = (message) => {
-    var messagetype = message.props.messagetype;
+    var messagetype = message.messagetype;
     var lastMessage = messagetype === "image" ?
         '~Image sent'
         :
@@ -11,7 +11,7 @@ const LastMessageCalc = (message) => {
                 '~Audio sent'
                 :
                 messagetype === "text" ?
-                    message.props.src
+                    message.src
                     :
                     'empty chat'
     return lastMessage;

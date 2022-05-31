@@ -1,4 +1,3 @@
-
 import { useState, useCallback, useEffect } from 'react';
 import SendPhoto from './AttachmentElements/SendPhoto'
 import SendAudio from './AttachmentElements/SendAudio'
@@ -12,22 +11,187 @@ import CurrentContact from './ChatComponents/CurrentContact';
 import SendVideo from './AttachmentElements/SendVideo';
 import AddNewContact from './ChatComponents/AddNewContact';
 import { useNavigate } from 'react-router-dom';
+import * as signalR from "@microsoft/signalr";
+import $ from 'jquery';
 
 var checked = false
+var local_server = "https://localhost:7087"
+// var local_server = "http://whatsdown.epizy.com/server/"
+var signal_selected_user = ""
+var connection = null;
+var full_token = "";
 
-
-const ChatScreen = ({ current_user }) => {
-    var emptyMsg = <MessageElm direction="send" src={'empty chat'} timeStamp={null} messagetype='text' />;
+const ChatScreen = ({ token }) => {
     const navigate = useNavigate();
-    const refresh = useCallback(() => navigate('/', { replace: true }), [navigate]);
-    const [refreshed_contact, set_refreshed_contact] = useState(false);
-    var init_contact_list =current_user === 'No UserName'? []:current_user.contact_list;
-    const [contact_list, setContact_List] = useState(init_contact_list);
+    const refresh = useCallback(() => navigate('/', { replace: true }), [navigate]); //brings back to default home page and refreshes the page
+    //token use Effect check if token is null or not
+    useEffect(() => {
+        // console.log("token in useEffect: ", token)
+        full_token = token
+        fetchContactList()
+        if (token === null|| token === undefined|| token ==="") {refresh();}
+    }, [token])
+
+    //SignalR Connection
+    //const [connection, setConnection] = useState(null);
     
+    const [selected_contact, set_selected_contact] = useState("");
+    const [messages, setMessages] = useState([]);
+    
+    
+    async function updateChatByContactId(selected = selected_contact ){//update current chat according to the contact id:
+        // console.log('update chat for: '+selected);
+        if (signal_selected_user !== "") { 
+        $.ajax({
+            url: local_server+'/api/Contacts/'+selected+'/messages',
+            type: 'GET',
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("Authorization", "Bearer " + full_token);
+            },
+            data:{},
+            success: function (data) {
+                var newMsgs = [];
+                for (let i = 0; i < data.length; i++) {
+                    newMsgs.push(<MessageElm sent={data[i].sent} src={data[i].content} timeStamp={data[i].created} messagetype={"text"} />)
+                }
+                setMessages(newMsgs)                             
+            },
+            error: function (data) {
+                // console.log("failed getting messages");
+                return null;
+            }
+        })
+        }
+    }
+    useEffect(() => {updateChatByContactId()}, [selected_contact])//useEffect for when contact is changed to update the chat
+    //fetch Cuurent User
+    const [current_user, set_current_user] = useState('No UserName');
+    useEffect( () => {
+        /*
+        async function fetchMe(){
+            console.log('fetch Users')
+            const res = await fetch(local_server+'/api/Users');
+            const data = await res.json();
+            // console.log(res.status);
+            // console.log(data);   
+            set_current_user(data);
+            console.log(current_user)     
+            console.log(current_user[0].id)     
+            console.log("Step 2 for authorized:")
+            //--------------------------
+            const res2 = await fetch(local_server+'/WeatherForecast');
+            console.log("Whether Request:")     
+            console.log(res2)     
+            console.log('Status is: '+res2.status)     
+            const data2 = await res.json();
+            console.log("Whether:")     
+            console.log(data2)     
+        }
+        fetchMe();*/
+        async function GetMeFunc(){
+            $.ajax({
+                url: local_server+'/api/Users/Me',
+                type: 'GET',
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("Authorization", "Bearer " + full_token);
+                },  
+                data:{},
+                success: function (data) {
+                    if(data["Error"] !==""  ){
+                        //console.log(data["Error"]);
+                    }else{
+                        set_current_user({
+                        user_name: data["Id"],
+                        display_name: data["NickName"],
+                        picture: data["ProfilePicture"],
+                        })  
+                    }
+                },
+                error: function (data) {
+                    //console.log("failed getting userMe");
+                }
+            });
+        }        
+        GetMeFunc();
+        },[])
+
+    //fetch contacts to contact list
+    async function fetchContactList(){
+        // console.log('fetch Contacts')
+        // console.log(token)
+        // console.log(full_token)
+        $.ajax({
+            url: local_server+'/api/Contacts',
+            type: 'GET',
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("Authorization", "Bearer " + full_token);
+            },  
+            data:{},
+            success: function (data) {
+                setContact_List(data);
+            },
+            error: function (data) {
+                //console.log("failed getting Contacts");
+            }
+        });
+            
+        }
+        
+    const [contact_list, setContact_List] = useState([]); // will be an array of contact objects without conversations
+    useEffect( () => {// reselect current chat when contact list is changed
+        for (let i = 0; i < contact_list.length; i++) { //remove selection
+            let elem =document.getElementById(contact_list[i].id)
+            if(elem !== null){ elem.classList.remove('selected-chat')}
+        }
+        if(selected_contact!=""){selectContact(selected_contact)}
+    },[contact_list])
+    useEffect( () => { //signalR connection 
+        const connectToSignalR = async () => {
+            const connect = new signalR.HubConnectionBuilder().withUrl(local_server+"/myHub").configureLogging(signalR.LogLevel.Information).build();
+            connect.on("SentMessage", (user, message) => {    
+                if(user == signal_selected_user){   
+                    updateChatByContactId(user)
+                }
+                fetchContactList(user)
+            });
+            connect.on("NewContact", ()=>{
+                fetchContactList()
+            });            
+            connect.onreconnected = () => {connect.invoke("Connect", current_user.user_name)};
+            await connect.start()
+            connection = connect;
+            
+                      
+        }
+        connectToSignalR();
+        fetchContactList();
+    },[])
+    
+    const delay = ms => new Promise(res => setTimeout(res, ms));
+
+    useEffect( () => { // link connection with active username when connection is established
+        const asycnConnection = async () =>{
+            await delay(2000);
+            if(connection != null && current_user.user_name != null){            
+                if(connection.state == signalR.HubConnectionState.Connected){
+                    connection.invoke("Connect", current_user.user_name)
+                    // console.log("connecting")
+                }
+                else{
+                    // console.log("cant connect")
+    
+                }
+            }
+        }
+        asycnConnection();
+        
+    },[connection, current_user,contact_list])
+        
 
     const [buttonSend, setButtonSend] = useState(null)
     const [sendingRef, setsendingRef] = useState(null)
-
+    //toggle media buttons
+    const [classes, setClasses] = useState("btn btn-light collapse");
     const toggle = () => {
         if (checked === false) {
             setClasses("btn btn-light attachments")
@@ -38,19 +202,59 @@ const ChatScreen = ({ current_user }) => {
         checked = !checked
     }
 
-    const [classes, setClasses] = useState("btn btn-light collapse");
-    const [messages, setMessages] = useState([]);
+    function getFullSelectedContact (){return contact_list.find(contact => contact.id === selected_contact);}
+    function getFullContact (cont_id){return contact_list.find(contact => contact.id === cont_id);}
 
-
-
+    function updateContactLastMsg(contact_id, msg){
+        var contact = getFullContact(contact_id);
+        contact.last = msg;
+        contact.lastdate = new Date();
+        var filterd = contact_list.filter(contact => contact.id !== contact_id);
+        setContact_List([contact,...filterd]);
+    }
 
     const sendText = () => {
         var input = document.getElementById('message').value
-        if (input !== "") {
-            var elm = (<MessageElm direction="send" src={input} timeStamp={new Date()} messagetype='text' />)
-            setMessages([...messages, elm])
-            selected_contact.chat_history.push(elm)
-            selected_contact.last_message = elm
+        if (input !== "") {           
+            $.ajax({//POST new Message
+                url: local_server+'/api/Contacts/'+selected_contact+'/messages',
+                type: 'POST',
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("Authorization", "Bearer " + full_token);
+                },
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                data:JSON.stringify({content:input}),
+                success: function (data) {
+                },
+                error: function (data) {
+                    // console.log("failed sending message");
+                    // console.log(data);
+                    return null;
+                }
+            }).then(
+                setMessages([...messages, <MessageElm sent={true} src={input} timeStamp={new Date()} messagetype={"text"} />])
+                ).then(()=>{
+                    connection.invoke("SentMessage",current_user.user_name, selected_contact, input)
+                })
+            $.ajax({//Transfer new Message
+                url: getFullSelectedContact().server+'/api/Transfer/',
+                type: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                data:JSON.stringify({from:current_user.user_name, to:selected_contact, content:input}),
+                success: function (data) {
+                },
+                error: function (data) {
+                    // console.log("failed transfer message");
+                    // console.log(data);
+                    return null;
+                }
+            })
+            updateContactLastMsg(selected_contact, input)
+            
         }
         document.getElementById('message').value = ""
     }
@@ -78,38 +282,23 @@ const ChatScreen = ({ current_user }) => {
 
     }
 
-    useEffect(() => {
-        if (messages) {
-            contact_chat_change(selected_contact.display_name)
-        }
-        //set scrolling correctly
+    useEffect(() => {//set scrolling correctly
         document.getElementById('chatbox').scrollTop = document.getElementById('chatbox').scrollHeight;
-        // make sure a user is logged in - otherwise redirect to login page
-        if (current_user === "No UserName") {
-            refresh()
-        }
     });
 
-    const [selected_contact, set_selected_contact] = useState("");
-    //update the contact list when a new message sent/recived
-    const contact_chat_change = (cahnged_contact) => {
-        setContact_List(contact_list)
-    }
     //select a spescific contact, update current chat history and last message
-    const selectContact = (contact) => {
+    const  selectContact = async (contact) => {
+        connection.invoke("Connect", current_user.user_name)
         if (selected_contact !== '') {
-            document.getElementById(selected_contact.display_name).classList.remove('selected-chat')
+            document.getElementById(selected_contact).classList.remove('selected-chat') //remove eselection
         }
-        var temp_contact = document.getElementById(contact.display_name)
-        if (temp_contact !== null) {
-            document.getElementById(contact.display_name).classList.add('selected-chat')
-        }
-        document.getElementById("message").value = ''
-
+        let elem =  document.getElementById(contact)
+        if(elem!==null){elem.classList.add('selected-chat')}//add selection
         set_selected_contact(contact)
-        setMessages(contact.chat_history)
+        signal_selected_user = contact
+        document.getElementById("message").value = '' //erase the messageBox when switching contacts
         document.getElementById('ChatSide').classList.remove('collapse')
-        document.getElementById("selected-contact-image").classList.remove('collapse')
+        // document.getElementById("selected-contact-image").classList.remove('collapse')
         resetSendMedia()
     }
 
@@ -125,47 +314,83 @@ const ChatScreen = ({ current_user }) => {
     }
 
     //add a new contact to the contact list
-    const addContact = (newContactName) => {
+    const addContact = (newContactName,Nickname,server) => {
         //check if newContactName is already in the contact list
-        if (newContactName.length < 1) { return 'Please enter a valid name' }
+        if (newContactName ===current_user.user_name) { return 'You can not add yourself! find some friends!' }
+        if (contact_list.map(contact => contact.id).includes(newContactName)) { return 'This user is already in your contact list!' }
+        if (newContactName.length < 3) { return 'Please enter a valid Id (3 chars+)' }
+        if (Nickname.length < 3) { return 'Please enter a valid Nickname (3 chars+)' }
         if (newContactName in contact_list) { return 'User already in contact list' }
+        if (server === "localhost" ||server === "local"|| server ===""|| server === null) {server = local_server}      
+        let newbie = { id: newContactName, name: Nickname,server: server}
 
-        var temp = contact_list
-        temp[newContactName] = {
-            display_name: newContactName,
-            chat_history: [],
-            last_message: emptyMsg,
-            picture: "blank-profile-picture.png",
-        }
-        setContact_List(temp)
-        set_refreshed_contact(!refreshed_contact)
+        $.ajax({// post new contact to the local server
+            url: local_server+'/api/Contacts/',
+            type: 'POST',
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("Authorization", "Bearer " + full_token);
+            },
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            data:JSON.stringify(newbie),
+            success: function (data) {
+            },
+            error: function (data) {
+                // console.log("failed posting new contact");
+                // console.log(data);
+                return null;
+            }            
+        }).then(
+            // console.log("new contact added"),
+            setContact_List([newbie ,...contact_list]))
+        try {connection.invoke("UpdateContacts", newbie.id)}
+        catch (error) {/*console.log(error)*/}
+        let foreignNewbie = { from: current_user.user_name, to: newContactName,server: local_server}
+        $.ajax({// INVITATION new contact to the OTHER server
+            url: newbie.server+'/api/invitations/',
+            type: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            data:JSON.stringify(foreignNewbie),
+            success: function (data) {
+            },
+            error: function (data) {
+                // console.log("failed inviting new contact");
+                // console.log(data);
+                return null;
+            }
+        })
         return 'success'
     }
-
     return (
 
         <div className='container large'>
             <div className="row row-chat">
-                <div className="col-5">
+                <div className="col"> {/*left side - above contactlist*/} 
                     <div className="row row-chat">
-                        <div className="col-6">
-                            <img className="float-start img-thumbnail rounded-start right-padding-for-picture" src={current_user.picture} alt="Profile" />
-                            <h2 className="card-title">{current_user.display_name}</h2>
+                        <div className="col">
+                            <img className="float-start img-thumbnail rounded-start right-padding-for-picture" src="default.png" alt="Profile" />
                         </div>
-                        <div className="col-6 align-right">
+                        <div className="col">
+                            <h2 className="card-title align-left">{current_user.display_name}</h2>
+                        </div>
+                        <div className="col align-right">
                             <AddNewContact addContact={addContact} />
+                            {/* <button className="btn btn-primary" onClick={() => {fetchContactList()}}>Refresh</button> */}
                         </div>
                     </div>
                 </div>
-                <CurrentContact contact={selected_contact} />
-                <ContactSide contact_list={contact_list} selectContact={selectContact} flag={refreshed_contact} />
-                <div className="col-sm chat-space collapse" id='ChatSide'>
+                <CurrentContact contact={getFullSelectedContact} />
+                <ContactSide contact_list={contact_list} selectContact={selectContact}  />
+                <div className="col chat-space collapse" id='ChatSide'>
                     <div className="chat-box scrollable" id="chatbox">
                         {messages}
                     </div>
-                    <div className="toolbar row row-cols-3">
+                    <div className="toolbar row ">
                         <div className='col-1'>
-                            <div>
+                            {/* <div>
                                 <button className="btn btn-light" id="attach" onClick={toggle}><ImAttachment /></button>
                                 <button className={classes} type="checkbox" id='photo' data-bs-toggle="modal" data-bs-target="#PopupModal" onClick={() => {
                                     setsendingRef((<SendPhoto />))
@@ -180,29 +405,30 @@ const ChatScreen = ({ current_user }) => {
                                     setButtonSend(() => sendMedia("audio"))
                                 }}><BiMicrophone /></button>
                                 <button className={classes} type="checkbox" id='close' onClick={toggle}><RiCloseCircleLine /></button>
-                            </div>
+                            </div> */}
                         </div>
                         <div className='col-9'>
                             <input type="text" className="form-control" placeholder="message" id='message' onKeyDown={(e) => { e.key === 'Enter' && sendText() }} />
                         </div>
-                        <div className='col-1'>
+                        <div className='col-2'>
                             <input type="submit" value="Send" className="btn btn-primary" onClick={sendText} id='send' />
                         </div>
                     </div>
-                </div>
-            </div>
+            
 
-            <div className="modal fade" id="PopupModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
-                <div className="modal-dialog">
-                    <div className="modal-content">
-                        <button type="button" className="btn-close" onClick={clearMedia} id="close-button" data-bs-dismiss="modal"></button>
-                        {sendingRef}
-                        <button className="btn btn-primary collapse" onClick={buttonSend} id='send_button' data-bs-dismiss="modal">Send</button>
+                    <div className="modal fade" id="PopupModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+                        <div className="modal-dialog">
+                            <div className="modal-content">
+                                <button type="button" className="btn-close" onClick={clearMedia} id="close-button" data-bs-dismiss="modal"></button>
+                                {sendingRef}
+                                <button className="btn btn-primary collapse" onClick={buttonSend} id='send_button' data-bs-dismiss="modal">Send</button>
 
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
 
+            </div>
         </div>
 
     )

@@ -5,24 +5,15 @@ import InputLine from "./InputLine"
 import { useState } from "react"
 
 
-
-const Register = ({ user_list, addUser, checkUser, close }) => {
+//var local_server = "https://localhost:7087"
+var local_server = "https://localhost:7087"
+const Register = ({close}) => {
     const [down_alert, setAlert] = useState(['', ''])
-
-    //show all existing users for tests: -LEAVE IT FOR NEXT ASSIGNMENT
-    // const showUsers = () => {
-    //     user_list.map((user) => (
-    //         alert('username: ' + user.user_name + ' password: ' + user.password)
-    //     ))
-    // }
-    const [profilePicture, setProfilePicture] = useState();
+    const [imageSrc, setImageSrc] = useState('')
+    const [profilePicture, setProfilePicture] = useState("");
     const handlePicture = (e) => {
-        var a = document.getElementById('picture').value
-        console.log(a)
-        console.log('here')
-        console.log(e)
-        console.log(e.target.files[0])
-        console.log(URL.createObjectURL(e.target.files[0]))
+        // var a = document.getElementById('picture').value
+
         setProfilePicture(URL.createObjectURL(e.target.files[0]))
         document.getElementById('profile_mini_pic').classList.remove('collapse');
         // let picture = e.target.value
@@ -50,20 +41,15 @@ const Register = ({ user_list, addUser, checkUser, close }) => {
     }
 
     //user validation and registreation
-    const on_submit = (e) => {
+    const on_submit = async(e) => {
         //prevent default form submit - to prevent page reload
         e.preventDefault();
-        console.log('on submit')
+        //console.log('on submit')
 
         let u_name = document.getElementById('user_name').value
         let p_word1 = document.getElementById('password1').value
         let p_word2 = document.getElementById('password2').value
         let d_name = document.getElementById('display_name').value
-        //check username doesn't exist
-        if (checkUser(u_name)) {
-            setAlert(["Username already exists", 'alert alert-danger'])
-            return
-        }
         if (u_name.length < 3) {
             setAlert(["Username must be at least 3 characters long", 'alert alert-danger'])
             return
@@ -73,8 +59,8 @@ const Register = ({ user_list, addUser, checkUser, close }) => {
             return
         }
         //check display name
-        if (d_name.length < 3) {
-            setAlert(["Display name must be at least 3 characters long", 'alert alert-danger'])
+        if (d_name.length < 3 || d_name.length > 10) {
+            setAlert(["Display Name Length must be between 3 and 10 characters", 'alert alert-danger'])
             return
         }
         //check profile picture:
@@ -83,24 +69,36 @@ const Register = ({ user_list, addUser, checkUser, close }) => {
             return
         }
         //add user to userlist after all validation
-        let isRegisterded = addUser({
-            user_name: u_name,
-            password: p_word1,
-            display_name: d_name,
-            picture: profilePicture,
+        
+        var res = await fetch(local_server+'/api/Users', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                Id: u_name,
+                password: p_word1,
+                nickName: d_name,
+                profilePicture: imageSrc
+            }),
         })
-        if (isRegisterded === "success") {
-            setAlert(["Register Successful", 'alert alert-success'])
-        } else {
-            setAlert(["Register Failed", 'alert alert-danger'])
-
+        if(!res.ok){
+            // console.log('register failed! ')
+            // log the res faile message:
+            // console.log(res.text().then(text => { throw new Error(text) }))
+            // console.log(res.errors())
+            setAlert(["Username already exists", 'alert alert-danger'])
+            // setAlert(["Register Failed", 'alert alert-danger'])
+            return
         }
+        // console.log('user added')
+        setAlert(["Register Successful", 'alert alert-success'])
+        // console.log(res.ok)
         //clear all form inputs
         document.getElementById('user_name').value = ''
         document.getElementById('password1').value = ''
         document.getElementById('password2').value = ''
         document.getElementById('display_name').value = ''
-
         close()
     }
 
@@ -116,8 +114,8 @@ const Register = ({ user_list, addUser, checkUser, close }) => {
                     <InputLine label='Display Name:' type='text' id='display_name' placeholder='Enter Display Name' />
                     <div className="row">
                         <div className="col-sm">
-                            <label className="input-group-text" htmlFor='picture'>Upload a Profile Picture:</label>
-                            <input type="file" className="form-control" id='picture' onChange={handlePicture}></input>
+                            {/* <label className="input-group-text" htmlFor='picture'>Upload a Profile Picture:</label> */}
+                            {/* <input type="file" className="form-control" id='picture' onChange={handlePicture}></input> */}
                         </div>
                         <div className="col-sm collapse" id='profile_mini_pic'>
                             <img src={profilePicture} alt="profile" className="img-thumbnail" width="140" height="140" />
