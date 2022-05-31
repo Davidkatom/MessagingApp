@@ -46,7 +46,7 @@ namespace WhatsdownAPI.Controllers
 
             _context.ContactRelation.Add(newContact);
             await _context.SaveChangesAsync();
-            await UpdateContacts(from);
+            await UpdateContacts(to);
             return NoContent();
         }
 
@@ -54,6 +54,9 @@ namespace WhatsdownAPI.Controllers
         {
             if (MyHub.connectionIDs.ContainsKey(to))
                 await _hubContext.Clients.Client(MyHub.connectionIDs[to]).SendAsync("NewContact");
+                Console.WriteLine(to);
+            else
+                Console.WriteLine(to + "not found");
         }
 
     }

@@ -15,11 +15,11 @@ import * as signalR from "@microsoft/signalr";
 import $ from 'jquery';
 
 var checked = false
-var local_server = "https://192.168.1.18:7087"
+var local_server = "https://192.168.1.20:7087"
 // var local_server = "http://whatsdown.epizy.com/server/"
 var signal_selected_user = ""
 var connection = null;
-
+var full_token = "";
 
 const ChatScreen = ({ token }) => {
     const navigate = useNavigate();
@@ -27,6 +27,7 @@ const ChatScreen = ({ token }) => {
     //token use Effect check if token is null or not
     useEffect(() => {
         console.log("token in useEffect: ", token)
+        full_token = token
         fetchContactList()
         if (token === null|| token === undefined|| token ==="") {refresh();}
     }, [token])
@@ -45,7 +46,7 @@ const ChatScreen = ({ token }) => {
             url: local_server+'/api/Contacts/'+selected+'/messages',
             type: 'GET',
             beforeSend: function (xhr) {
-                xhr.setRequestHeader("Authorization", "Bearer " + token);
+                xhr.setRequestHeader("Authorization", "Bearer " + full_token);
             },
             data:{},
             success: function (data) {
@@ -92,7 +93,7 @@ const ChatScreen = ({ token }) => {
                 url: local_server+'/api/Users/Me',
                 type: 'GET',
                 beforeSend: function (xhr) {
-                    xhr.setRequestHeader("Authorization", "Bearer " + token);
+                    xhr.setRequestHeader("Authorization", "Bearer " + full_token);
                 },  
                 data:{},
                 success: function (data) {
@@ -118,11 +119,12 @@ const ChatScreen = ({ token }) => {
     async function fetchContactList(){
         console.log('fetch Contacts')
         console.log(token)
+        console.log(full_token)
         $.ajax({
             url: local_server+'/api/Contacts',
             type: 'GET',
             beforeSend: function (xhr) {
-                xhr.setRequestHeader("Authorization", "Bearer " + token);
+                xhr.setRequestHeader("Authorization", "Bearer " + full_token);
             },  
             data:{},
             success: function (data) {
@@ -164,7 +166,7 @@ const ChatScreen = ({ token }) => {
     },[])
     
     useEffect( () => { // link connection with active username when connection is established
-        if(connection != null && current_user.user_name != null&& contact_list != []){            
+        if(connection != null && current_user.user_name != null){            
             if(connection.state == signalR.HubConnectionState.Connected){
                 connection.invoke("Connect", current_user.user_name)
             }
@@ -205,7 +207,7 @@ const ChatScreen = ({ token }) => {
                 url: local_server+'/api/Contacts/'+selected_contact+'/messages',
                 type: 'POST',
                 beforeSend: function (xhr) {
-                    xhr.setRequestHeader("Authorization", "Bearer " + token);
+                    xhr.setRequestHeader("Authorization", "Bearer " + full_token);
                 },
                 headers: {
                     'Content-Type': 'application/json'
@@ -313,7 +315,7 @@ const ChatScreen = ({ token }) => {
             url: local_server+'/api/Contacts/',
             type: 'POST',
             beforeSend: function (xhr) {
-                xhr.setRequestHeader("Authorization", "Bearer " + token);
+                xhr.setRequestHeader("Authorization", "Bearer " + full_token);
             },
             headers: {
                 'Content-Type': 'application/json'
