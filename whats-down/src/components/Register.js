@@ -45,7 +45,7 @@ const Register = ({close}) => {
     const on_submit = async(e) => {
         //prevent default form submit - to prevent page reload
         e.preventDefault();
-        console.log('on submit')
+        //console.log('on submit')
 
         let u_name = document.getElementById('user_name').value
         let p_word1 = document.getElementById('password1').value
