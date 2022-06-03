@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">My Application</string>
+    <string name="login_etPassword">Password</string>
+    <string name="login_etUsername">Username</string>
+    <string name="login_btnLoginTitle">Login</string>
+    <string name="login_btnSignIn">SIGN IN</string>
+    <string name="login_btnSignUp">SIGN UP</string>
+</resources>
