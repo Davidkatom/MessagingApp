@@ -17,6 +17,9 @@
             android:name=".ChatScreen"
             android:exported="false" />
         <activity
+            android:name=".ContactScreen"
+            android:exported="false" />
+        <activity
             android:name=".RegisterScreen"
             android:exported="false" />
         <activity

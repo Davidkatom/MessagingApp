@@ -9,4 +9,7 @@
     <string name="etSignUp_nickname">Display Name</string>
     <string name="SignUp_etPasswordConfirm">Confirm Password</string>
     <string name="add_profile_picture">Add Profile Picture</string>
+    <string name="contact">Contact</string>
+    <string name="last_message">Last Message</string>
+    <string name="time">10:00</string>
 </resources>
