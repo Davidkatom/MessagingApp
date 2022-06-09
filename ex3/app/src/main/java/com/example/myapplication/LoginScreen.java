@@ -18,5 +18,11 @@ public class LoginScreen extends AppCompatActivity {
             Intent i = new Intent(this,RegisterScreen.class);
             startActivity(i);
         });
+
+        Button btnSignIn = findViewById(R.id.btnSignIn);
+        btnSignIn.setOnClickListener(v->{
+            Intent i = new Intent(this,ChatScreen.class);
+            startActivity(i);
+        });
     }
 }
