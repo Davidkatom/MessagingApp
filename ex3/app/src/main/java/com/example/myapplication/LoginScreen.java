@@ -22,7 +22,7 @@ public class LoginScreen extends AppCompatActivity {
 
         Button btnSignIn = findViewById(R.id.btnSignIn);
         btnSignIn.setOnClickListener(v->{
-            Intent i = new Intent(this,ChatScreen.class);
+            Intent i = new Intent(this, ChatActivity.class);
             startActivity(i);
         });
     }
