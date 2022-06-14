@@ -86,7 +86,7 @@
 
 
         <EditText
-            android:id="@+id/editTextTextPersonName3"
+            android:id="@+id/et_InputText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="15"
@@ -98,7 +98,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/floatingActionButton"
+            android:id="@+id/fab_SendMessage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="12dp"

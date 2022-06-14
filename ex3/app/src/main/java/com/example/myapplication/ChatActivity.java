@@ -1,13 +1,16 @@
 package com.example.myapplication;
 
 import android.os.Bundle;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class ChatActivity extends AppCompatActivity {
 
@@ -17,10 +20,30 @@ public class ChatActivity extends AppCompatActivity {
 
     ListView listview;
     MessagesListAdapter adapter;
+
+    private AppMessagesDB db;
+    private MessageDao messageDao;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_screen);
+
+        //room from here:
+        db = Room.databaseBuilder(getApplicationContext(), AppMessagesDB.class, "MessagesDB").allowMainThreadQueries().build();
+        messageDao = db.messageDao();
+        FloatingActionButton fabSend = findViewById(R.id.fab_SendMessage);
+        fabSend.setOnClickListener(v-> {
+                    EditText etInputText = findViewById(R.id.et_InputText);
+                    String inputText = etInputText.getText().toString();
+                    etInputText.setText("");
+                    Date date = new Date();
+                    //33:26
+                    Message message = new Message(inputText, true, "add DAte", "add Time");
+                    messageDao.insert(message);
+                    adapter.add(message);
+                    adapter.notifyDataSetChanged();
+                });
+        //room ends here.
 
         FloatingActionButton fab_backFromChat = findViewById(R.id.btn_backFromChat);
         fab_backFromChat.setOnClickListener(v -> finish());
