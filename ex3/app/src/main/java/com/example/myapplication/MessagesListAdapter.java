@@ -30,7 +30,7 @@ public class MessagesListAdapter extends ArrayAdapter<Message> {
         TextView msg_time = convertView.findViewById(R.id.Message_time);
 
         msg_text.setText(msg.getText());
-//        msg_time.setText(msg.getTime());
+        msg_time.setText(msg.getTimeForChat());
 
         return convertView;
     }

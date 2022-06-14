@@ -1,8 +1,14 @@
 package com.example.myapplication;
 
 
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 public class Message {
@@ -56,7 +62,17 @@ public class Message {
         return time;
     }
 
-    public void setTime(String newtime) {
-        time = newtime;
+    public void setTime(String newTime) {
+        time = newTime;
+    }
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public String getTimeForChat(){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+        if (date.equals(LocalDate.now().format(formatter))){
+            return time;
+        }
+        else{
+            return date;
+        }
     }
 }
