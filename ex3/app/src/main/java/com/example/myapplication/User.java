@@ -1,10 +1,18 @@
 package com.example.myapplication;
 
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+@Entity
 public class User {
-    private String userName;
-    private int pictureId;
-    private String lastMessage;
-    private String lastMessageSendingTime;
+
+    @PrimaryKey(autoGenerate = true)
+    private int id;
+    private final String userName;
+    private final int pictureId;
+
+
+    private final String lastMessage;
+    private final String lastMessageSendingTime;
 
 
     public User(String userName, int pictureId, String lastMessage, String lastMessageSendingTime){
@@ -12,6 +20,13 @@ public class User {
         this.pictureId = pictureId;
         this.lastMessage = lastMessage;
         this.lastMessageSendingTime = lastMessageSendingTime;
+    }
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getUserName() {
