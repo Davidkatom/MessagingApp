@@ -30,7 +30,7 @@ public class LoginScreen extends AppCompatActivity {
                 "com.example.myapplication", Context.MODE_PRIVATE);
         if(prefs.getString("username", "").length() > 0){
             System.out.println("Logged in as " + prefs.getString("username", ""));
-            new ConnectedUser(userDao.getUser(prefs.getString("username", "")));
+            ChosenValues.getInstance().setUser(userDao.getUser(prefs.getString("username", "")));
             Intent i = new Intent(this, ContactScreen.class);
             startActivity(i);
             return;
@@ -62,7 +62,7 @@ public class LoginScreen extends AppCompatActivity {
             }
             //connect user
             prefs.edit().putString("username", user.getUsername()).apply();
-            new ConnectedUser(user);
+            ChosenValues.getInstance().setUser(user);
 
             Intent i = new Intent(this, ChatActivity.class);
             startActivity(i);

@@ -4,7 +4,7 @@ import androidx.room.AutoMigration;
 import androidx.room.Database;
 import androidx.room.RoomDatabase;
 
-@Database(entities = {Contact.class}, version = 2)
+@Database(entities = {Contact.class}, version = 3)
 public abstract class AppContactsDB extends RoomDatabase {
     public abstract ContactsDao contactsDao();
 }

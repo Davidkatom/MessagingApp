@@ -36,7 +36,7 @@ public class ContactScreen extends AppCompatActivity implements AdapterView.OnIt
         listview.setOnItemClickListener(this);
 
         //room from here:
-        db = Room.databaseBuilder(getApplicationContext(), AppContactsDB.class, ConnectedUser.getUser().getUsername()).allowMainThreadQueries().fallbackToDestructiveMigration().build();
+        db = Room.databaseBuilder(getApplicationContext(), AppContactsDB.class, ChosenValues.getInstance().getUser().getUsername()).allowMainThreadQueries().fallbackToDestructiveMigration().build();
         contactsDao = db.contactsDao();
         Button btnAddContact = findViewById(R.id.btnAddContact);
 
@@ -62,6 +62,7 @@ public class ContactScreen extends AppCompatActivity implements AdapterView.OnIt
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         Contact contact = contacts.get(i);
+        ChosenValues.getInstance().setSelectedContact(contact);
         Intent intent = new Intent(this, ChatActivity.class);
         startActivity(intent);
     }

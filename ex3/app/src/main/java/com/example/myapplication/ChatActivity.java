@@ -37,7 +37,9 @@ public class ChatActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat_screen);
 
         //room from here:
-        db = Room.databaseBuilder(getApplicationContext(), AppMessagesDB.class, "MessagesDB").allowMainThreadQueries().build();
+        String connectedUser = ChosenValues.getInstance().getUser().getUsername();
+        String sellectedContact = ChosenValues.getInstance().getSelectedContact().getUserName();
+        db = Room.databaseBuilder(getApplicationContext(), AppMessagesDB.class, connectedUser+sellectedContact).allowMainThreadQueries().build();
         messageDao = db.messageDao();
         FloatingActionButton fabSend = findViewById(R.id.fab_SendMessage);
         etInputText = findViewById(R.id.et_InputText);
@@ -65,9 +67,11 @@ public class ChatActivity extends AppCompatActivity {
 
         ArrayList<Message> messages = new ArrayList<>();
 
-        for (int i = 0; i < tempMessages.length; i++) {
-            messages.add(new Message(tempMessages[i], i % 2 == 0, "12/12/12", tempMessagesTimes[i]));
-        }
+//        for (int i = 0; i < tempMessages.length; i++) {
+//            messages.add(new Message(tempMessages[i], i % 2 == 0, "12/12/12", tempMessagesTimes[i]));
+//        }
+
+        messages.addAll(messageDao.index());
         listview = findViewById(R.id.listView_messages);
         adapter = new MessagesListAdapter(this, messages);
         listview.setAdapter(adapter);

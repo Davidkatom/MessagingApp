@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 
 public class RegisterScreen extends AppCompatActivity {
     private AppUsersDB db;
@@ -48,7 +47,8 @@ public class RegisterScreen extends AppCompatActivity {
             User user = new User(etUserName.getText().toString(), etPass1.getText().toString(), imageId, etNickName.getText().toString());
             userDao.insert(user);
             //connect user
-            new ConnectedUser(user);
+
+            ChosenValues.getInstance().setUser(user);
 
             Intent i = new Intent(this, ContactScreen.class);
             startActivity(i);
