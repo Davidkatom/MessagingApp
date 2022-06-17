@@ -3,7 +3,10 @@ package com.example.myapplication;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -11,7 +14,7 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
-public class ContactScreen extends AppCompatActivity {
+public class ContactScreen extends AppCompatActivity implements AdapterView.OnItemClickListener {
     private ArrayList<Contact> contacts = new ArrayList<>();
     private ContactListAdapter adapter;
     private ListView listview;
@@ -30,9 +33,10 @@ public class ContactScreen extends AppCompatActivity {
         adapter = new ContactListAdapter(this, contacts);
         listview = findViewById(R.id.contactList);
         listview.setAdapter(adapter);
+        listview.setOnItemClickListener(this);
 
         //room from here:
-        db = Room.databaseBuilder(getApplicationContext(), AppContactsDB.class, "ContactsDB").allowMainThreadQueries().build();
+        db = Room.databaseBuilder(getApplicationContext(), AppContactsDB.class, ConnectedUser.getUser().getUsername()).allowMainThreadQueries().fallbackToDestructiveMigration().build();
         contactsDao = db.contactsDao();
         Button btnAddContact = findViewById(R.id.btnAddContact);
 
@@ -53,5 +57,12 @@ public class ContactScreen extends AppCompatActivity {
             adapter.notifyDataSetChanged();
         }
         //room ends here.
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        Contact contact = contacts.get(i);
+        Intent intent = new Intent(this, ChatActivity.class);
+        startActivity(intent);
     }
 }

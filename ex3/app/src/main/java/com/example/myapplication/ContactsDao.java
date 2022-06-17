@@ -7,6 +7,7 @@ import androidx.room.Query;
 import java.util.List;
 
 @Dao
+
 public interface ContactsDao {
     @Insert
     void insert(Contact... contact);

@@ -7,7 +7,7 @@ public class ConnectedUser {
         ConnectedUser.user = user;
     }
 
-    public User getUser() {
+    public static User getUser() {
         return user;
     }
 }

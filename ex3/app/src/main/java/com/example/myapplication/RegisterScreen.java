@@ -10,10 +10,9 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 public class RegisterScreen extends AppCompatActivity {
-    private ContactListAdapter adapter;
-    private ListView listview;
-    private AppContactsDB db;
-    private User contactsDao;
+    private AppUsersDB db;
+    private UserDao userDao;
+    private int imageId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,30 +24,33 @@ public class RegisterScreen extends AppCompatActivity {
         final EditText etPass2 = findViewById(R.id.etSignUpPassConfirm);
         final EditText etNickName = findViewById(R.id.etNickName);
 
-        adapter = new ContactListAdapter(this, contacts);
-        listview = findViewById(R.id.contactList);
-        listview.setAdapter(adapter);
 
         //room from here:
-        db = Room.databaseBuilder(getApplicationContext(), AppContactsDB.class, "ContactsDB").allowMainThreadQueries().build();
-        contactsDao = db.contactsDao();
-        Button btnAddContact = findViewById(R.id.btnAddContact);
+        db = Room.databaseBuilder(getApplicationContext(), AppUsersDB.class, "UsersDB").fallbackToDestructiveMigration().allowMainThreadQueries().build();
+        userDao = db.userDao();
+        Button btnRegister = findViewById(R.id.btnSignUp);
 
-        Button btnRegister = findViewById(R.id.btnAddContact);
         btnRegister.setOnClickListener(v->{
-            //TODO Check if user already exists
+            //Check if user already exists TODO check if works
+            User exists = userDao.getUser(etUserName.getText().toString());
+            if(exists != null){
+                //TODO error
+                System.out.println("Exists");
+                return;
+            }
             //Check if passwords match
             if(!etPass1.getText().toString().equals(etPass2.getText().toString())){
                 //TODO error
+                System.out.println("passwords dont match");
+                return;
             }
-
-
             //register user
-
+            User user = new User(etUserName.getText().toString(), etPass1.getText().toString(), imageId, etNickName.getText().toString());
+            userDao.insert(user);
             //connect user
+            new ConnectedUser(user);
 
-
-            Intent i = new Intent(this, ChatActivity.class);
+            Intent i = new Intent(this, ContactScreen.class);
             startActivity(i);
         });
     }
