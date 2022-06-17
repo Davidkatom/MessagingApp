@@ -1,47 +1,52 @@
 package com.example.myapplication;
 
-import androidx.room.Entity;
 import androidx.room.PrimaryKey;
-@Entity
+
+import java.util.List;
+
 public class User {
+    @PrimaryKey
+    private String username;
+    private String nickname;
+    private String password;
+    private int imageId;
 
-    @PrimaryKey(autoGenerate = true)
-    private int id;
-    private final String userName;
-    private final int pictureId;
-
-
-    private final String lastMessage;
-    private final String lastMessageSendingTime;
-
-
-    public User(String userName, int pictureId, String lastMessage, String lastMessageSendingTime){
-        this.userName = userName;
-        this.pictureId = pictureId;
-        this.lastMessage = lastMessage;
-        this.lastMessageSendingTime = lastMessageSendingTime;
-    }
-    public void setId(int id) {
-        this.id = id;
+    public User(String username, String password, int imageId,String nickname) {
+        this.username = username;
+        this.password = password;
+        this.imageId = imageId;
+        this.nickname = nickname;
     }
 
-    public int getId() {
-        return id;
+    public String getUsername() {
+        return username;
     }
 
-    public String getUserName() {
-        return userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public int getPictureId() {
-        return pictureId;
+    public String getPassword() {
+        return password;
     }
 
-    public String getLastMessage() {
-        return lastMessage;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
-    public String getLastMessageSendingTime() {
-        return lastMessageSendingTime;
+    public int getImageId() {
+        return imageId;
+    }
+
+    public void setImageId(int imageId) {
+        this.imageId = imageId;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 }
