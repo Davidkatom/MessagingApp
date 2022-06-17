@@ -40,12 +40,11 @@ public class ContactScreen extends AppCompatActivity implements AdapterView.OnIt
         contactsDao = db.contactsDao();
         Button btnAddContact = findViewById(R.id.btnAddContact);
 
-        //send message button
         btnAddContact.setOnClickListener(v->{
             String inputText = etInputText.getText().toString();
             if (!inputText.equals("")) {
                 etInputText.setText("");
-                Contact contact = new Contact(inputText, 1, "hello", "10:00");
+                Contact contact = new Contact(inputText, 1, "", "");
                 contactsDao.insert(contact);
                 adapter.add(contact);
                 adapter.notifyDataSetChanged();
@@ -58,6 +57,16 @@ public class ContactScreen extends AppCompatActivity implements AdapterView.OnIt
         }
         //room ends here.
     }
+    @Override
+    public void onResume() {
+        super.onResume();
+        adapter.clear();
+        for(Contact contact : contactsDao.index()){
+            adapter.add(contact);
+            adapter.notifyDataSetChanged();
+        }
+    }
+
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {

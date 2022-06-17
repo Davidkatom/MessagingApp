@@ -13,10 +13,8 @@ public class Contact {
     @NonNull
     private final String userName;
     private final int pictureId;
-
-
-    private final String lastMessage;
-    private final String lastMessageSendingTime;
+    private String lastMessage;
+    private String lastMessageSendingTime;
 
 
     public Contact(String userName, int pictureId, String lastMessage, String lastMessageSendingTime){
@@ -47,5 +45,13 @@ public class Contact {
 
     public String getLastMessageSendingTime() {
         return lastMessageSendingTime;
+    }
+
+    public void setLastMessage(String lastMessage) {
+        this.lastMessage = lastMessage;
+    }
+
+    public void setLastMessageSendingTime(String lastMessageSendingTime) {
+        this.lastMessageSendingTime = lastMessageSendingTime;
     }
 }
