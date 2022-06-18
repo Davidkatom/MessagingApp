@@ -38,10 +38,10 @@ namespace WhatsdownAPI.Controllers
         private string GetConnectedUserId(string autho)
         {
             Dictionary<string, string> requestHeaders = new Dictionary<string, string>();
-            var tokey = autho.Replace("Bearer ", "");
-            var handler = new JwtSecurityTokenHandler();
             try
             {
+                var tokey = autho.Replace("Bearer ", "");
+                var handler = new JwtSecurityTokenHandler();
                 var jsonToken = handler.ReadToken(tokey);
                 var tokenS = jsonToken as JwtSecurityToken;
                 return tokenS.Claims.ToArray()[3].Value;

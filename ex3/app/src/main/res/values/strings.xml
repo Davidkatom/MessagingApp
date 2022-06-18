@@ -1,4 +1,5 @@
 <resources>
+    <string name="BASE_URL">https://10.0.2.2:7087/</string>
     <string name="app_name">My Application</string>
     <string name="login_etPassword">Password</string>
     <string name="login_etUsername">Username</string>

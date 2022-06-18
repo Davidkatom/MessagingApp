@@ -2,18 +2,21 @@ package com.example.myapplication;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.content.Intent;
-import android.os.Build;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.room.Room;
+
+import com.google.android.material.snackbar.Snackbar;
 
 public class LoginScreen extends AppCompatActivity {
     private static final String CHANNEL_ID = "1";
@@ -96,6 +99,11 @@ public class LoginScreen extends AppCompatActivity {
             //16:40 how to use notification manager to go to new intent
             //22:00 updating notification
 
+
+
+            // retrofit
+            LinearLayout mRootView = (LinearLayout) findViewById(R.id.linearLayout_Login);
+            Snackbar.make(mRootView, "Username already exists", Snackbar.LENGTH_SHORT).show();
 
         });
     }
