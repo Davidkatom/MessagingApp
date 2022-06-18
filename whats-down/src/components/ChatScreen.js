@@ -15,7 +15,7 @@ import * as signalR from "@microsoft/signalr";
 import $ from 'jquery';
 
 var checked = false
-var local_server = "https://localhost:7087"
+var local_server = "http://localhost:7087"
 // var local_server = "http://whatsdown.epizy.com/server/"
 var signal_selected_user = ""
 var connection = null;
@@ -117,9 +117,9 @@ const ChatScreen = ({ token }) => {
 
     //fetch contacts to contact list
     async function fetchContactList(){
-        // console.log('fetch Contacts')
-        // console.log(token)
-        // console.log(full_token)
+        console.log('fetch Contacts')
+        console.log(token)
+        console.log(full_token)
         $.ajax({
             url: local_server+'/api/Contacts',
             type: 'GET',

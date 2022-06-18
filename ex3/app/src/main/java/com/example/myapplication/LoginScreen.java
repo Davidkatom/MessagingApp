@@ -54,16 +54,33 @@ public class LoginScreen extends AppCompatActivity {
         btnSignUp.setOnClickListener(v->{
             Intent i = new Intent(this,RegisterScreen.class);
             startActivity(i);
-
         });
 
-        Button btnSignIn = findViewById(R.id.btnSignIn);
+        Button btnSignIn = findViewById(R.id.btnSignIn); //SIGN IN BUTTON
         btnSignIn.setOnClickListener(v->{
             //Omer:
-            LoginAPI loginAPI = new LoginAPI();
-            loginAPI.LoginToServer("Omer","qwe123");
+            LinearLayout mRootView = (LinearLayout) findViewById(R.id.linearLayout_Login);
 
+            LoginAPI loginAPI = new LoginAPI(mRootView);
+            loginAPI.LoginToServer(etUserName.getText().toString(),etPass.getText().toString(),prefs);
+            prefs.registerOnSharedPreferenceChangeListener((sharedPreferences, key) -> {
+                if(key.equals("token")){// if token is changed, user is logged in and start Intent
+                    if(sharedPreferences.getString("token", "").length() > 0){
+                        System.out.println("Logged in as " + sharedPreferences.getString("username", ""));
+                        ChosenValues.getInstance().setUser(userDao.getUser(sharedPreferences.getString("username", "")));
+                        //connect user
+                        //TODO CHECK HERE THIS IS DAVIDS CODE
+                        User user = userDao.getUser(etUserName.getText().toString());
+                        prefs.edit().putString("username", user.getUsername()).apply();
+                        ChosenValues.getInstance().setUser(user);
 
+                        //Start Intent
+                        Intent i = new Intent(this, ContactScreen.class);
+                        startActivity(i);
+                    }
+                }
+            });
+/*
 
             //check if user exists
             User user = userDao.getUser(etUserName.getText().toString());
@@ -84,6 +101,8 @@ public class LoginScreen extends AppCompatActivity {
 
             Intent i = new Intent(this, ContactScreen.class);
             startActivity(i);
+
+ */
         });
 
         Button btnContactScreen = findViewById(R.id.contactScreen);

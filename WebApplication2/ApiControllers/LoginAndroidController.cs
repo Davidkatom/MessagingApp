@@ -66,8 +66,8 @@ namespace WebApplication2.ApiControllers
                     claimes,
                     expires: DateTime.UtcNow.AddMinutes(20),
                     signingCredentials: mac);
-                Ok(new JwtSecurityTokenHandler().WriteToken(token));
-                res.token = token.ToString();
+                var a = Ok(new JwtSecurityTokenHandler().WriteToken(token)).Value;
+                res.token = a.ToString();
                 res.username = username;
                 return res;
             }

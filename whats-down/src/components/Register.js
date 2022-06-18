@@ -5,8 +5,8 @@ import InputLine from "./InputLine"
 import { useState } from "react"
 
 
-//var local_server = "https://localhost:7087"
-var local_server = "https://localhost:7087"
+//var local_server = "http://localhost:7087"
+var local_server = "http://localhost:7087"
 const Register = ({close}) => {
     const [down_alert, setAlert] = useState(['', ''])
     const [imageSrc, setImageSrc] = useState('')
