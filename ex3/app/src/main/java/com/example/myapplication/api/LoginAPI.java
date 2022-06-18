@@ -28,14 +28,14 @@ public class LoginAPI {
         call.enqueue(new Callback<LoginResObject>() {
             @Override
             public void onResponse(Call<LoginResObject> call, Response<LoginResObject> response) {
-//                String temp = response.body();
+                LoginResObject LRO = response.body();
                 System.out.println("Login !");
 
             }
 
             @Override
             public void onFailure(Call<LoginResObject> call, Throwable t) {
-                System.out.println("Login Failed");
+                //Connection to server failed Todo add error message
             }
         });
     }

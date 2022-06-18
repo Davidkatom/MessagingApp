@@ -42,19 +42,14 @@ namespace WebApplication2.ApiControllers
         [HttpGet]
         public LoginResObject LoginGet(string username, string password)
         {
+            LoginResObject res = new LoginResObject();
+            
             var q = from user in _context.User
                     where user.Id.Equals(username) &&
                             user.Password.Equals(password)
                     select user;
 
-            LoginResObject res = new LoginResObject();
-            res.token = "Token here";
-            res.username = "Username here";
 
-            return res;
-
-            //this is for later
-            /*
             if (q.Any()) // if username and password found in User database
             {
                 var claimes = new[] {
@@ -71,10 +66,13 @@ namespace WebApplication2.ApiControllers
                     claimes,
                     expires: DateTime.UtcNow.AddMinutes(20),
                     signingCredentials: mac);
-                return Ok(new JwtSecurityTokenHandler().WriteToken(token));
+                Ok(new JwtSecurityTokenHandler().WriteToken(token));
+                res.token = token.ToString();
+                res.username = username;
+                return res;
             }
-            return NotFound("UserName and or Password are incorrect.");//check if valid return statement 
-            */
+            return res;//check if valid return statement 
+            
         }
     }
 }
