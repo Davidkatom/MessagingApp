@@ -9,7 +9,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
-import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface WebServiceAPI {
     @GET("Contacts")
@@ -18,8 +18,10 @@ public interface WebServiceAPI {
     @POST("Contacts")
     Call<Void> createContact(@Body Contact contact);
 
-    @POST("Login?username={username}&password={password}")
-    Call<LoginResObject> login(@Path("username") String username, @Path("password") String password);
+//    @GET("LoginAndroid")
+//    Call<List<LoginResObject>> login();
+    @GET("LoginAndroid")
+    Call<LoginResObject> login(@Query("username") String username, @Query("password") String password);
 
 
 }

@@ -16,6 +16,7 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.room.Room;
 
+import com.example.myapplication.api.LoginAPI;
 import com.google.android.material.snackbar.Snackbar;
 
 public class LoginScreen extends AppCompatActivity {
@@ -23,29 +24,31 @@ public class LoginScreen extends AppCompatActivity {
 
     private AppUsersDB db;
     private UserDao userDao;
+    public static Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        context = getApplicationContext();
         setContentView(R.layout.activity_login_screen);
 
-        db = Room.databaseBuilder(getApplicationContext(), AppUsersDB.class, "UsersDB").allowMainThreadQueries().fallbackToDestructiveMigration().build();
+        db = Room.databaseBuilder(context, AppUsersDB.class, "UsersDB").allowMainThreadQueries().fallbackToDestructiveMigration().build();
         userDao = db.userDao();
 
         final EditText etUserName = findViewById(R.id.etUserName);
         final EditText etPass = findViewById(R.id.etPassword);
 
-        //Auto login if user is already logged in
+        //get shared preferences to check if user is already logged in
         SharedPreferences prefs = this.getSharedPreferences(
                 "com.example.myapplication", Context.MODE_PRIVATE);
+        //Auto login if user is already logged in
+        /*
         if(prefs.getString("username", "").length() > 0){
             System.out.println("Logged in as " + prefs.getString("username", ""));
             ChosenValues.getInstance().setUser(userDao.getUser(prefs.getString("username", "")));
             Intent i = new Intent(this, ContactScreen.class);
             startActivity(i);
-        }
-
-
+        }         */
 
         Button btnSignUp = findViewById(R.id.btnSignUp);
         btnSignUp.setOnClickListener(v->{
@@ -56,6 +59,12 @@ public class LoginScreen extends AppCompatActivity {
 
         Button btnSignIn = findViewById(R.id.btnSignIn);
         btnSignIn.setOnClickListener(v->{
+            //Omer:
+            LoginAPI loginAPI = new LoginAPI();
+            loginAPI.LoginToServer("Omer","qwe123");
+
+
+
             //check if user exists
             User user = userDao.getUser(etUserName.getText().toString());
             if(user == null){

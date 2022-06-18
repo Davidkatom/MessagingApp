@@ -1,6 +1,7 @@
 package com.example.myapplication.api;
 
 import com.example.myapplication.R;
+import com.example.myapplication.view_models.MyApplication;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -14,30 +15,27 @@ public class LoginAPI {
 
     public LoginAPI() {
 
-
         retrofit = new Retrofit.Builder()
-                .baseUrl(String.valueOf(R.string.BASE_URL + "/api/"))
+                .baseUrl(MyApplication.context.getString(R.string.BASE_URL) )
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         webServiceAPI = retrofit.create(WebServiceAPI.class);
     }
 
     public void LoginToServer(String username, String password) {
-        Call<LoginResObject> call = webServiceAPI.login(username, password);
+//        Call<LoginResObject> call = webServiceAPI.login(username, password);
+        Call<LoginResObject> call = webServiceAPI.login("omer", "123");
         call.enqueue(new Callback<LoginResObject>() {
             @Override
             public void onResponse(Call<LoginResObject> call, Response<LoginResObject> response) {
-                LoginResObject loginResObject = response.body();
-                if (loginResObject != null) {
-                    //save token to shared preferences
-//                    SharedPreferencesManager.getInstance().saveToken(loginResObject.getToken());
-//                    SharedPreferencesManager.getInstance().saveUsername(loginResObject.getUsername());
-                }
+//                String temp = response.body();
+                System.out.println("Login !");
+
             }
 
             @Override
             public void onFailure(Call<LoginResObject> call, Throwable t) {
-
+                System.out.println("Login Failed");
             }
         });
     }
