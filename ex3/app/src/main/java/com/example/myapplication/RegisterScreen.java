@@ -35,7 +35,7 @@ public class RegisterScreen extends AppCompatActivity {
         Button btnRegister = findViewById(R.id.btnSignUp);
 
         btnRegister.setOnClickListener(v->{
-            //Check if user already exists TODO check if works
+            //Check if user already exists
             LinearLayout mRootView = (LinearLayout) findViewById(R.id.linearLayout_Register);
             User exists = userDao.getUser(etUserName.getText().toString());
             if(exists != null){
