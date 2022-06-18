@@ -29,12 +29,13 @@ public class LoginScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_screen);
 
-        db = Room.databaseBuilder(getApplicationContext(), AppUsersDB.class, "UsersDB").allowMainThreadQueries().build();
+        db = Room.databaseBuilder(getApplicationContext(), AppUsersDB.class, "UsersDB").allowMainThreadQueries().fallbackToDestructiveMigration().build();
         userDao = db.userDao();
 
         final EditText etUserName = findViewById(R.id.etUserName);
         final EditText etPass = findViewById(R.id.etPassword);
 
+        //Auto login if user is already logged in
         SharedPreferences prefs = this.getSharedPreferences(
                 "com.example.myapplication", Context.MODE_PRIVATE);
         if(prefs.getString("username", "").length() > 0){

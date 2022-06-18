@@ -1,16 +1,22 @@
 package com.example.myapplication;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 
+import android.widget.LinearLayout;
 import android.widget.ListView;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 
@@ -21,14 +27,13 @@ public class ContactScreen extends AppCompatActivity implements AdapterView.OnIt
 
     private AppContactsDB db;
     private ContactsDao contactsDao;
-
+    private Button btnAddContact;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_screen);
-        final EditText etInputText = findViewById(R.id.et_InputText);
 
         adapter = new ContactListAdapter(this, contacts);
         listview = findViewById(R.id.contactList);
@@ -38,18 +43,10 @@ public class ContactScreen extends AppCompatActivity implements AdapterView.OnIt
         //room from here:
         db = Room.databaseBuilder(getApplicationContext(), AppContactsDB.class, ChosenValues.getInstance().getUser().getUsername()).allowMainThreadQueries().fallbackToDestructiveMigration().build();
         contactsDao = db.contactsDao();
-        Button btnAddContact = findViewById(R.id.btnAddContact);
 
-        btnAddContact.setOnClickListener(v->{
-            String inputText = etInputText.getText().toString();
-            if (!inputText.equals("")) {
-                etInputText.setText("");
-                Contact contact = new Contact(inputText, 1, "", "");
-                contactsDao.insert(contact);
-                adapter.add(contact);
-                adapter.notifyDataSetChanged();
-                listview.smoothScrollToPosition(adapter.getCount() - 1);
-            }
+        Button btnPopup = findViewById(R.id.btnShowPopup);
+        btnPopup.setOnClickListener(v->{
+            ShowDialog();
         });
         for(Contact contact : contactsDao.index()){
             adapter.add(contact);
@@ -74,5 +71,39 @@ public class ContactScreen extends AppCompatActivity implements AdapterView.OnIt
         ChosenValues.getInstance().setSelectedContact(contact);
         Intent intent = new Intent(this, ChatActivity.class);
         startActivity(intent);
+    }
+
+    private void ShowDialog(){
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.add_contact_popup, null);
+        builder.setView(view);
+        builder.show();
+
+        btnAddContact = view.findViewById(R.id.btnAddContact);
+        btnAddContact.setOnClickListener(v->{
+            final EditText etUsername = view.findViewById(R.id.etContactName);
+            final EditText etNickname = view.findViewById(R.id.etNickName);
+            final EditText etServer = view.findViewById(R.id.etServer);
+
+            String username = etUsername.getText().toString();
+            String nickname = etNickname.getText().toString();
+            String server = etServer.getText().toString();
+
+            if (!(username.equals("") || nickname.equals("") || server.equals(""))) {
+                etUsername.setText("");
+                Contact contact = new Contact(username, nickname, 1, "", "", server);
+                contactsDao.insert(contact);
+                adapter.add(contact);
+                adapter.notifyDataSetChanged();
+                listview.smoothScrollToPosition(adapter.getCount() - 1);
+                //TODO close dialog
+            }
+            else{
+                //TODO show error message
+                //LinearLayout mRootView = (LinearLayout) findViewById(R.id.contactList);
+                //Snackbar.make(mRootView, "Please fill in all fields", Snackbar.LENGTH_SHORT).show();
+            }
+        });
     }
 }

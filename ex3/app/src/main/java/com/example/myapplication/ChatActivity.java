@@ -40,19 +40,16 @@ public class ChatActivity extends AppCompatActivity {
         TextView vtContactName = findViewById(R.id.SelectedContactName);
 
         //room from here:
-        try {
-            String connectedUser = ChosenValues.getInstance().getUser().getUsername();
-            String selectedContact = ChosenValues.getInstance().getSelectedContact().getUserName();
+        String connectedUser = ChosenValues.getInstance().getUser().getUsername();
+        String selectedContact = ChosenValues.getInstance().getSelectedContact().getUserName();
+        String server = ChosenValues.getInstance().getSelectedContact().getServer();
 
-            vtContactName.setText(selectedContact);
-            db = Room.databaseBuilder(getApplicationContext(), AppMessagesDB.class, connectedUser + selectedContact).allowMainThreadQueries().build();
-            dbContacts = Room.databaseBuilder(getApplicationContext(), AppContactsDB.class, connectedUser).allowMainThreadQueries().build();
-            messageDao = db.messageDao();
-            contactsDao = dbContacts.contactsDao();
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
+        vtContactName.setText(selectedContact);
+        db = Room.databaseBuilder(getApplicationContext(), AppMessagesDB.class, connectedUser + selectedContact + server).fallbackToDestructiveMigration().allowMainThreadQueries().build();
+        dbContacts = Room.databaseBuilder(getApplicationContext(), AppContactsDB.class, connectedUser).fallbackToDestructiveMigration().allowMainThreadQueries().build();
+        messageDao = db.messageDao();
+        contactsDao = dbContacts.contactsDao();
+
         FloatingActionButton fabSend = findViewById(R.id.fab_SendMessage);
         etInputText = findViewById(R.id.et_InputText);
         //send message button
