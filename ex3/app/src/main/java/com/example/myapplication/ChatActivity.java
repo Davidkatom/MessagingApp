@@ -40,15 +40,19 @@ public class ChatActivity extends AppCompatActivity {
         TextView vtContactName = findViewById(R.id.SelectedContactName);
 
         //room from here:
-        String connectedUser = ChosenValues.getInstance().getUser().getUsername();
-        String sellectedContact = ChosenValues.getInstance().getSelectedContact().getUserName();
+        try {
+            String connectedUser = ChosenValues.getInstance().getUser().getUsername();
+            String selectedContact = ChosenValues.getInstance().getSelectedContact().getUserName();
 
-        vtContactName.setText(sellectedContact);
-        db = Room.databaseBuilder(getApplicationContext(), AppMessagesDB.class, connectedUser+sellectedContact).allowMainThreadQueries().build();
-        dbContacts = Room.databaseBuilder(getApplicationContext(), AppContactsDB.class, connectedUser).allowMainThreadQueries().build();
-        messageDao = db.messageDao();
-        contactsDao = dbContacts.contactsDao();
-
+            vtContactName.setText(selectedContact);
+            db = Room.databaseBuilder(getApplicationContext(), AppMessagesDB.class, connectedUser + selectedContact).allowMainThreadQueries().build();
+            dbContacts = Room.databaseBuilder(getApplicationContext(), AppContactsDB.class, connectedUser).allowMainThreadQueries().build();
+            messageDao = db.messageDao();
+            contactsDao = dbContacts.contactsDao();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
         FloatingActionButton fabSend = findViewById(R.id.fab_SendMessage);
         etInputText = findViewById(R.id.et_InputText);
         //send message button

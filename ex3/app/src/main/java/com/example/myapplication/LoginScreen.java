@@ -33,7 +33,6 @@ public class LoginScreen extends AppCompatActivity {
             ChosenValues.getInstance().setUser(userDao.getUser(prefs.getString("username", "")));
             Intent i = new Intent(this, ContactScreen.class);
             startActivity(i);
-            return;
         }
 
 
@@ -64,7 +63,7 @@ public class LoginScreen extends AppCompatActivity {
             prefs.edit().putString("username", user.getUsername()).apply();
             ChosenValues.getInstance().setUser(user);
 
-            Intent i = new Intent(this, ChatActivity.class);
+            Intent i = new Intent(this, ContactScreen.class);
             startActivity(i);
         });
 
