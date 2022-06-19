@@ -18,7 +18,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.ArrayList;
 
-public class ContactScreen extends AppCompatActivity implements AdapterView.OnItemClickListener {
+public class ContactScreen extends AppCompatActivity implements AdapterView.OnItemClickListener, Listener {
     private ArrayList<Contact> contacts = new ArrayList<>();
     private ContactListAdapter adapter;
     private ListView listview;
@@ -32,6 +32,8 @@ public class ContactScreen extends AppCompatActivity implements AdapterView.OnIt
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_screen);
+
+        ChosenValues.getInstance().setWaiting(this);
         //room from here:
         db = Room.databaseBuilder(getApplicationContext(), AppContactsDB.class, ChosenValues.getInstance().getUser().getUsername()).allowMainThreadQueries().fallbackToDestructiveMigration().build();
         contactsDao = db.contactsDao();
@@ -51,11 +53,8 @@ public class ContactScreen extends AppCompatActivity implements AdapterView.OnIt
         btnPopup.setOnClickListener(v->{
             ShowDialog();
         });
-        for(Contact contact : contactsDao.index()){
-            adapter.add(contact);
-            adapter.notifyDataSetChanged();
-        }
-        //room ends here.
+
+
     }
     @Override
     public void onResume() {
@@ -111,5 +110,14 @@ public class ContactScreen extends AppCompatActivity implements AdapterView.OnIt
                 //Snackbar.make(mRootView, "Please fill in all fields", Snackbar.LENGTH_SHORT).show();
             }
         });
+    }
+
+    @Override
+    public void finished() {
+        adapter.clear();
+        for(Contact contact : contactsDao.index()){
+            adapter.add(contact);
+            adapter.notifyDataSetChanged();
+        }
     }
 }
