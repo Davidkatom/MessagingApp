@@ -1,14 +1,8 @@
 package com.example.myapplication.api;
 
-import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.widget.LinearLayout;
 
-import androidx.room.Room;
-
-import com.example.myapplication.AppContactsDB;
-import com.example.myapplication.AppUsersDB;
 import com.example.myapplication.ChosenValues;
 import com.example.myapplication.Contact;
 import com.example.myapplication.ContactScreen;
@@ -17,7 +11,6 @@ import com.example.myapplication.Listener;
 import com.example.myapplication.Message;
 import com.example.myapplication.R;
 import com.example.myapplication.User;
-import com.example.myapplication.UserDao;
 import com.example.myapplication.view_models.MyApplication;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
@@ -57,15 +50,18 @@ public class AndroidServiceAPI {
         webServiceAPI = retrofit.create(WebServiceAPI.class);
     }
 
-    public void getMessages(Contact contact){
-        Call<List<Message>> call = webServiceAPI.getMessages(jasonHeader, contact.getId());
+    public void UpdateMessages(Contact contact){
+        Map<String, String> tokenHeader = new HashMap<String, String>() {{
+            put("Authorization", "Bearer " + ChosenValues.getInstance().getToken());
+        }};
+        Call<List<Message>> call = webServiceAPI.getMessages(tokenHeader, contact.getId());
         call.enqueue(new Callback<List<Message>>() {
             @Override
             public void onResponse(Call<List<Message>> call, Response<List<Message>> response) {
                 if(response.isSuccessful()) {
-                    assert response.body() != null;
                     List<Message> messages = response.body();
-//                    contact.setMessages(messages);
+                    Snackbar.make(MRootLayout, "Received messages from server", Snackbar.LENGTH_SHORT).show();
+
                 } else {
                     Snackbar.make(MRootLayout, "failed to receive messages from server", Snackbar.LENGTH_SHORT).show();
                 }
@@ -96,7 +92,28 @@ public class AndroidServiceAPI {
         });
 
     }
+    public void PostContact(Contact contact) {
+        //UserPostObject userPostObject = new UserPostObject(user.getUsername(), user.getPassword(),user.getNickname(),String.valueOf(user.getImageId()));
+        Map<String, String> tokenHeader = new HashMap<String, String>() {{
+            put("Authorization", "Bearer " + ChosenValues.getInstance().getToken());
+        }};
+        Call<JsonElement> call = webServiceAPI.CreateContact(contact, tokenHeader);
+        call.enqueue(new Callback<JsonElement>() {
+            @Override
+            public void onResponse(Call<JsonElement> call, Response<JsonElement> response) {
+                if (response.isSuccessful()) {
+                    Snackbar.make(MRootLayout, "Contact Added", Snackbar.LENGTH_LONG).show();
+                } else {
+                    Snackbar.make(MRootLayout, "Contact already exists", Snackbar.LENGTH_SHORT).show();
+                }
+            }
+            @Override
+            public void onFailure(Call<JsonElement> call, Throwable t) {
+                Snackbar.make(MRootLayout, "Connection to server failed", Snackbar.LENGTH_SHORT).show();
+            }
+        });
 
+    }
     public void LoginToServer(String username, String password, SharedPreferences prefs) {
         Call<JsonElement> call = webServiceAPI.login(username, password);
         call.enqueue(new Callback<JsonElement>() {
@@ -113,7 +130,6 @@ public class AndroidServiceAPI {
                     Snackbar.make(MRootLayout, "Username and/or password are incorrect", Snackbar.LENGTH_SHORT).show();
                 }
             }
-
             @Override
             public void onFailure(Call<JsonElement> call, Throwable t) {
                 Snackbar.make(MRootLayout, "Connection to server failed", Snackbar.LENGTH_SHORT).show();

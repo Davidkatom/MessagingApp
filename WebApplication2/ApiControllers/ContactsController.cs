@@ -17,7 +17,7 @@ namespace WhatsdownAPI.Controllers
     {
         private readonly WhatsdownAPIContext _context;
         private string ConnectedUser = "";
-       
+
         public ContactsController(WhatsdownAPIContext context)
         {
             _context = context;
@@ -38,15 +38,21 @@ namespace WhatsdownAPI.Controllers
         private string GetConnectedUserId(string autho)
         {
             Dictionary<string, string> requestHeaders = new Dictionary<string, string>();
+            if(autho == null) { return null; }
+            var tokey = autho;
+            if (autho.Contains("Bearer "))
+            {
+                tokey = autho.Replace("Bearer ", "");
+            }
             try
             {
-                var tokey = autho.Replace("Bearer ", "");
                 var handler = new JwtSecurityTokenHandler();
                 var jsonToken = handler.ReadToken(tokey);
                 var tokenS = jsonToken as JwtSecurityToken;
                 return tokenS.Claims.ToArray()[3].Value;
             }
-            catch{
+            catch
+            {
                 return null;
             }
         }
@@ -157,10 +163,10 @@ namespace WhatsdownAPI.Controllers
 
             var parsedSent = new List<ParsedMessage>();
             foreach (var message in sentMesseges)
-            {             
-               parsedSent.Add(ParseMessage(message));
-            }            
-            return parsedSent.ToList().OrderBy(x => x.created); 
+            {
+                parsedSent.Add(ParseMessage(message));
+            }
+            return parsedSent.ToList().OrderBy(x => x.created);
 
         }
 
@@ -179,7 +185,7 @@ namespace WhatsdownAPI.Controllers
             {
                 return BadRequest();
             }
-           
+
             return Ok(ParseMessage(message));
 
             //return 
@@ -190,7 +196,7 @@ namespace WhatsdownAPI.Controllers
             ConnectedUser = GetConnectedUserId(Request.Headers["Authorization"]);
             //Contact of connected user
             var message = await _context.Message.Include(m => m.Sender).Include(m => m.Reciever).SingleAsync(m => m.Id == messageId);
-            if(message == null)
+            if (message == null)
             {
                 return BadRequest();
             }
@@ -220,7 +226,7 @@ namespace WhatsdownAPI.Controllers
                 Reciever = id,
                 Content = content["content"],
                 Time = DateTime.Now,
-                isSent = true                
+                isSent = true
             };
             Contact cont = await _context.ContactRelation.SingleAsync(c => c.Contacter == ConnectedUser && c.Contacted == id);
             cont.LastMessage = msg.Content;
@@ -243,7 +249,7 @@ namespace WhatsdownAPI.Controllers
                 created = message.Time,
                 sent = message.isSent
             };
-        }    
+        }
     }
 }
 
