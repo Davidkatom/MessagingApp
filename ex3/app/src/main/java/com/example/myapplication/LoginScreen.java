@@ -81,8 +81,8 @@ public class LoginScreen extends AppCompatActivity {
                     prefs.edit().putString("username", user.getUsername()).apply();
                     ChosenValues.getInstance().setUser(user);
                     //Start Intent
-//                    Intent i = new Intent(this, ContactScreen.class);
-//                    startActivity(i);
+                    Intent i = new Intent(this, ContactScreen.class);
+                    startActivity(i);
                 }
             }
         });
