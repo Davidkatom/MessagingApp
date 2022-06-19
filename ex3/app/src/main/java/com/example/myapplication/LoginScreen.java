@@ -51,29 +51,28 @@ public class LoginScreen extends AppCompatActivity {
         }         */
 
         Button btnSignUp = findViewById(R.id.btnSignUp);
-        btnSignUp.setOnClickListener(v->{
-            Intent i = new Intent(this,RegisterScreen.class);
+        btnSignUp.setOnClickListener(v -> {
+            Intent i = new Intent(this, RegisterScreen.class);
             startActivity(i);
         });
 
         Button btnSignIn = findViewById(R.id.btnSignIn); //SIGN IN BUTTON
-        btnSignIn.setOnClickListener(v->{
-            //Omer:
+        btnSignIn.setOnClickListener(v -> {
+            //for pop up messages
             LinearLayout mRootView = (LinearLayout) findViewById(R.id.linearLayout_Login);
-
+            //Login Logic:
             LoginAPI loginAPI = new LoginAPI(mRootView);
-            loginAPI.LoginToServer(etUserName.getText().toString(),etPass.getText().toString(),prefs);
+            loginAPI.LoginToServer(etUserName.getText().toString(), etPass.getText().toString(), prefs);
+            //here we have lambda function that listens only to positive login response from the server.
             prefs.registerOnSharedPreferenceChangeListener((sharedPreferences, key) -> {
-                if(key.equals("token")){// if token is changed, user is logged in and start Intent
-                    if(sharedPreferences.getString("token", "").length() > 0){
+                if (key.equals("token")) {// if token is changed, user is logged in and start Intent
+                    if (sharedPreferences.getString("token", "").length() > 0) {
                         System.out.println("Logged in as " + sharedPreferences.getString("username", ""));
-                        ChosenValues.getInstance().setUser(userDao.getUser(sharedPreferences.getString("username", "")));
+                        System.out.println("Active token as " + sharedPreferences.getString("token", ""));
                         //connect user
-                        //TODO CHECK HERE THIS IS DAVIDS CODE
                         User user = userDao.getUser(etUserName.getText().toString());
                         prefs.edit().putString("username", user.getUsername()).apply();
                         ChosenValues.getInstance().setUser(user);
-
                         //Start Intent
                         Intent i = new Intent(this, ContactScreen.class);
                         startActivity(i);
@@ -106,7 +105,7 @@ public class LoginScreen extends AppCompatActivity {
         });
 
         Button btnContactScreen = findViewById(R.id.contactScreen);
-        btnContactScreen.setOnClickListener(v->{
+        btnContactScreen.setOnClickListener(v -> {
             Intent i = new Intent(this, ContactScreen.class);
             startActivity(i);
         });
@@ -116,7 +115,7 @@ public class LoginScreen extends AppCompatActivity {
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
 
         Button btnPushNotification = findViewById(R.id.tempPushNotification);
-        btnPushNotification.setOnClickListener(v->{
+        btnPushNotification.setOnClickListener(v -> {
             NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
                     .setSmallIcon(R.drawable.ic_launcher_foreground)
                     .setContentTitle("My notification")
@@ -129,7 +128,6 @@ public class LoginScreen extends AppCompatActivity {
             //22:00 updating notification
 
 
-
             // retrofit
             LinearLayout mRootView = (LinearLayout) findViewById(R.id.linearLayout_Login);
             Snackbar.make(mRootView, "Username already exists", Snackbar.LENGTH_SHORT).show();
@@ -137,8 +135,8 @@ public class LoginScreen extends AppCompatActivity {
         });
     }
 
-    private void createNotificationChannel(){
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = getString(R.string.Channel_main_name);
             String description = getString(R.string.Channel_main_description);
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
