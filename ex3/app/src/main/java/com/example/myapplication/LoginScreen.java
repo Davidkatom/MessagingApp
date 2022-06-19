@@ -71,14 +71,6 @@ public class LoginScreen extends AppCompatActivity implements Listener {
             ChosenValues.getInstance().setWaiting(this);
         });
 
-
-
-//        Button btnContactScreen = findViewById(R.id.btnSignIn);
-//        btnContactScreen.setOnClickListener(v -> {
-//            Intent i = new Intent(this, ContactScreen.class);
-//            startActivity(i);
-//        });
-
         //notification manager
         createNotificationChannel();
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);

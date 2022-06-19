@@ -49,10 +49,10 @@ public class ContactScreen extends AppCompatActivity implements AdapterView.OnIt
 
 
 
-        Button btnPopup = findViewById(R.id.btnShowPopup);
-        btnPopup.setOnClickListener(v->{
-            ShowDialog();
-        });
+//        Button btnPopup = findViewById(R.id.fab_addContact);
+//        btnPopup.setOnClickListener(v->{
+//            ShowDialog();
+//        });
 
 
     }
