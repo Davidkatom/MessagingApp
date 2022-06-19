@@ -3,9 +3,8 @@ package com.example.myapplication;
 import android.os.Build;
 import android.os.Bundle;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,64 +13,61 @@ import androidx.room.Room;
 import com.example.myapplication.api.AndroidServiceAPI;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 public class ChatActivity extends AppCompatActivity implements Listener {
 
-    ListView listview;
-    MessagesListAdapter adapter;
-    ContactListAdapter contactAdapter;
+    MessagesListAdapter MsgListAdapter;
 
     private MessageDao messageDao;
-    private ContactsDao contactsDao;
     private EditText etInputText;
-    private ArrayList<Message> messages = new ArrayList<>();
+    private ArrayList<Message> messages = new ArrayList<Message>();
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        AppMessagesDB db;
-        AppContactsDB dbContacts;
-        ChosenValues.getInstance().setWaiting(this);
         super.onCreate(savedInstanceState);
+        //HERE CONSTANTS DECLARATION
+        etInputText = findViewById(R.id.et_InputText);
+        AndroidServiceAPI serviceAPI = new AndroidServiceAPI(findViewById(R.id.linearLayout_Chat));
         setContentView(R.layout.activity_chat_screen);
-
         TextView vtContactName = findViewById(R.id.SelectedContactName);
-
-        //room from here:
+        FloatingActionButton fabSend = findViewById(R.id.fab_SendMessage);
         String connectedUser = ChosenValues.getInstance().getUser().getUsername();
         String selectedContact = ChosenValues.getInstance().getSelectedContact().getId();
         String server = ChosenValues.getInstance().getSelectedContact().getServer().replaceAll("/", "");
-
+        //adapter connection to the listview
+        ListView msg_listview = findViewById(R.id.listView_messages);
+        MsgListAdapter = new MessagesListAdapter(this, new ArrayList<Message>());
+        msg_listview.setAdapter(MsgListAdapter);
+        msg_listview.setClickable(false);
+        //HERE ROOM DB SETTINGS:
         vtContactName.setText(selectedContact);
-        db = Room.databaseBuilder(getApplicationContext(), AppMessagesDB.class, connectedUser + selectedContact + server).fallbackToDestructiveMigration().allowMainThreadQueries().build();
-        dbContacts = Room.databaseBuilder(getApplicationContext(), AppContactsDB.class, connectedUser).fallbackToDestructiveMigration().allowMainThreadQueries().build();
+        AppMessagesDB db = Room.databaseBuilder(getApplicationContext(), AppMessagesDB.class, connectedUser + selectedContact + server).fallbackToDestructiveMigration().allowMainThreadQueries().build();
+        AppContactsDB dbContacts = Room.databaseBuilder(getApplicationContext(), AppContactsDB.class, connectedUser).fallbackToDestructiveMigration().allowMainThreadQueries().build();
         messageDao = db.messageDao();
-        contactsDao = dbContacts.contactsDao();
 
-        FloatingActionButton fabSend = findViewById(R.id.fab_SendMessage);
-        etInputText = findViewById(R.id.et_InputText);
         //send message button
         fabSend.setOnClickListener(v -> {
             String inputText = etInputText.getText().toString();
             if (!inputText.equals("")) {
                 etInputText.setText("");
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
-                Date date = new Date();
-                Message message = new Message(0, inputText, true, LocalDateTime.now().format(formatter));
                 ChosenValues.getInstance().getSelectedContact().setLast(inputText);
                 ChosenValues.getInstance().getSelectedContact().setLastdate(LocalDateTime.now().format(formatter));
 
-                messageDao.insert(message);
-                contactsDao.update(ChosenValues.getInstance().getSelectedContact());
-                adapter.add(message);
-                adapter.notifyDataSetChanged();
-                listview.smoothScrollToPosition(adapter.getCount() - 1);
+
+//                Message message = new Message(0, inputText, true, LocalDateTime.now().format(formatter));
+                serviceAPI.UpdateMessages(ChosenValues.getInstance().getSelectedContact(), messageDao);
+
+
+//                messageDao.insert(message);
+//                contactsDao.update(ChosenValues.getInstance().getSelectedContact());
+//                MsgListAdapter.add(message);
+//                MsgListAdapter.notifyDataSetChanged();
+//                listview.smoothScrollToPosition(MsgListAdapter.getCount() - 1);
             }
         });
         //room ends here.
@@ -82,23 +78,17 @@ public class ChatActivity extends AppCompatActivity implements Listener {
         //from here we can get the messages from the database
 
 
-        LinearLayout mRootView = (LinearLayout) findViewById(R.id.ContactsRoot);
-        AndroidServiceAPI serviceAPI = new AndroidServiceAPI(mRootView);
         serviceAPI.UpdateMessages(ChosenValues.getInstance().getSelectedContact(), messageDao);
 
-        //messages = messageDao.index();
-        listview = findViewById(R.id.listView_messages);
-        adapter = new MessagesListAdapter(this, messages);
-        listview.setAdapter(adapter);
-        listview.setClickable(false);
+        ChosenValues.getInstance().setWaiting(this);
     }
 
     @Override
     public void finished() {
-        adapter.clear();
-        for(Message message : messageDao.index()){
-            adapter.add(message);
-            adapter.notifyDataSetChanged();
+        MsgListAdapter.clear();
+        for (Message message : messageDao.index()) {
+            MsgListAdapter.add(message);
+            MsgListAdapter.notifyDataSetChanged();
         }
     }
 }

@@ -35,7 +35,7 @@ public interface WebServiceAPI {
 
     @POST("{id}/messages")
     Call<JsonElement> CreateMessage(
-            @Body Map<String, String>  message,
+            @Body Map<String, String> message,
             @HeaderMap  Map<String, String> headers,
             @Path("user_id") String user_id
 
