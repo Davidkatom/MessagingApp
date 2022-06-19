@@ -96,7 +96,7 @@ public class AndroidServiceAPI {
     }
 
     public void LoginToServer(String username, String password, SharedPreferences prefs) {
-        Call<JsonElement> call = webServiceAPI.login("omer", "qwe123");
+        Call<JsonElement> call = webServiceAPI.login(username, password);
         call.enqueue(new Callback<JsonElement>() {
             @Override
             public void onResponse(Call<JsonElement> call, Response<JsonElement> response) {
@@ -140,20 +140,6 @@ public class AndroidServiceAPI {
             }
         });
 
-    }
-
-    private void login(String username, String password, Context context, UserDao userDao, SharedPreferences prefs) {
-        User user = userDao.getUser(username);
-        if(user == null){
-            //TODO HTTP GET request to get user info (Nickname)
-            user = new User(username, password, 0, username);
-            userDao.insert(user);
-        }
-
-        prefs.edit().putString("username", user.getUsername()).apply();
-        ChosenValues.getInstance().setUser(user);
-
-        //context.startActivity(new Intent(context, ContactScreen.class));
     }
 
 }
