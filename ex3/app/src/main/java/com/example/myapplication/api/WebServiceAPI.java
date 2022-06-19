@@ -33,6 +33,14 @@ public interface WebServiceAPI {
             @HeaderMap  Map<String, String> headers
     );
 
+    @POST("{id}/messages")
+    Call<JsonElement> CreateMessage(
+            @Body Map<String, String>  message,
+            @HeaderMap  Map<String, String> headers,
+            @Path("user_id") String user_id
+
+    );
+
 
     @GET("Contacts")
     Call<List<Contact>> getContacts(

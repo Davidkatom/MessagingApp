@@ -5,9 +5,7 @@ import android.widget.LinearLayout;
 
 import com.example.myapplication.ChosenValues;
 import com.example.myapplication.Contact;
-import com.example.myapplication.ContactScreen;
 import com.example.myapplication.ContactsDao;
-import com.example.myapplication.Listener;
 import com.example.myapplication.Message;
 import com.example.myapplication.MessageDao;
 import com.example.myapplication.R;
@@ -98,8 +96,33 @@ public class AndroidServiceAPI {
                 Snackbar.make(MRootLayout, "Connection to server failed", Snackbar.LENGTH_SHORT).show();
             }
         });
-
     }
+    public void PostMessage(Message message){
+        Map<String, String> tokenHeader = new HashMap<String, String>() {{
+            put("Authorization", "Bearer " + ChosenValues.getInstance().getToken());
+        }};
+//        MessagePostObject messagePostObject = new MessagePostObject(message.getText(), message.getContactId());
+        Map<String, String> messageMap = new HashMap<String, String>() {{
+            put("content", message.getContent());
+        }};
+        Call<JsonElement> call = webServiceAPI.CreateMessage(messageMap, jasonHeader,message.getContent());
+        call.enqueue(new Callback<JsonElement>() {
+            @Override
+            public void onResponse(Call<JsonElement> call, Response<JsonElement> response) {
+                if (response.isSuccessful()) {
+                    Snackbar.make(MRootLayout, "Message sent", Snackbar.LENGTH_LONG).show();
+                } else {
+                    Snackbar.make(MRootLayout, "Message failed to send", Snackbar.LENGTH_SHORT).show();
+                }
+            }
+            @Override
+            public void onFailure(Call<JsonElement> call, Throwable t) {
+                Snackbar.make(MRootLayout, "Connection to server failed", Snackbar.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
     public void PostContact(Contact contact) {
         //UserPostObject userPostObject = new UserPostObject(user.getUsername(), user.getPassword(),user.getNickname(),String.valueOf(user.getImageId()));
         Map<String, String> tokenHeader = new HashMap<String, String>() {{
