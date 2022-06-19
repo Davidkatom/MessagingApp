@@ -2,6 +2,7 @@ package com.example.myapplication.api;
 
 
 import com.example.myapplication.Contact;
+import com.example.myapplication.Message;
 import com.google.gson.JsonElement;
 
 import java.util.List;
@@ -12,6 +13,7 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.HeaderMap;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface WebServiceAPI {
@@ -36,9 +38,10 @@ public interface WebServiceAPI {
 //            Call<List<Contact>> getContacts(
             @HeaderMap  Map<String, String> jasonHeader
     );
-    @GET("Contacts")
-    Call<List<Contact>> getMessages(
-        @HeaderMap  Map<String, String> jasonHeader
+    @GET("Contacts/{user_id}/messages")
+    Call<List<Message>> getMessages(
+            @HeaderMap  Map<String, String> jasonHeader,
+            @Path("user_id") String user_id
     );
 
 //    @POST("Contacts")

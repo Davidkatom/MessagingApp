@@ -12,6 +12,7 @@ import com.example.myapplication.AppUsersDB;
 import com.example.myapplication.ChosenValues;
 import com.example.myapplication.Contact;
 import com.example.myapplication.ContactScreen;
+import com.example.myapplication.Message;
 import com.example.myapplication.R;
 import com.example.myapplication.User;
 import com.example.myapplication.UserDao;
@@ -54,6 +55,26 @@ public class AndroidServiceAPI {
         webServiceAPI = retrofit.create(WebServiceAPI.class);
     }
 
+    public void getMessages(Contact contact){
+        Call<List<Message>> call = webServiceAPI.getMessages(jasonHeader, contact.getId());
+        call.enqueue(new Callback<List<Message>>() {
+            @Override
+            public void onResponse(Call<List<Message>> call, Response<List<Message>> response) {
+                if(response.isSuccessful()) {
+                    assert response.body() != null;
+                    List<Message> messages = response.body();
+//                    contact.setMessages(messages);
+                } else {
+                    Snackbar.make(MRootLayout, "failed to receive messages from server", Snackbar.LENGTH_SHORT).show();
+                }
+            }
+            @Override
+            public void onFailure(Call<List<Message>> call, Throwable t) {
+                Snackbar.make(MRootLayout, "Connection to server failed", Snackbar.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     public void PostUser(User user) {
         UserPostObject userPostObject = new UserPostObject(user.getUsername(), user.getPassword(),user.getNickname(),String.valueOf(user.getImageId()));
         Call<JsonElement> call = webServiceAPI.CreateUser(userPostObject, jasonHeader);
@@ -74,8 +95,8 @@ public class AndroidServiceAPI {
 
     }
 
-    public void LoginToServer(String username, String password, UserDao userDao, Context context, SharedPreferences prefs) {
-        Call<JsonElement> call = webServiceAPI.login(username, password);
+    public void LoginToServer(String username, String password, SharedPreferences prefs) {
+        Call<JsonElement> call = webServiceAPI.login("omer", "qwe123");
         call.enqueue(new Callback<JsonElement>() {
             @Override
             public void onResponse(Call<JsonElement> call, Response<JsonElement> response) {
@@ -84,7 +105,12 @@ public class AndroidServiceAPI {
                     JsonElement LRO = response.body();
                     //Snackbar.make(MRootLayout, "Login Successful", Snackbar.LENGTH_LONG).show();
                     ChosenValues.getInstance().setToken(LRO.getAsString());
-                    login(username, password, context, userDao,prefs);
+                    prefs.edit().putString("token", LRO.getAsString()).apply();
+//                    getContacts();
+                    //temp:
+                    Contact c = new Contact("david", "davidddd","lmsg","ltime","localhost");
+                    getMessages(c);
+
 
                 } else {
                     Snackbar.make(MRootLayout, "Username and/or password are incorrect", Snackbar.LENGTH_SHORT).show();

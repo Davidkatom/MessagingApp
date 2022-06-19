@@ -52,7 +52,7 @@ public class LoginScreen extends AppCompatActivity {
             startActivity(i);
         }         */
 
-        
+
         Button btnSignUp = findViewById(R.id.btnSignUp);
         btnSignUp.setOnClickListener(v -> {
             Intent i = new Intent(this, RegisterScreen.class);
