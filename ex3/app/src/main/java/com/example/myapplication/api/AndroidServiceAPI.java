@@ -103,13 +103,9 @@ public class AndroidServiceAPI {
                 if (response.isSuccessful()) {
                     assert response.body() != null;
                     JsonElement LRO = response.body();
-                    //Snackbar.make(MRootLayout, "Login Successful", Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(MRootLayout, "Login Successful", Snackbar.LENGTH_LONG).show();
                     ChosenValues.getInstance().setToken(LRO.getAsString());
                     prefs.edit().putString("token", LRO.getAsString()).apply();
-//                    getContacts();
-                    //temp:
-                    Contact c = new Contact("david", "davidddd","lmsg","ltime","localhost");
-                    getMessages(c);
 
 
                 } else {
@@ -124,7 +120,7 @@ public class AndroidServiceAPI {
         });
     }
 
-    public void getContacts() {
+    public void updateContacts() {
         Map<String, String> tokenHeader = new HashMap<String, String>() {{
             put("Authorization", "Bearer " + ChosenValues.getInstance().getToken());
         }};
