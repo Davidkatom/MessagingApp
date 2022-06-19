@@ -16,7 +16,7 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.room.Room;
 
-import com.example.myapplication.api.LoginAPI;
+import com.example.myapplication.api.AndroidServiceAPI;
 import com.google.android.material.snackbar.Snackbar;
 
 public class LoginScreen extends AppCompatActivity {
@@ -61,17 +61,14 @@ public class LoginScreen extends AppCompatActivity {
             //for pop up messages
             LinearLayout mRootView = (LinearLayout) findViewById(R.id.linearLayout_Login);
             //Login Logic:
-            LoginAPI loginAPI = new LoginAPI(mRootView);
-            loginAPI.LoginToServer(etUserName.getText().toString(), etPass.getText().toString(), prefs);
+            AndroidServiceAPI androidServiceAPI = new AndroidServiceAPI(mRootView);
+            androidServiceAPI.LoginToServer(etUserName.getText().toString(), etPass.getText().toString(), prefs);
         });
         //here we have lambda function that listens only to positive login response from the server.
         prefs.registerOnSharedPreferenceChangeListener((sharedPreferences, key) -> {
             if (key.equals("token")) {// if token is changed, user is logged in and start Intent
                 if (sharedPreferences.getString("token", "").length() > 0) {
-                    System.out.println("Logged in as " + sharedPreferences.getString("username", ""));
-                    System.out.println("Active token as " + sharedPreferences.getString("token", ""));
                     //connect user
-
                     User user = userDao.getUser(etUserName.getText().toString());
                     if(user == null){
                         //TODO HTTP GET request to get user info (Nickname)

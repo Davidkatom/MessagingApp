@@ -1,9 +1,5 @@
 package com.example.myapplication;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.room.Room;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,12 +7,12 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
-
-import android.widget.LinearLayout;
 import android.widget.ListView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
+
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 
@@ -28,7 +24,6 @@ public class ContactScreen extends AppCompatActivity implements AdapterView.OnIt
     private AppContactsDB db;
     private ContactsDao contactsDao;
     private Button btnAddContact;
-    private ContactApi contactApi;
 
 
     @Override
