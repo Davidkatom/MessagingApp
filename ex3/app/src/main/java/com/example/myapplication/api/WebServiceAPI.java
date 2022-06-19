@@ -33,6 +33,7 @@ public interface WebServiceAPI {
 //    @Headers({"Authorization: application/json"})
     @GET("Contacts")
     Call<List<Contact>> getContacts(
+//            Call<List<Contact>> getContacts(
             @HeaderMap  Map<String, String> headers
     );
 

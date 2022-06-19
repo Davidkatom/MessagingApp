@@ -26,33 +26,36 @@ public class AndroidServiceAPI {
     Retrofit retrofit;
     WebServiceAPI webServiceAPI;
     LinearLayout MRootLayout;
+
     public AndroidServiceAPI(LinearLayout mRootView) {
         MRootLayout = mRootView;
         Gson gson = new GsonBuilder()//https://stackoverflow.com/questions/39918814/use-jsonreader-setlenienttrue-to-accept-malformed-json-at-line-1-column-1-path
                 .setLenient()
                 .create();
         retrofit = new Retrofit.Builder()
-                .baseUrl(MyApplication.context.getString(R.string.BASE_URL) )
+                .baseUrl(MyApplication.context.getString(R.string.BASE_URL))
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
         webServiceAPI = retrofit.create(WebServiceAPI.class);
     }
 
-    public void LoginToServer(String username, String password,SharedPreferences prefs) {
-        Call<JsonElement> call = webServiceAPI.login(username,password);
+    public void LoginToServer(String username, String password, SharedPreferences prefs) {
+        Call<JsonElement> call = webServiceAPI.login(username, password);
         call.enqueue(new Callback<JsonElement>() {
             @Override
             public void onResponse(Call<JsonElement> call, Response<JsonElement> response) {
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     assert response.body() != null;
-                    String LRO = response.body().toString();
+                    JsonElement LRO = response.body();
                     Snackbar.make(MRootLayout, "Login Successful", Snackbar.LENGTH_LONG).show();
-                    ChosenValues.getInstance().setToken(LRO);
-                    prefs.edit().putString("token", LRO).apply();
+                    ChosenValues.getInstance().setToken(LRO.getAsString());
+                    prefs.edit().putString("token", LRO.getAsString()).apply();
+                    getContacts();
                 } else {
                     Snackbar.make(MRootLayout, "Username and/or password are incorrect", Snackbar.LENGTH_SHORT).show();
                 }
             }
+
             @Override
             public void onFailure(Call<JsonElement> call, Throwable t) {
                 Snackbar.make(MRootLayout, "Connection to server failed", Snackbar.LENGTH_SHORT).show();
@@ -60,9 +63,11 @@ public class AndroidServiceAPI {
         });
     }
 
-    public void getContacts(){
+    public void getContacts() {
         Map<String, String> map = new HashMap<>();
-        map.put("Authorization", "Bearer "+ChosenValues.getInstance().getToken());
+        String b = "bearer ";
+        String bearerToken = "Bearer " + ChosenValues.getInstance().getToken();
+        map.put("Authorization", bearerToken);
         Call<List<Contact>> call = webServiceAPI.getContacts(map);
         call.enqueue(new Callback<List<Contact>>() {
             @Override
