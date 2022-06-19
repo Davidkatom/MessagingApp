@@ -14,7 +14,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 
 import com.example.myapplication.api.AndroidServiceAPI;
-import com.example.myapplication.api.WebServiceAPI;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.ArrayList;
@@ -83,7 +82,7 @@ public class ContactScreen extends AppCompatActivity implements AdapterView.OnIt
         builder.setView(view);
         builder.show();
 
-        btnAddContact = view.findViewById(R.id.btnAddContact);
+        btnAddContact = view.findViewById(R.id.fab_addContact);
         btnAddContact.setOnClickListener(v->{
             final EditText etUsername = view.findViewById(R.id.etContactName);
             final EditText etNickname = view.findViewById(R.id.etNickName);
