@@ -71,8 +71,8 @@ public class AndroidServiceAPI {
                         if (!messageDao.index().contains(message)) {
                             messageDao.insert(message);// adds new messages to local database
                         }
-                        MsgListAdapter.add(message);//adds all messages to the list adapter
                     }
+                    MsgListAdapter.addAll(messages);//adds all messages to the list adapter
                     MsgListAdapter.notifyDataSetChanged();
                     ChosenValues.getInstance().getWaiting().finished();
                 } else {
@@ -110,7 +110,6 @@ public class AndroidServiceAPI {
                     MsgListAdapter.add(newMessage);
                     MsgListAdapter.notifyDataSetChanged();
                     ChosenValues.getInstance().getWaiting().finished();
-//                    Snackbar.make(MRootLayout, "Message sent", Snackbar.LENGTH_LONG).show();
                 } else {
                     Snackbar.make(MRootLayout, "Message failed to send", Snackbar.LENGTH_SHORT).show();
                 }
