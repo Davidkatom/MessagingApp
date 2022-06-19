@@ -10,45 +10,27 @@ public class Contact {
 
     @PrimaryKey
     @NonNull
-    private final String userName;
-    private final String nickname;
-    private final int pictureId;
-    private String lastMessage;
-    private String lastMessageSendingTime;
+    private final String id;
+    private final String name;
     private String server;
+    private String last;
+    private String lastdate;
 
 
-    public Contact(String userName,String nickname, int pictureId, String lastMessage, String lastMessageSendingTime, String server) {
-        this.userName = userName;
-        this.pictureId = pictureId;
-        this.lastMessage = lastMessage;
-        this.lastMessageSendingTime = lastMessageSendingTime;
+    public Contact(String id,String name, String last, String lastdate, String server) {
+        this.id = id;
+        this.name = name;
+        this.last = last;
+        this.lastdate = lastdate;
         this.server = server;
-        this.nickname = nickname;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getId() {
+        return id;
     }
 
-    public int getPictureId() {
-        return pictureId;
-    }
-
-    public String getLastMessage() {
-        return lastMessage;
-    }
-
-    public String getLastMessageSendingTime() {
-        return lastMessageSendingTime;
-    }
-
-    public void setLastMessage(String lastMessage) {
-        this.lastMessage = lastMessage;
-    }
-
-    public void setLastMessageSendingTime(String lastMessageSendingTime) {
-        this.lastMessageSendingTime = lastMessageSendingTime;
+    public String getName() {
+        return name;
     }
 
     public String getServer() {
@@ -59,7 +41,19 @@ public class Contact {
         this.server = server;
     }
 
-    public String getNickname() {
-        return nickname;
+    public String getLast() {
+        return last;
+    }
+
+    public void setLast(String last) {
+        this.last = last;
+    }
+
+    public String getLastdate() {
+        return lastdate;
+    }
+
+    public void setLastdate(String lastdate) {
+        this.lastdate = lastdate;
     }
 }
