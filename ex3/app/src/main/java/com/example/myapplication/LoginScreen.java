@@ -71,7 +71,13 @@ public class LoginScreen extends AppCompatActivity {
                     System.out.println("Logged in as " + sharedPreferences.getString("username", ""));
                     System.out.println("Active token as " + sharedPreferences.getString("token", ""));
                     //connect user
+
                     User user = userDao.getUser(etUserName.getText().toString());
+                    if(user == null){
+                        //TODO HTTP GET request to get user info (Nickname)
+                        user = new User(etUserName.getText().toString(), etPass.getText().toString(), 0, etUserName.getText().toString());
+                        userDao.insert(user);
+                    }
                     prefs.edit().putString("username", user.getUsername()).apply();
                     ChosenValues.getInstance().setUser(user);
                     //Start Intent

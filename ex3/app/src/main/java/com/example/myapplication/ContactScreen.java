@@ -28,6 +28,7 @@ public class ContactScreen extends AppCompatActivity implements AdapterView.OnIt
     private AppContactsDB db;
     private ContactsDao contactsDao;
     private Button btnAddContact;
+    private ContactApi contactApi;
 
 
     @Override
