@@ -3,6 +3,7 @@ package com.example.myapplication;
 import android.os.Build;
 import android.os.Bundle;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ListView;
 
@@ -10,6 +11,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 
+import com.example.myapplication.api.AndroidServiceAPI;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.time.LocalDate;
@@ -79,10 +81,9 @@ public class ChatActivity extends AppCompatActivity {
         //from here we can get the messages from the database
 
         ArrayList<Message> messages = new ArrayList<>();
-
-//        for (int i = 0; i < tempMessages.length; i++) {
-//            messages.add(new Message(tempMessages[i], i % 2 == 0, "12/12/12", tempMessagesTimes[i]));
-//        }
+        LinearLayout mRootView = (LinearLayout) findViewById(R.id.ContactsRoot);
+        AndroidServiceAPI serviceAPI = new AndroidServiceAPI(mRootView);
+        serviceAPI.UpdateMessages(ChosenValues.getInstance().getSelectedContact(), messageDao);
 
         messages.addAll(messageDao.index());
         listview = findViewById(R.id.listView_messages);
