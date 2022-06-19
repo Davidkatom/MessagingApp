@@ -36,7 +36,10 @@ public interface WebServiceAPI {
 //            Call<List<Contact>> getContacts(
             @HeaderMap  Map<String, String> jasonHeader
     );
-
+    @GET("Contacts")
+    Call<List<Contact>> getMessages(
+        @HeaderMap  Map<String, String> jasonHeader
+    );
 
 //    @POST("Contacts")
 //    Call<Void> createContact(@Body Contact contact);

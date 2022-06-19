@@ -52,14 +52,7 @@ public class LoginScreen extends AppCompatActivity {
             startActivity(i);
         }         */
 
-
-        //OMER TEMP POST USER
-        User userTemp = new User("omer4", "qwe123",1,"Omer Nick");
-        LinearLayout mRootView1 = (LinearLayout) findViewById(R.id.linearLayout_Login);
-        AndroidServiceAPI androidServiceAPITemp = new AndroidServiceAPI(mRootView1);
-        androidServiceAPITemp.PostUser(userTemp);
-
-        //OMER TEMP POST USER
+        
         Button btnSignUp = findViewById(R.id.btnSignUp);
         btnSignUp.setOnClickListener(v -> {
             Intent i = new Intent(this, RegisterScreen.class);
