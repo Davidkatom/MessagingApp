@@ -57,7 +57,7 @@ namespace WhatsdownAPI.Controllers
                     _configuration["JWTParams:Issuer"],
                     _configuration["JWTParams:Audience"],
                     claimes,
-                    expires: DateTime.UtcNow.AddMinutes(20),
+                    expires: DateTime.UtcNow.AddMinutes(200),
                     signingCredentials: mac);
                 return Ok(new JwtSecurityTokenHandler().WriteToken(token));
             }
