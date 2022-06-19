@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -32,15 +33,20 @@ public class ContactScreen extends AppCompatActivity implements AdapterView.OnIt
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_screen);
+        //room from here:
+        db = Room.databaseBuilder(getApplicationContext(), AppContactsDB.class, ChosenValues.getInstance().getUser().getUsername()).allowMainThreadQueries().fallbackToDestructiveMigration().build();
+        contactsDao = db.contactsDao();
+
+        LinearLayout mRootView = (LinearLayout) findViewById(R.id.ContactsRoot);
+        AndroidServiceAPI serviceAPI = new AndroidServiceAPI(mRootView);
+        serviceAPI.updateContacts(contactsDao);
 
         adapter = new ContactListAdapter(this, contacts);
         listview = findViewById(R.id.contactList);
         listview.setAdapter(adapter);
         listview.setOnItemClickListener(this);
 
-        //room from here:
-        db = Room.databaseBuilder(getApplicationContext(), AppContactsDB.class, ChosenValues.getInstance().getUser().getUsername()).allowMainThreadQueries().fallbackToDestructiveMigration().build();
-        contactsDao = db.contactsDao();
+
 
         Button btnPopup = findViewById(R.id.btnShowPopup);
         btnPopup.setOnClickListener(v->{

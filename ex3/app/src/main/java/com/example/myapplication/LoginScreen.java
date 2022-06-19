@@ -20,13 +20,15 @@ import androidx.room.Room;
 import com.example.myapplication.api.AndroidServiceAPI;
 import com.google.android.material.snackbar.Snackbar;
 
-public class LoginScreen extends AppCompatActivity {
+public class LoginScreen extends AppCompatActivity implements Listener {
     private static final String CHANNEL_ID = "1";
 
     private AppUsersDB db;
     private UserDao userDao;
     public static Context context;
-
+    EditText etUserName;
+    EditText etPass;
+    private SharedPreferences prefs;
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,11 +39,11 @@ public class LoginScreen extends AppCompatActivity {
         db = Room.databaseBuilder(context, AppUsersDB.class, "UsersDB").allowMainThreadQueries().fallbackToDestructiveMigration().build();
         userDao = db.userDao();
 
-        final EditText etUserName = findViewById(R.id.etUserName);
-        final EditText etPass = findViewById(R.id.etPassword);
+        etUserName = findViewById(R.id.etUserName);
+        etPass = findViewById(R.id.etPassword);
 
         //get shared preferences to check if user is already logged in
-        SharedPreferences prefs = this.getSharedPreferences(
+        prefs = this.getSharedPreferences(
                 "com.example.myapplication", Context.MODE_PRIVATE);
         //Auto login if user is already logged in
         /*
@@ -66,49 +68,30 @@ public class LoginScreen extends AppCompatActivity {
             //Login Logic:
             AndroidServiceAPI androidServiceAPI = new AndroidServiceAPI(mRootView);
             androidServiceAPI.LoginToServer(etUserName.getText().toString(), etPass.getText().toString(), prefs);
+            ChosenValues.getInstance().setWaiting(this);
         });
+
         //here we have lambda function that listens only to positive login response from the server.
-        prefs.registerOnSharedPreferenceChangeListener((sharedPreferences, key) -> {
-            if (key.equals("token")) {// if token is changed, user is logged in and start Intent
-                if (sharedPreferences.getString("token", "").length() > 0) {
-                    //connect user
-                    User user = userDao.getUser(etUserName.getText().toString());
-                    if(user == null){
-                        //TODO HTTP GET request to get user info (Nickname)
-                        user = new User(etUserName.getText().toString(), etPass.getText().toString(), 0, etUserName.getText().toString());
-                        userDao.insert(user);
-                    }
-                    prefs.edit().putString("username", user.getUsername()).apply();
-                    ChosenValues.getInstance().setUser(user);
-                    //Start Intent
-                    Intent i = new Intent(this, ContactScreen.class);
-                    startActivity(i);
-                }
-            }
-        });
-/*
+//        prefs.registerOnSharedPreferenceChangeListener((sharedPreferences, key) -> {
+//            if (key.equals("token")) {// if token is changed, user is logged in and start Intent
+//                if (sharedPreferences.getString("token", "").length() > 0) {
+//                    //connect user
+//                    User user = userDao.getUser(etUserName.getText().toString());
+//                    if(user == null){
+//                        //TODO HTTP GET request to get user info (Nickname)
+//                        user = new User(etUserName.getText().toString(), etPass.getText().toString(), 0, etUserName.getText().toString());
+//                        userDao.insert(user);
+//                    }
+//                    prefs.edit().putString("username", user.getUsername()).apply();
+//                    ChosenValues.getInstance().setUser(user);
+//                    //Start Intent
+//                    Intent i = new Intent(this, ContactScreen.class);
+//                    startActivity(i);
+//                }
+//            }
+//        });
 
-            //check if user exists
-            User user = userDao.getUser(etUserName.getText().toString());
-            if(user == null){
-                //TODO error
-                System.out.println("User does not exist");
-                return;
-            }
-            //check if password is correct
-            if(!user.getPassword().equals(etPass.getText().toString())){
-                //TODO error
-                System.out.println("Password is incorrect");
-                return;
-            }
-            //connect user
-            prefs.edit().putString("username", user.getUsername()).apply();
-            ChosenValues.getInstance().setUser(user);
 
-            Intent i = new Intent(this, ContactScreen.class);
-            startActivity(i);
-
- */
 
 
         Button btnContactScreen = findViewById(R.id.contactScreen);
@@ -154,5 +137,20 @@ public class LoginScreen extends AppCompatActivity {
             notificationManager.createNotificationChannel(channel);
             //here we can add more channels if needed like 07:20
         }
+    }
+
+    @Override
+    public void finished() {
+        User user = userDao.getUser(etUserName.getText().toString());
+        if(user == null){
+            //TODO HTTP GET request to get user info (Nickname)
+            user = new User(etUserName.getText().toString(), etPass.getText().toString(), 0, etUserName.getText().toString());
+            userDao.insert(user);
+        }
+        prefs.edit().putString("username", user.getUsername()).apply();
+        ChosenValues.getInstance().setUser(user);
+        //Start Intent
+        Intent i = new Intent(this, ContactScreen.class);
+        startActivity(i);
     }
 }

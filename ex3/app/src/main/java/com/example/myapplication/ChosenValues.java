@@ -5,6 +5,7 @@ public class ChosenValues {
     private Contact contact = null;
     private String token = null;
     private static ChosenValues instance = null;
+    private Listener waiting = null;
 
     private ChosenValues() {
 
@@ -34,5 +35,11 @@ public class ChosenValues {
     }
     public void setToken(String token) {
         this.token = token;
+    }
+    public void setWaiting(Listener waiting) {
+        this.waiting = waiting;
+    }
+    public Listener getWaiting() {
+        return waiting;
     }
 }

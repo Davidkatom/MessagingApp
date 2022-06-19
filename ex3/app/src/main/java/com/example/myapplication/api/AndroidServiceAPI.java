@@ -12,6 +12,8 @@ import com.example.myapplication.AppUsersDB;
 import com.example.myapplication.ChosenValues;
 import com.example.myapplication.Contact;
 import com.example.myapplication.ContactScreen;
+import com.example.myapplication.ContactsDao;
+import com.example.myapplication.Listener;
 import com.example.myapplication.Message;
 import com.example.myapplication.R;
 import com.example.myapplication.User;
@@ -105,8 +107,7 @@ public class AndroidServiceAPI {
                     JsonElement LRO = response.body();
                     Snackbar.make(MRootLayout, "Login Successful", Snackbar.LENGTH_LONG).show();
                     ChosenValues.getInstance().setToken(LRO.getAsString());
-                    prefs.edit().putString("token", LRO.getAsString()).apply();
-
+                    ChosenValues.getInstance().getWaiting().finished();
 
                 } else {
                     Snackbar.make(MRootLayout, "Username and/or password are incorrect", Snackbar.LENGTH_SHORT).show();
@@ -120,7 +121,7 @@ public class AndroidServiceAPI {
         });
     }
 
-    public void updateContacts() {
+    public void updateContacts(ContactsDao contactsDao) {
         Map<String, String> tokenHeader = new HashMap<String, String>() {{
             put("Authorization", "Bearer " + ChosenValues.getInstance().getToken());
         }};
@@ -129,6 +130,14 @@ public class AndroidServiceAPI {
             @Override
             public void onResponse(Call<List<Contact>> call, Response<List<Contact>> response) {
                 List<Contact> contacts = response.body();
+                List<Contact> localContacts = contactsDao.index();
+                assert contacts != null;
+                for (Contact contact : contacts) {
+                    if (!localContacts.contains(contact)) {
+                        contactsDao.insert(contact);
+                    }
+                }
+
             }
 
             @Override
