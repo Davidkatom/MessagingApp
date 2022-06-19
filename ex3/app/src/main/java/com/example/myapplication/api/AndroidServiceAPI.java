@@ -6,6 +6,7 @@ import android.widget.LinearLayout;
 import com.example.myapplication.ChosenValues;
 import com.example.myapplication.Contact;
 import com.example.myapplication.R;
+import com.example.myapplication.User;
 import com.example.myapplication.view_models.MyApplication;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
@@ -23,6 +24,12 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class AndroidServiceAPI {
+    //Useful headers:
+    Map<String, String> jasonHeader = new HashMap<String, String>() {{
+        put("Content-Type", "application/json");
+    }};
+
+
     Retrofit retrofit;
     WebServiceAPI webServiceAPI;
     LinearLayout MRootLayout;
@@ -39,6 +46,26 @@ public class AndroidServiceAPI {
         webServiceAPI = retrofit.create(WebServiceAPI.class);
     }
 
+    public void PostUser(User user) {
+        UserPostObject userPostObject = new UserPostObject(user.getUsername(), user.getPassword(),user.getNickname(),String.valueOf(user.getImageId()));
+        Call<JsonElement> call = webServiceAPI.CreateUser(userPostObject, jasonHeader);
+        call.enqueue(new Callback<JsonElement>() {
+            @Override
+            public void onResponse(Call<JsonElement> call, Response<JsonElement> response) {
+                if (response.isSuccessful()) {
+                    Snackbar.make(MRootLayout, "User Created", Snackbar.LENGTH_LONG).show();
+                } else {
+                    Snackbar.make(MRootLayout, "User already exists", Snackbar.LENGTH_SHORT).show();
+                }
+            }
+            @Override
+            public void onFailure(Call<JsonElement> call, Throwable t) {
+                Snackbar.make(MRootLayout, "Connection to server failed", Snackbar.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+
     public void LoginToServer(String username, String password, SharedPreferences prefs) {
         Call<JsonElement> call = webServiceAPI.login(username, password);
         call.enqueue(new Callback<JsonElement>() {
@@ -50,7 +77,7 @@ public class AndroidServiceAPI {
                     Snackbar.make(MRootLayout, "Login Successful", Snackbar.LENGTH_LONG).show();
                     ChosenValues.getInstance().setToken(LRO.getAsString());
                     prefs.edit().putString("token", LRO.getAsString()).apply();
-                    getContacts();
+//                    getContacts();
                 } else {
                     Snackbar.make(MRootLayout, "Username and/or password are incorrect", Snackbar.LENGTH_SHORT).show();
                 }
@@ -64,11 +91,10 @@ public class AndroidServiceAPI {
     }
 
     public void getContacts() {
-        Map<String, String> map = new HashMap<>();
-        String b = "bearer ";
-        String bearerToken = "Bearer " + ChosenValues.getInstance().getToken();
-        map.put("Authorization", bearerToken);
-        Call<List<Contact>> call = webServiceAPI.getContacts(map);
+        Map<String, String> tokenHeader = new HashMap<String, String>() {{
+            put("Authorization", "Bearer " + ChosenValues.getInstance().getToken());
+        }};
+        Call<List<Contact>> call = webServiceAPI.getContacts(tokenHeader);
         call.enqueue(new Callback<List<Contact>>() {
             @Override
             public void onResponse(Call<List<Contact>> call, Response<List<Contact>> response) {
@@ -77,7 +103,6 @@ public class AndroidServiceAPI {
 
             @Override
             public void onFailure(Call<List<Contact>> call, Throwable t) {
-
             }
         });
 
