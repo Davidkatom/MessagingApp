@@ -65,7 +65,7 @@ public class LoginScreen extends AppCompatActivity {
             LinearLayout mRootView = (LinearLayout) findViewById(R.id.linearLayout_Login);
             //Login Logic:
             AndroidServiceAPI androidServiceAPI = new AndroidServiceAPI(mRootView);
-            androidServiceAPI.LoginToServer(etUserName.getText().toString(), etPass.getText().toString(), prefs);
+            androidServiceAPI.LoginToServer(etUserName.getText().toString(), etPass.getText().toString(), userDao, context, prefs);
         });
         //here we have lambda function that listens only to positive login response from the server.
         prefs.registerOnSharedPreferenceChangeListener((sharedPreferences, key) -> {

@@ -1,12 +1,20 @@
 package com.example.myapplication.api;
 
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.widget.LinearLayout;
 
+import androidx.room.Room;
+
+import com.example.myapplication.AppContactsDB;
+import com.example.myapplication.AppUsersDB;
 import com.example.myapplication.ChosenValues;
 import com.example.myapplication.Contact;
+import com.example.myapplication.ContactScreen;
 import com.example.myapplication.R;
 import com.example.myapplication.User;
+import com.example.myapplication.UserDao;
 import com.example.myapplication.view_models.MyApplication;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
@@ -66,7 +74,7 @@ public class AndroidServiceAPI {
 
     }
 
-    public void LoginToServer(String username, String password, SharedPreferences prefs) {
+    public void LoginToServer(String username, String password, UserDao userDao, Context context, SharedPreferences prefs) {
         Call<JsonElement> call = webServiceAPI.login(username, password);
         call.enqueue(new Callback<JsonElement>() {
             @Override
@@ -74,10 +82,10 @@ public class AndroidServiceAPI {
                 if (response.isSuccessful()) {
                     assert response.body() != null;
                     JsonElement LRO = response.body();
-                    Snackbar.make(MRootLayout, "Login Successful", Snackbar.LENGTH_LONG).show();
+                    //Snackbar.make(MRootLayout, "Login Successful", Snackbar.LENGTH_LONG).show();
                     ChosenValues.getInstance().setToken(LRO.getAsString());
-                    prefs.edit().putString("token", LRO.getAsString()).apply();
-//                    getContacts();
+                    login(username, password, context, userDao,prefs);
+
                 } else {
                     Snackbar.make(MRootLayout, "Username and/or password are incorrect", Snackbar.LENGTH_SHORT).show();
                 }
@@ -107,4 +115,19 @@ public class AndroidServiceAPI {
         });
 
     }
+
+    private void login(String username, String password, Context context, UserDao userDao, SharedPreferences prefs) {
+        User user = userDao.getUser(username);
+        if(user == null){
+            //TODO HTTP GET request to get user info (Nickname)
+            user = new User(username, password, 0, username);
+            userDao.insert(user);
+        }
+
+        prefs.edit().putString("username", user.getUsername()).apply();
+        ChosenValues.getInstance().setUser(user);
+
+        //context.startActivity(new Intent(context, ContactScreen.class));
+    }
+
 }
