@@ -5,40 +5,46 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/login_bg"
+    android:background="@color/white"
     android:padding="30dp"
     tools:context=".LoginScreen">
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="401dp"
-        android:layout_height="221dp"
-        app:layout_constraintBottom_toTopOf="@+id/textView2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@mipmap/ic_banner_foreground" />
-
-    <TextView
-        android:id="@+id/textView2"
+    <LinearLayout
+        android:id="@+id/linearLayout3"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/login_btnLoginTitle"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout_Login"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
-        tools:layout_editor_absoluteX="40dp" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteX="30dp"
+        tools:layout_editor_absoluteY="30dp">
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-medium"
+            android:text="@string/login_btnLoginTitle"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+            android:textColor="#2B2A2A"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_gravity="center"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="30dp"
+            app:srcCompat="@mipmap/icon_d" />
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/linearLayout_Login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.68"
+        app:layout_constraintVertical_bias="0.52"
         tools:layout_editor_absoluteX="30dp">
 
 
@@ -62,21 +68,24 @@
             android:inputType="textPassword"
             android:paddingBottom="30dp" />
 
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnSignIn"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:background="@drawable/login_bg"
+            android:elevation="10dp"
+            android:text="@string/login_btnSignIn"
+            android:textColor="@color/white"
+
+            android:textSize="25sp"
+            tools:ignore="TextContrastCheck" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
             android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/btnSignIn"
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_margin="10dp"
-                android:text="@string/login_btnSignIn"
-
-                android:textSize="25sp" />
 
             <Button
                 android:id="@+id/btnSignUp"
@@ -90,11 +99,6 @@
 
         </LinearLayout>
 
-        <Button
-            android:id="@+id/contactScreen"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Contacts" />
         <Button
             android:id="@+id/tempPushNotification"
             android:layout_width="match_parent"
