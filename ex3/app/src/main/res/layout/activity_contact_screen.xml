@@ -10,23 +10,11 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/CL_contactHeader"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"/>
 
-        <Button
-            android:id="@+id/btnShowPopup"
-            android:layout_width="142dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="Button"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/CL_Contacts"
         android:layout_width="match_parent"
@@ -34,6 +22,7 @@
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -61,7 +50,14 @@
             android:clickable="true"
             app:layout_constraintBottom_toBottomOf="@+id/CL_Contacts"
             app:layout_constraintEnd_toEndOf="@+id/CL_Contacts"
-            app:srcCompat="@android:drawable/sym_contact_card" />
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/constraintLayout"
+            app:layout_constraintVertical_bias="1.0"
+            app:srcCompat="@drawable/add_contact"
+            app:backgroundTint="#8ec5fc"
+
+            android:focusable="true" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

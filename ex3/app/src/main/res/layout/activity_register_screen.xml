@@ -5,15 +5,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/login_bg"
+    android:background="@color/white"
     android:padding="30dp"
     tools:context=".RegisterScreen">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/sign_up"
+        android:fontFamily="sans-serif-medium"
+        android:text="@string/login_btnLoginTitle"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textColor="#2B2A2A"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout_Register"
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteX="40dp" />
@@ -71,26 +74,18 @@
         <ImageButton
             android:id="@+id/imageButton"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             tools:srcCompat="@tools:sample/avatars"
             android:contentDescription="@string/add_profile_picture" />
 
-        <LinearLayout
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnSignUp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/btnSignUp"
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_margin="10dp"
-                android:text="@string/login_btnSignUp"
-                android:textSize="25sp" />
-
-        </LinearLayout>
+            android:layout_margin="10dp"
+            android:background="@drawable/login_bg"
+            android:text="@string/login_btnSignUp"
+            android:textSize="25sp" />
 
     </LinearLayout>
 

@@ -71,35 +71,6 @@ public class LoginScreen extends AppCompatActivity implements Listener {
             ChosenValues.getInstance().setWaiting(this);
         });
 
-        //here we have lambda function that listens only to positive login response from the server.
-//        prefs.registerOnSharedPreferenceChangeListener((sharedPreferences, key) -> {
-//            if (key.equals("token")) {// if token is changed, user is logged in and start Intent
-//                if (sharedPreferences.getString("token", "").length() > 0) {
-//                    //connect user
-//                    User user = userDao.getUser(etUserName.getText().toString());
-//                    if(user == null){
-//                        //TODO HTTP GET request to get user info (Nickname)
-//                        user = new User(etUserName.getText().toString(), etPass.getText().toString(), 0, etUserName.getText().toString());
-//                        userDao.insert(user);
-//                    }
-//                    prefs.edit().putString("username", user.getUsername()).apply();
-//                    ChosenValues.getInstance().setUser(user);
-//                    //Start Intent
-//                    Intent i = new Intent(this, ContactScreen.class);
-//                    startActivity(i);
-//                }
-//            }
-//        });
-
-
-
-
-        Button btnContactScreen = findViewById(R.id.contactScreen);
-        btnContactScreen.setOnClickListener(v -> {
-            Intent i = new Intent(this, ContactScreen.class);
-            startActivity(i);
-        });
-
         //notification manager
         createNotificationChannel();
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
