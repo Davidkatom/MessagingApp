@@ -4,6 +4,12 @@ import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
+import org.json.JSONObject;
+
 import java.util.List;
 
 @Entity
@@ -15,7 +21,7 @@ public class User {
     private String password;
     private int imageId;
 
-    public User(String username, String password, int imageId,String nickname) {
+    public User(String username, String password, int imageId, String nickname) {
         this.username = username;
         this.password = password;
         this.imageId = imageId;
@@ -52,5 +58,19 @@ public class User {
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
+    }
+
+    public JsonElement ToJsonElement() {
+
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("Id", username);
+            jsonObject.put("password", password);
+            jsonObject.put("profilePicture", imageId);
+            jsonObject.put("nickName", nickname);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return JsonParser.parseString(jsonObject.toString());
     }
 }

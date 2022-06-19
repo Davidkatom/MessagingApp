@@ -5,6 +5,8 @@ import com.example.myapplication.Contact;
 import com.example.myapplication.User;
 import com.google.gson.JsonElement;
 
+import org.json.JSONObject;
+
 import java.util.List;
 import java.util.Map;
 
@@ -25,7 +27,7 @@ public interface WebServiceAPI {
 //    @GET("LoginAndroid")
 //    Call<List<LoginResObject>> login();
     @POST("Users")
-    Call<Void> CreateUser(@Body User user);
+    Call<Void> CreateUser(@Body JsonElement user);
 //    Call<JsonElement> login(@Body LoginPostObject loginPostObject);
 //    @POST("Login")
 //    Call<JsonElement> login(@Query("username") String username, @Query("password") String password);
