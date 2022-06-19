@@ -89,7 +89,28 @@ public class AndroidServiceAPI {
         });
 
     }
+    public void PostContact(Contact contact) {
+        //UserPostObject userPostObject = new UserPostObject(user.getUsername(), user.getPassword(),user.getNickname(),String.valueOf(user.getImageId()));
+        Map<String, String> tokenHeader = new HashMap<String, String>() {{
+            put("Authorization", "Bearer " + ChosenValues.getInstance().getToken());
+        }};
+        Call<JsonElement> call = webServiceAPI.CreateContact(contact, tokenHeader);
+        call.enqueue(new Callback<JsonElement>() {
+            @Override
+            public void onResponse(Call<JsonElement> call, Response<JsonElement> response) {
+                if (response.isSuccessful()) {
+                    Snackbar.make(MRootLayout, "Contact Added", Snackbar.LENGTH_LONG).show();
+                } else {
+                    Snackbar.make(MRootLayout, "Contact already exists", Snackbar.LENGTH_SHORT).show();
+                }
+            }
+            @Override
+            public void onFailure(Call<JsonElement> call, Throwable t) {
+                Snackbar.make(MRootLayout, "Connection to server failed", Snackbar.LENGTH_SHORT).show();
+            }
+        });
 
+    }
     public void LoginToServer(String username, String password, SharedPreferences prefs) {
         Call<JsonElement> call = webServiceAPI.login(username, password);
         call.enqueue(new Callback<JsonElement>() {
@@ -103,15 +124,13 @@ public class AndroidServiceAPI {
                     prefs.edit().putString("token", LRO.getAsString()).apply();
 //                    getContacts();
                     //temp:
-                    Contact c = new Contact("david", "davidddd","lmsg","ltime","localhost");
-                    UpdateMessages(c);
-
-
+                    Contact c = new Contact("david23", "davidddd23","lmsg","ltime","localhost");
+                    PostContact(c);
+//                    UpdateMessages(c);
                 } else {
                     Snackbar.make(MRootLayout, "Username and/or password are incorrect", Snackbar.LENGTH_SHORT).show();
                 }
             }
-
             @Override
             public void onFailure(Call<JsonElement> call, Throwable t) {
                 Snackbar.make(MRootLayout, "Connection to server failed", Snackbar.LENGTH_SHORT).show();

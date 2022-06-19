@@ -38,7 +38,7 @@ namespace WhatsdownAPI.Controllers
         private string GetConnectedUserId(string autho)
         {
             Dictionary<string, string> requestHeaders = new Dictionary<string, string>();
-
+            if(autho == null) { return null; }
             var tokey = autho;
             if (autho.Contains("Bearer "))
             {

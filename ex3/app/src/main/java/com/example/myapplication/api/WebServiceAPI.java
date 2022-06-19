@@ -18,8 +18,6 @@ import retrofit2.http.Query;
 
 public interface WebServiceAPI {
 
-    //get messages from here:
-
     @POST("Login")
     Call<JsonElement> login(@Query("username") String username, @Query("password") String password);
 
@@ -28,22 +26,31 @@ public interface WebServiceAPI {
             @Body UserPostObject user,
             @HeaderMap  Map<String, String> headers
     );
-//    Call<JsonElement> login(@Body LoginPostObject loginPostObject);
-//    @POST("Login")
-//    Call<JsonElement> login(@Query("username") String username, @Query("password") String password);
 
-//    @Headers({"Authorization: application/json"})
+    @POST("Contacts")
+    Call<JsonElement> CreateContact(
+            @Body Contact contact,
+            @HeaderMap  Map<String, String> headers
+    );
+
+
     @GET("Contacts")
     Call<List<Contact>> getContacts(
-//            Call<List<Contact>> getContacts(
             @HeaderMap  Map<String, String> jasonHeader
     );
+
     @GET("Contacts/{user_id}/messages")
     Call<List<Message>> getMessages(
             @HeaderMap  Map<String, String> jasonHeader,
             @Path("user_id") String user_id
     );
 
+
+//    Call<JsonElement> login(@Body LoginPostObject loginPostObject);
+//    @POST("Login")
+//    Call<JsonElement> login(@Query("username") String username, @Query("password") String password);
+
+//    @Headers({"Authorization: application/json"})
 //    @POST("Contacts")
 //    Call<Void> createContact(@Body Contact contact);
 
