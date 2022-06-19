@@ -3,6 +3,7 @@ package com.example.myapplication;
 public class ChosenValues {
     private User user = null;
     private Contact contact = null;
+    private String token = null;
     private static ChosenValues instance = null;
 
     private ChosenValues() {
@@ -26,5 +27,12 @@ public class ChosenValues {
     }
     public void setSelectedContact(Contact contact) {
         this.contact = contact;
+    }
+
+    public String getToken() {
+        return token;
+    }
+    public void setToken(String token) {
+        this.token = token;
     }
 }
