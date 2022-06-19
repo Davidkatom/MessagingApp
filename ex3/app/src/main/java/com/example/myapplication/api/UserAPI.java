@@ -7,6 +7,12 @@ import com.example.myapplication.ContactsDao;
 import com.example.myapplication.R;
 import com.example.myapplication.User;
 import com.example.myapplication.UserDao;
+import com.example.myapplication.view_models.MyApplication;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+
+import org.json.JSONObject;
 
 import java.util.List;
 
@@ -23,15 +29,19 @@ public class UserAPI {
 
     public UserAPI(UserDao userDao) {
         this.userDao = userDao;//
+        Gson gson = new GsonBuilder()//https://stackoverflow.com/questions/39918814/use-jsonreader-setlenienttrue-to-accept-malformed-json-at-line-1-column-1-path
+                .setLenient()
+                .create();
         retrofit = new Retrofit.Builder()
-                .baseUrl(String.valueOf(R.string.BASE_URL))
-                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl(MyApplication.context.getString(R.string.BASE_URL) )
+                .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
         webServiceAPI = retrofit.create(WebServiceAPI.class);
     }
 
     public void PostUser(User user){
-        Call<Void> call = webServiceAPI.CreateUser(user);
+
+        Call<Void> call = webServiceAPI.CreateUser(user.ToJsonElement());
         call.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) {
