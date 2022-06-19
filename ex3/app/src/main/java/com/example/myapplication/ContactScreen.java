@@ -87,6 +87,7 @@ public class ContactScreen extends AppCompatActivity implements AdapterView.OnIt
             String server = etServer.getText().toString();
 
             if (!(username.equals("") || nickname.equals("") || server.equals(""))) {
+                /*
                 etUsername.setText("");
                 Contact contact = new Contact(username, nickname, 1, "", "", server);
                 contactsDao.insert(contact);
@@ -94,6 +95,8 @@ public class ContactScreen extends AppCompatActivity implements AdapterView.OnIt
                 adapter.notifyDataSetChanged();
                 listview.smoothScrollToPosition(adapter.getCount() - 1);
                 //TODO close dialog
+
+                 */
             }
             else{
                 //TODO show error message

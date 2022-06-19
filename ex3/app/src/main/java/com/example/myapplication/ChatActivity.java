@@ -41,7 +41,7 @@ public class ChatActivity extends AppCompatActivity {
 
         //room from here:
         String connectedUser = ChosenValues.getInstance().getUser().getUsername();
-        String selectedContact = ChosenValues.getInstance().getSelectedContact().getUserName();
+        String selectedContact = ChosenValues.getInstance().getSelectedContact().getId();
         String server = ChosenValues.getInstance().getSelectedContact().getServer();
 
         vtContactName.setText(selectedContact);
@@ -61,8 +61,8 @@ public class ChatActivity extends AppCompatActivity {
                 DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("H:mm");
                 Date date = new Date();
                 Message message = new Message(inputText, true, LocalDate.now().format(formatter), LocalDateTime.now().format(formatter2));
-                ChosenValues.getInstance().getSelectedContact().setLastMessage(inputText);
-                ChosenValues.getInstance().getSelectedContact().setLastMessageSendingTime(LocalDateTime.now().format(formatter2));
+                ChosenValues.getInstance().getSelectedContact().setLast(inputText);
+                ChosenValues.getInstance().getSelectedContact().setLastdate(LocalDateTime.now().format(formatter2));
 
                 messageDao.insert(message);
                 contactsDao.update(ChosenValues.getInstance().getSelectedContact());
