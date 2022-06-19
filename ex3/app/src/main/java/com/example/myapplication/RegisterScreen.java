@@ -1,23 +1,20 @@
 package com.example.myapplication;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.room.Room;
-
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
-import com.example.myapplication.api.UserAPI;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
+
+import com.example.myapplication.api.AndroidServiceAPI;
 import com.google.android.material.snackbar.Snackbar;
 
 public class RegisterScreen extends AppCompatActivity {
     private AppUsersDB db;
     private UserDao userDao;
-    private UserAPI userAPI;
+//    private UserAPI userAPI;
     private int imageId;
 
     @Override
@@ -57,16 +54,9 @@ public class RegisterScreen extends AppCompatActivity {
             }
             //register user
             User user = new User(etUserName.getText().toString(), etPass1.getText().toString(), imageId, etNickName.getText().toString());
-            //userDao.insert(user);
-            new UserAPI(userDao).PostUser(user);
-            //connect user
-            SharedPreferences prefs = this.getSharedPreferences(
-                    "com.example.myapplication", Context.MODE_PRIVATE);
-            prefs.edit().putString("username", user.getUsername()).apply();
-            ChosenValues.getInstance().setUser(user);
-
-            Intent i = new Intent(this, ContactScreen.class);
-            startActivity(i);
+            AndroidServiceAPI androidServiceAPI = new AndroidServiceAPI(mRootView);
+            androidServiceAPI.PostUser(user);
+//            finish();
         });
     }
 }

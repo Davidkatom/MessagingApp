@@ -2,10 +2,7 @@ package com.example.myapplication.api;
 
 
 import com.example.myapplication.Contact;
-import com.example.myapplication.User;
 import com.google.gson.JsonElement;
-
-import org.json.JSONObject;
 
 import java.util.List;
 import java.util.Map;
@@ -24,10 +21,11 @@ public interface WebServiceAPI {
     @POST("Login")
     Call<JsonElement> login(@Query("username") String username, @Query("password") String password);
 
-//    @GET("LoginAndroid")
-//    Call<List<LoginResObject>> login();
     @POST("Users")
-    Call<Void> CreateUser(@Body JsonElement user);
+    Call<JsonElement> CreateUser(
+            @Body UserPostObject user,
+            @HeaderMap  Map<String, String> headers
+    );
 //    Call<JsonElement> login(@Body LoginPostObject loginPostObject);
 //    @POST("Login")
 //    Call<JsonElement> login(@Query("username") String username, @Query("password") String password);
@@ -36,7 +34,7 @@ public interface WebServiceAPI {
     @GET("Contacts")
     Call<List<Contact>> getContacts(
 //            Call<List<Contact>> getContacts(
-            @HeaderMap  Map<String, String> headers
+            @HeaderMap  Map<String, String> jasonHeader
     );
 
 
