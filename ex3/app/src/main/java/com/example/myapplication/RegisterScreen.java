@@ -11,11 +11,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
+import com.example.myapplication.api.UserAPI;
 import com.google.android.material.snackbar.Snackbar;
 
 public class RegisterScreen extends AppCompatActivity {
     private AppUsersDB db;
     private UserDao userDao;
+    private UserAPI userAPI;
     private int imageId;
 
     @Override
@@ -55,7 +57,8 @@ public class RegisterScreen extends AppCompatActivity {
             }
             //register user
             User user = new User(etUserName.getText().toString(), etPass1.getText().toString(), imageId, etNickName.getText().toString());
-            userDao.insert(user);
+            //userDao.insert(user);
+            new UserAPI(userDao).PostUser(user);
             //connect user
             SharedPreferences prefs = this.getSharedPreferences(
                     "com.example.myapplication", Context.MODE_PRIVATE);

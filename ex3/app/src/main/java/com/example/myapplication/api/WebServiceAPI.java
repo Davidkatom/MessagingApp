@@ -20,6 +20,12 @@ public interface WebServiceAPI {
     @POST("Login")
     Call<JsonElement> login(@Query("username") String username, @Query("password") String password);
 
+//    @GET("LoginAndroid")
+//    Call<List<LoginResObject>> login();
+    @GET("LoginAndroid")
+    Call<LoginResObject> login(@Query("username") String username, @Query("password") String password);
+    @POST("Users")
+    Call<Void> CreateUser(@Body User user);
 //    Call<JsonElement> login(@Body LoginPostObject loginPostObject);
 //    @POST("Login")
 //    Call<JsonElement> login(@Query("username") String username, @Query("password") String password);
