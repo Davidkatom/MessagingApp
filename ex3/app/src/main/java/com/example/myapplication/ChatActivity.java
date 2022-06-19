@@ -19,8 +19,9 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
-public class ChatActivity extends AppCompatActivity {
+public class ChatActivity extends AppCompatActivity implements Listener {
 
     ListView listview;
     MessagesListAdapter adapter;
@@ -29,13 +30,14 @@ public class ChatActivity extends AppCompatActivity {
     private MessageDao messageDao;
     private ContactsDao contactsDao;
     private EditText etInputText;
+    private ArrayList<Message> messages = new ArrayList<>();
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         AppMessagesDB db;
         AppContactsDB dbContacts;
-
+        ChosenValues.getInstance().setWaiting(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_screen);
 
@@ -44,7 +46,7 @@ public class ChatActivity extends AppCompatActivity {
         //room from here:
         String connectedUser = ChosenValues.getInstance().getUser().getUsername();
         String selectedContact = ChosenValues.getInstance().getSelectedContact().getId();
-        String server = ChosenValues.getInstance().getSelectedContact().getServer();
+        String server = ChosenValues.getInstance().getSelectedContact().getServer().replaceAll("/", "");
 
         vtContactName.setText(selectedContact);
         db = Room.databaseBuilder(getApplicationContext(), AppMessagesDB.class, connectedUser + selectedContact + server).fallbackToDestructiveMigration().allowMainThreadQueries().build();
@@ -59,12 +61,11 @@ public class ChatActivity extends AppCompatActivity {
             String inputText = etInputText.getText().toString();
             if (!inputText.equals("")) {
                 etInputText.setText("");
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-                DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("H:mm");
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
                 Date date = new Date();
-                Message message = new Message(0, inputText, true, LocalDate.now().format(formatter));
+                Message message = new Message(0, inputText, true, LocalDateTime.now().format(formatter));
                 ChosenValues.getInstance().getSelectedContact().setLast(inputText);
-                ChosenValues.getInstance().getSelectedContact().setLastdate(LocalDateTime.now().format(formatter2));
+                ChosenValues.getInstance().getSelectedContact().setLastdate(LocalDateTime.now().format(formatter));
 
                 messageDao.insert(message);
                 contactsDao.update(ChosenValues.getInstance().getSelectedContact());
@@ -80,15 +81,24 @@ public class ChatActivity extends AppCompatActivity {
 
         //from here we can get the messages from the database
 
-        ArrayList<Message> messages = new ArrayList<>();
+
         LinearLayout mRootView = (LinearLayout) findViewById(R.id.ContactsRoot);
         AndroidServiceAPI serviceAPI = new AndroidServiceAPI(mRootView);
         serviceAPI.UpdateMessages(ChosenValues.getInstance().getSelectedContact(), messageDao);
 
-        messages.addAll(messageDao.index());
+        //messages = messageDao.index();
         listview = findViewById(R.id.listView_messages);
         adapter = new MessagesListAdapter(this, messages);
         listview.setAdapter(adapter);
         listview.setClickable(false);
+    }
+
+    @Override
+    public void finished() {
+        adapter.clear();
+        for(Message message : messageDao.index()){
+            adapter.add(message);
+            adapter.notifyDataSetChanged();
+        }
     }
 }

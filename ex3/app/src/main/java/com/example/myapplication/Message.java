@@ -11,6 +11,7 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
@@ -71,11 +72,11 @@ public class Message {
 
         String date = LocalDate.parse(formattedTime, dateParser).format(dateFormatter);
 
-        if (date.equals(LocalDate.now().format(dateFormatter))){
-            return LocalDate.parse(formattedTime, dateParser).format(timeFormatter);
+        if (date.equals(LocalDateTime.now().format(dateFormatter))){
+            return LocalDateTime.parse(formattedTime, dateParser).format(timeFormatter);
         }
         else{
-            return LocalDate.parse(formattedTime, dateParser).format(dateFormatter);
+            return LocalDateTime.parse(formattedTime, dateParser).format(dateFormatter);
         }
     }
 

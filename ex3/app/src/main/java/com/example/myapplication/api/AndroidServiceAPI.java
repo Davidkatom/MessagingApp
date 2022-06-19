@@ -67,11 +67,11 @@ public class AndroidServiceAPI {
                         if (!localMessages.contains(message)) {
                             messageDao.insert(message);
                         }
+                        ChosenValues.getInstance().getWaiting().finished();
                     }
-                    Snackbar.make(MRootLayout, "Received messages from server", Snackbar.LENGTH_SHORT).show();
 
                 } else {
-                    Snackbar.make(MRootLayout, "failed to receive messages from server", Snackbar.LENGTH_SHORT).show();
+                    //Snackbar.make(MRootLayout, "failed to receive messages from server", Snackbar.LENGTH_SHORT).show();
                 }
             }
             @Override
@@ -161,6 +161,7 @@ public class AndroidServiceAPI {
                         contactsDao.insert(contact);
                     }
                 }
+                ChosenValues.getInstance().getWaiting().finished();
 
             }
 

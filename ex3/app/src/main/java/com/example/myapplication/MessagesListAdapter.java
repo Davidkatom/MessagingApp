@@ -1,6 +1,7 @@
 package com.example.myapplication;
 
 import android.content.Context;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 
 import java.util.ArrayList;
 
@@ -19,6 +21,7 @@ public class MessagesListAdapter extends ArrayAdapter<Message> {
         super(context, R.layout.message_item, messages);
         this.inflater = LayoutInflater.from(context);
     }
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Nullable
     @Override
     public View getView(int position, @Nullable View convertView, @Nullable ViewGroup parent){
@@ -30,7 +33,7 @@ public class MessagesListAdapter extends ArrayAdapter<Message> {
         TextView msg_time = convertView.findViewById(R.id.Message_time);
 
         msg_text.setText(msg.getContent());
-        msg_time.setText(msg.getCreated());
+        msg_time.setText(msg.getTimeForChat());
 
         return convertView;
     }
