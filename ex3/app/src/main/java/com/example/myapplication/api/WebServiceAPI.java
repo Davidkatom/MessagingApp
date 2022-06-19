@@ -2,7 +2,7 @@ package com.example.myapplication.api;
 
 
 import com.example.myapplication.Contact;
-import com.example.myapplication.User;
+import com.google.gson.JsonElement;
 
 import java.util.List;
 
@@ -18,6 +18,10 @@ public interface WebServiceAPI {
     //get messages from here:
     @POST("Contacts")
     Call<Void> createContact(@Body Contact contact);
+//    @POST("Login")
+//    Call<JsonElement> login(@Query("username") String username, @Query("password") String password);
+    @POST("Login")
+    Call<JsonElement> login(@Query("username") String username, @Query("password") String password);
 
 //    @GET("LoginAndroid")
 //    Call<List<LoginResObject>> login();
@@ -25,4 +29,7 @@ public interface WebServiceAPI {
     Call<LoginResObject> login(@Query("username") String username, @Query("password") String password);
     @POST("Users")
     Call<Void> CreateUser(@Body User user);
+//    Call<JsonElement> login(@Body LoginPostObject loginPostObject);
+
+
 }
