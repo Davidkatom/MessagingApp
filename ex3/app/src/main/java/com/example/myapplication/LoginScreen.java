@@ -63,22 +63,23 @@ public class LoginScreen extends AppCompatActivity {
             //Login Logic:
             LoginAPI loginAPI = new LoginAPI(mRootView);
             loginAPI.LoginToServer(etUserName.getText().toString(), etPass.getText().toString(), prefs);
-            //here we have lambda function that listens only to positive login response from the server.
-            prefs.registerOnSharedPreferenceChangeListener((sharedPreferences, key) -> {
-                if (key.equals("token")) {// if token is changed, user is logged in and start Intent
-                    if (sharedPreferences.getString("token", "").length() > 0) {
-                        System.out.println("Logged in as " + sharedPreferences.getString("username", ""));
-                        System.out.println("Active token as " + sharedPreferences.getString("token", ""));
-                        //connect user
-                        User user = userDao.getUser(etUserName.getText().toString());
-                        prefs.edit().putString("username", user.getUsername()).apply();
-                        ChosenValues.getInstance().setUser(user);
-                        //Start Intent
-                        Intent i = new Intent(this, ContactScreen.class);
-                        startActivity(i);
-                    }
+        });
+        //here we have lambda function that listens only to positive login response from the server.
+        prefs.registerOnSharedPreferenceChangeListener((sharedPreferences, key) -> {
+            if (key.equals("token")) {// if token is changed, user is logged in and start Intent
+                if (sharedPreferences.getString("token", "").length() > 0) {
+                    System.out.println("Logged in as " + sharedPreferences.getString("username", ""));
+                    System.out.println("Active token as " + sharedPreferences.getString("token", ""));
+                    //connect user
+                    User user = userDao.getUser(etUserName.getText().toString());
+                    prefs.edit().putString("username", user.getUsername()).apply();
+                    ChosenValues.getInstance().setUser(user);
+                    //Start Intent
+                    Intent i = new Intent(this, ContactScreen.class);
+                    startActivity(i);
                 }
-            });
+            }
+        });
 /*
 
             //check if user exists
@@ -102,7 +103,7 @@ public class LoginScreen extends AppCompatActivity {
             startActivity(i);
 
  */
-        });
+
 
         Button btnContactScreen = findViewById(R.id.contactScreen);
         btnContactScreen.setOnClickListener(v -> {
