@@ -56,4 +56,15 @@ public class Contact {
     public void setLastdate(String lastdate) {
         this.lastdate = lastdate;
     }
+
+    @Override
+    public boolean equals(Object o){
+        if(o instanceof Contact){
+            Contact c = (Contact)o;
+            return this.id.equals(c.id);
+        }
+        else{
+            return false;
+        }
+    }
 }

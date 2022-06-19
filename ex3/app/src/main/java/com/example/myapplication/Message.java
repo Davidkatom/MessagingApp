@@ -78,4 +78,13 @@ public class Message {
             return LocalDate.parse(formattedTime, dateParser).format(dateFormatter);
         }
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if(o instanceof Message){
+            Message m = (Message)o;
+            return this.id == m.id;
+        }
+        return false;
+    }
 }
