@@ -9,6 +9,7 @@ import com.example.myapplication.ContactScreen;
 import com.example.myapplication.ContactsDao;
 import com.example.myapplication.Listener;
 import com.example.myapplication.Message;
+import com.example.myapplication.MessageDao;
 import com.example.myapplication.R;
 import com.example.myapplication.User;
 import com.example.myapplication.view_models.MyApplication;
@@ -50,7 +51,7 @@ public class AndroidServiceAPI {
         webServiceAPI = retrofit.create(WebServiceAPI.class);
     }
 
-    public void UpdateMessages(Contact contact){
+    public void UpdateMessages(Contact contact, MessageDao messageDao) {
         Map<String, String> tokenHeader = new HashMap<String, String>() {{
             put("Authorization", "Bearer " + ChosenValues.getInstance().getToken());
         }};
@@ -60,6 +61,13 @@ public class AndroidServiceAPI {
             public void onResponse(Call<List<Message>> call, Response<List<Message>> response) {
                 if(response.isSuccessful()) {
                     List<Message> messages = response.body();
+                    List<Message> localMessages = messageDao.index();
+                    assert messages != null;
+                    for (Message message : messages) {
+                        if (!localMessages.contains(message)) {
+                            messageDao.insert(message);
+                        }
+                    }
                     Snackbar.make(MRootLayout, "Received messages from server", Snackbar.LENGTH_SHORT).show();
 
                 } else {
