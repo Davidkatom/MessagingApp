@@ -1,13 +1,17 @@
 package com.example.myapplication.api;
 
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.widget.LinearLayout;
+
+import androidx.annotation.RequiresApi;
 
 import com.example.myapplication.ChosenValues;
 import com.example.myapplication.Contact;
 import com.example.myapplication.ContactsDao;
 import com.example.myapplication.Message;
 import com.example.myapplication.MessageDao;
+import com.example.myapplication.MessagesListAdapter;
 import com.example.myapplication.R;
 import com.example.myapplication.User;
 import com.example.myapplication.view_models.MyApplication;
@@ -16,6 +20,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,11 +32,13 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+@RequiresApi(api = Build.VERSION_CODES.O)
 public class AndroidServiceAPI {
     //Useful headers:
     Map<String, String> jasonHeader = new HashMap<String, String>() {{
         put("Content-Type", "application/json");
     }};
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
 
     Retrofit retrofit;
     WebServiceAPI webServiceAPI;
@@ -48,7 +56,7 @@ public class AndroidServiceAPI {
         webServiceAPI = retrofit.create(WebServiceAPI.class);
     }
 
-    public void UpdateMessages(Contact contact, MessageDao messageDao) {
+    public void UpdateMessages(Contact contact, MessageDao messageDao, MessagesListAdapter MsgListAdapter) {
         Map<String, String> tokenHeader = new HashMap<String, String>() {{
             put("Authorization", "Bearer " + ChosenValues.getInstance().getToken());
         }};
@@ -58,14 +66,15 @@ public class AndroidServiceAPI {
             public void onResponse(Call<List<Message>> call, Response<List<Message>> response) {
                 if (response.isSuccessful()) {
                     List<Message> messages = response.body();
-                    List<Message> localMessages = messageDao.index();
                     assert messages != null;
                     for (Message message : messages) {
-                        if (!localMessages.contains(message)) {
-                            messageDao.insert(message);
+                        if (!messageDao.index().contains(message)) {
+                            messageDao.insert(message);// adds new messages to local database
                         }
-                        ChosenValues.getInstance().getWaiting().finished();
+                        MsgListAdapter.add(message);//adds all messages to the list adapter
                     }
+                    MsgListAdapter.notifyDataSetChanged();
+                    ChosenValues.getInstance().getWaiting().finished();
                 } else {
                     //Snackbar.make(MRootLayout, "failed to receive messages from server", Snackbar.LENGTH_SHORT).show();
                 }
@@ -78,20 +87,30 @@ public class AndroidServiceAPI {
         });
     }
 
-    public void PostMessage(Message message, MessageDao messageDao) {
+    public void PostMessage(Contact contact, String content, MessageDao messageDao, MessagesListAdapter MsgListAdapter) {
+        String formattedDate = LocalDateTime.now().format(formatter);
+        ChosenValues.getInstance().getSelectedContact().setLast(content);
+        ChosenValues.getInstance().getSelectedContact().setLastdate(formattedDate);
+
+
         Map<String, String> tokenHeader = new HashMap<String, String>() {{
             put("Authorization", "Bearer " + ChosenValues.getInstance().getToken());
         }};
-//        MessagePostObject messagePostObject = new MessagePostObject(message.getText(), message.getContactId());
         Map<String, String> messageMap = new HashMap<String, String>() {{
-            put("content", message.getContent());
+            put("content", content);
         }};
-        Call<JsonElement> call = webServiceAPI.CreateMessage(messageMap, jasonHeader, message.getContent());
+
+        Call<JsonElement> call = webServiceAPI.CreateMessage(messageMap, tokenHeader, contact.getId());
         call.enqueue(new Callback<JsonElement>() {
             @Override
             public void onResponse(Call<JsonElement> call, Response<JsonElement> response) {
                 if (response.isSuccessful()) {
-                    Snackbar.make(MRootLayout, "Message sent", Snackbar.LENGTH_LONG).show();
+                    Message newMessage = new Message(Integer.parseInt(response.body().toString()), content, true, formattedDate);
+                    messageDao.insert(newMessage);//insert new message into local database
+                    MsgListAdapter.add(newMessage);
+                    MsgListAdapter.notifyDataSetChanged();
+                    ChosenValues.getInstance().getWaiting().finished();
+//                    Snackbar.make(MRootLayout, "Message sent", Snackbar.LENGTH_LONG).show();
                 } else {
                     Snackbar.make(MRootLayout, "Message failed to send", Snackbar.LENGTH_SHORT).show();
                 }

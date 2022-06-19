@@ -237,7 +237,7 @@ namespace WhatsdownAPI.Controllers
             if (msg.Reciever == null)
                 return BadRequest();
             await _context.SaveChangesAsync();
-            return Ok();
+            return Ok(msg.Id);
         }
 
         private ParsedMessage ParseMessage(Message message)
