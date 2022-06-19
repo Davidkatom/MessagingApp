@@ -2,6 +2,7 @@ package com.example.myapplication.api;
 
 
 import com.example.myapplication.Contact;
+import com.example.myapplication.User;
 
 import java.util.List;
 
@@ -22,6 +23,6 @@ public interface WebServiceAPI {
 //    Call<List<LoginResObject>> login();
     @GET("LoginAndroid")
     Call<LoginResObject> login(@Query("username") String username, @Query("password") String password);
-
-
+    @POST("Users")
+    Call<Void> CreateUser(@Body User user);
 }
