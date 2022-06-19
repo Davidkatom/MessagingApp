@@ -17,7 +17,7 @@ public class Contact {
     private String lastdate;
 
 
-    public Contact(String id,String name, String last, String lastdate, String server) {
+    public Contact(@NonNull String id, String name, String last, String lastdate, String server) {
         this.id = id;
         this.name = name;
         this.last = last;

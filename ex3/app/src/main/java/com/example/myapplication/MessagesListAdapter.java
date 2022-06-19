@@ -29,8 +29,8 @@ public class MessagesListAdapter extends ArrayAdapter<Message> {
         TextView msg_text = convertView.findViewById(R.id.Message_text);
         TextView msg_time = convertView.findViewById(R.id.Message_time);
 
-        msg_text.setText(msg.getText());
-        msg_time.setText(msg.getTimeForChat());
+        msg_text.setText(msg.getContent());
+        msg_time.setText(msg.getCreated());
 
         return convertView;
     }

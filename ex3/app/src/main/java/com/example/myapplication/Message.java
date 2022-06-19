@@ -7,24 +7,27 @@ import androidx.annotation.RequiresApi;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 @Entity
 public class Message {
 
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
     private int id;
-    private String text;
-    private Boolean isSent;
-    private String date;
-    private String time;
+    private String content;
+    private String created;
+    private Boolean sent;
 
-    public Message( String text, Boolean isSent,String date, String time) {
-        this.text = text;
-        this.isSent = isSent;
-        this.date = date;
-        this.time = time;
+    public Message( int id, String content, Boolean sent,String created) {
+        this.id = id;
+        this.content = content;
+        this.sent = sent;
+        this.created = created;
     }
 
     public int getId() {
@@ -35,44 +38,44 @@ public class Message {
         this.id = id;
     }
 
-    public String getText() {
-        return text;
+    public String getContent() {
+        return content;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public String getCreated() {
+        return created;
+    }
+
+    public void setCreated(String created) {
+        this.created = created;
     }
 
     public Boolean getSent() {
-        return isSent;
+        return sent;
     }
 
     public void setSent(Boolean sent) {
-        isSent = sent;
-    }
-    public String getDate() {
-        return date;
+        this.sent = sent;
     }
 
-    public void setDate(String newdate) {
-        date = newdate;
-    }
-
-    public String getTime() {
-        return time;
-    }
-
-    public void setTime(String newTime) {
-        time = newTime;
-    }
     @RequiresApi(api = Build.VERSION_CODES.O)
     public String getTimeForChat(){
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-        if (date.equals(LocalDate.now().format(formatter))){
-            return time;
+        String formattedTime = created.split("\\.", 2)[0];
+        DateTimeFormatter dateParser = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+
+        String date = LocalDate.parse(formattedTime, dateParser).format(dateFormatter);
+
+        if (date.equals(LocalDate.now().format(dateFormatter))){
+            return LocalDate.parse(formattedTime, dateParser).format(timeFormatter);
         }
         else{
-            return date;
+            return LocalDate.parse(formattedTime, dateParser).format(dateFormatter);
         }
     }
 }

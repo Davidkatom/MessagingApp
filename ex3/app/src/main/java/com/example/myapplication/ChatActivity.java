@@ -60,7 +60,7 @@ public class ChatActivity extends AppCompatActivity {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
                 DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("H:mm");
                 Date date = new Date();
-                Message message = new Message(inputText, true, LocalDate.now().format(formatter), LocalDateTime.now().format(formatter2));
+                Message message = new Message(0, inputText, true, LocalDate.now().format(formatter));
                 ChosenValues.getInstance().getSelectedContact().setLast(inputText);
                 ChosenValues.getInstance().getSelectedContact().setLastdate(LocalDateTime.now().format(formatter2));
 
