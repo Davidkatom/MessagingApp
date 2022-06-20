@@ -10,14 +10,24 @@
     android:isScrollContainer="false"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/connectedUser"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-medium"
-        android:text="@string/connected_user"
-        android:textSize="25sp"
-        android:textStyle="bold" />
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/connectedUser"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-medium"
+            android:text="@string/connected_user"
+            android:textSize="25sp"
+            android:paddingEnd="160dp"
+            android:paddingStart="10dp"
+            android:textStyle="bold" />
+
+
+    </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/CL_Contacts"
@@ -38,6 +48,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
+
             <ListView
                 android:id="@+id/contactList"
                 android:layout_width="match_parent"
@@ -49,6 +60,7 @@
                 android:headerDividersEnabled="false"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
+
                 tools:listitem="@layout/contact">
 
             </ListView>

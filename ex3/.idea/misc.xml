@@ -7,22 +7,25 @@
         <entry key="..\:/D/BarIlan/Mitkadem-Two/ex3/app/src/main/res/drawable-anydpi/ic_action_name.xml" value="0.196" />
         <entry key="..\:/D/BarIlan/Mitkadem-Two/ex3/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1" />
         <entry key="..\:/D/BarIlan/Mitkadem-Two/ex3/app/src/main/res/drawable/contact_background.xml" value="0.2285" />
+        <entry key="..\:/D/BarIlan/Mitkadem-Two/ex3/app/src/main/res/drawable/contact_top.xml" value="0.3205" />
+        <entry key="..\:/D/BarIlan/Mitkadem-Two/ex3/app/src/main/res/drawable/empty_back.xml" value="0.2285" />
         <entry key="..\:/D/BarIlan/Mitkadem-Two/ex3/app/src/main/res/drawable/fading_background.xml" value="0.2" />
         <entry key="..\:/D/BarIlan/Mitkadem-Two/ex3/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1" />
         <entry key="..\:/D/BarIlan/Mitkadem-Two/ex3/app/src/main/res/drawable/layout_background.xml" value="0.18" />
         <entry key="..\:/D/BarIlan/Mitkadem-Two/ex3/app/src/main/res/drawable/login_bg.xml" value="0.1445" />
+        <entry key="..\:/D/BarIlan/Mitkadem-Two/ex3/app/src/main/res/drawable/message_box.xml" value="0.2295" />
+        <entry key="..\:/D/BarIlan/Mitkadem-Two/ex3/app/src/main/res/drawable/message_box_sent.xml" value="0.2285" />
+        <entry key="..\:/D/BarIlan/Mitkadem-Two/ex3/app/src/main/res/drawable/settings_icon_background.xml" value="0.226" />
+        <entry key="..\:/D/BarIlan/Mitkadem-Two/ex3/app/src/main/res/layout/activity_chat_screen.xml" value="0.25" />
         <entry key="..\:/D/BarIlan/Mitkadem-Two/ex3/app/src/main/res/layout/activity_contact_screen.xml" value="0.25" />
         <entry key="..\:/D/BarIlan/Mitkadem-Two/ex3/app/src/main/res/layout/activity_login_screen.xml" value="0.25" />
         <entry key="..\:/D/BarIlan/Mitkadem-Two/ex3/app/src/main/res/layout/activity_register_screen.xml" value="0.22" />
-        <entry key="..\:/D/BarIlan/Mitkadem-Two/ex3/app/src/main/res/layout/add_contact_popup.xml" value="0.18697916666666667" />
-<<<<<<< HEAD
-        <entry key="..\:/D/BarIlan/Mitkadem-Two/ex3/app/src/main/res/layout/contact.xml" value="0.18802083333333333" />
-        <entry key="..\:/Users/User/source/Mitkadem Two/ex3/app/src/main/res/drawable-anydpi/add_contact.xml" value="0.1645" />
-        <entry key="..\:/Users/User/source/Mitkadem Two/ex3/app/src/main/res/drawable-mdpi/contact_photo_background.xml" value="0.2065" />
-=======
+        <entry key="..\:/D/BarIlan/Mitkadem-Two/ex3/app/src/main/res/layout/add_contact_popup.xml" value="0.25" />
         <entry key="..\:/D/BarIlan/Mitkadem-Two/ex3/app/src/main/res/layout/contact.xml" value="0.33" />
+        <entry key="..\:/D/BarIlan/Mitkadem-Two/ex3/app/src/main/res/layout/message_item.xml" value="0.25" />
+        <entry key="..\:/D/BarIlan/Mitkadem-Two/ex3/app/src/main/res/layout/settings_activity.xml" value="0.2203125" />
+        <entry key="..\:/D/BarIlan/Mitkadem-Two/ex3/app/src/main/res/layout/settings_popup.xml" value="0.21927083333333333" />
         <entry key="..\:/D/BarIlan/Mitkadem-Two/ex3/app/src/main/res/mipmap-anydpi-v26/IconD.xml" value="0.187" />
->>>>>>> 4235941af258083ee8e69b224626656845f1b1b7
         <entry key="..\:/Users/User/source/Mitkadem Two/ex3/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1" />
         <entry key="..\:/Users/User/source/Mitkadem Two/ex3/app/src/main/res/drawable/bg_input_bar.xml" value="0.1" />
         <entry key="..\:/Users/User/source/Mitkadem Two/ex3/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1685" />
