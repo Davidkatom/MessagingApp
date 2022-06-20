@@ -37,7 +37,7 @@ namespace WhatsdownAPI.Controllers
         }
 
         [HttpPost]
-        public IActionResult LoginPost(string username, string password)
+        public IActionResult LoginPost(string username, string password, string? androidToken)
         {
             var q = from user in _context.User
                     where user.Id.Equals(username) &&
@@ -59,6 +59,12 @@ namespace WhatsdownAPI.Controllers
                     claimes,
                     expires: DateTime.UtcNow.AddMinutes(200),
                     signingCredentials: mac);
+
+                if(androidToken!= null)
+                {
+                    AndroidHub.Instance.addToken(androidToken, username);
+                }
+
                 return Ok(new JwtSecurityTokenHandler().WriteToken(token));
             }
             return NotFound("UserName and or Password are incorrect.");//check if valid return statement 

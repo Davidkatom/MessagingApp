@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1071946372166",
+    "project_id": "what-is-down",
+    "storage_bucket": "what-is-down.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1071946372166:android:86afed69c9a5e8578da647",
+        "android_client_info": {
+          "package_name": "com.example.myapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1071946372166-imnrais50me3u9cesu8tm9ebmp7v0l81.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBzxp-Nh_rW-I7o901S6AKABZ5wdzUTu1Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1071946372166-imnrais50me3u9cesu8tm9ebmp7v0l81.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

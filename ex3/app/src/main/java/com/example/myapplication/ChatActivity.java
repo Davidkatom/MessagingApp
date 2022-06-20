@@ -13,6 +13,7 @@ import androidx.room.Room;
 
 import com.example.myapplication.api.AndroidServiceAPI;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.ArrayList;
 
@@ -57,6 +58,11 @@ public class ChatActivity extends AppCompatActivity implements Listener {
         });
 
         serviceAPI.UpdateMessages(ChosenValues.getInstance().getSelectedContact(), messageDao, MsgListAdapter);
+
+
+
+
+
 
         //Back Button
         FloatingActionButton fab_backFromChat = findViewById(R.id.btn_backFromChat);

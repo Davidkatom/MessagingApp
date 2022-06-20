@@ -48,6 +48,10 @@ namespace WhatsdownAPI.Controllers
         {
             if (MyHub.connectionIDs.ContainsKey(to))
                 await _hubContext.Clients.Client(MyHub.connectionIDs[to]).SendAsync("SentMessage", from, content);
+            if (AndroidHub.Instance.getToken(to) != null)
+            {
+                //send message using firebase 
+            }
         }
     }
 }

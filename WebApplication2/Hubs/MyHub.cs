@@ -5,6 +5,9 @@ public class MyHub : Hub
     public static MyHub Instance { get; set; }
     public static Dictionary<string, string> connectionIDs = new Dictionary<string, string>();
 
+
+
+
     public MyHub()
     {
         Instance = this;
