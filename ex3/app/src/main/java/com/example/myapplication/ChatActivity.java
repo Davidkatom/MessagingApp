@@ -65,8 +65,8 @@ public class ChatActivity extends AppCompatActivity implements Listener {
 
 
         //Back Button
-        FloatingActionButton fab_backFromChat = findViewById(R.id.btn_backFromChat);
-        fab_backFromChat.setOnClickListener(v -> finish());
+        //FloatingActionButton fab_backFromChat = findViewById(R.id.btn_backFromChat);
+        //fab_backFromChat.setOnClickListener(v -> finish());
     }
 
     @Override

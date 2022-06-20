@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-medium"
-        android:text="@string/login_btnLoginTitle"
+        android:text="@string/sign_up"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         android:textColor="#2B2A2A"
         android:textStyle="bold"

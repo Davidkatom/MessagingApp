@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -18,6 +20,8 @@ import androidx.core.app.NotificationManagerCompat;
 import androidx.room.Room;
 
 import com.example.myapplication.api.AndroidServiceAPI;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 public class LoginScreen extends AppCompatActivity implements Listener {
@@ -92,6 +96,31 @@ public class LoginScreen extends AppCompatActivity implements Listener {
             // retrofit
             LinearLayout mRootView = (LinearLayout) findViewById(R.id.linearLayout_Login);
             Snackbar.make(mRootView, "Username already exists", Snackbar.LENGTH_SHORT).show();
+
+        });
+
+        Button btnSettings = findViewById(R.id.btnSettings);
+        btnSettings.setOnClickListener(v->{
+            ShowDialogSettings();
+        });
+
+    }
+
+    private void ShowDialogSettings() {
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.settings_popup, null);
+        builder.setView(view);
+        builder.show();
+
+        Button btnSaveSettings = view.findViewById(R.id.btnSaveSettings);
+        btnSaveSettings.setOnClickListener(v->{
+            final EditText save = view.findViewById(R.id.etServer);
+
+            //save settings
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putString("server", save.getText().toString());
+            editor.apply();
 
         });
     }

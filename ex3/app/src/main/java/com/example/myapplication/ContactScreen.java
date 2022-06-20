@@ -17,6 +17,8 @@ import androidx.room.Room;
 
 import com.example.myapplication.api.AndroidServiceAPI;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.ArrayList;
 
@@ -52,13 +54,16 @@ public class ContactScreen extends AppCompatActivity implements AdapterView.OnIt
 
 
 
-//        Button btnPopup = findViewById(R.id.fab_addContact);
-//        btnPopup.setOnClickListener(v->{
-//            ShowDialog();
-//        });
+        FloatingActionButton btnPopup = findViewById(R.id.fab_addContact);
+        btnPopup.setOnClickListener(v->{
+            ShowDialogContact();
+        });
 
 
     }
+
+
+
     @Override
     public void onResume() {
         super.onResume();
@@ -78,7 +83,7 @@ public class ContactScreen extends AppCompatActivity implements AdapterView.OnIt
         startActivity(intent);
     }
 
-    private void ShowDialog(){
+    private void ShowDialogContact(){
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
         LayoutInflater inflater = getLayoutInflater();
         View view = inflater.inflate(R.layout.add_contact_popup, null);
