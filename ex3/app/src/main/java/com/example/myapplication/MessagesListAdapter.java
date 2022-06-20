@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -31,7 +32,10 @@ public class MessagesListAdapter extends ArrayAdapter<Message> {
 
         TextView msg_text = convertView.findViewById(R.id.Message_text);
         TextView msg_time = convertView.findViewById(R.id.Message_time);
-
+        if(!msg.getSent()) {//to change direction of message
+            LinearLayout msg_layout = convertView.findViewById(R.id.LL_messageItem);
+            msg_layout.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+        }
         msg_text.setText(msg.getContent());
         msg_time.setText(msg.getTimeForChat());
 

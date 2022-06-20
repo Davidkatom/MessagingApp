@@ -82,7 +82,7 @@ public class AndroidServiceAPI {
 
             @Override
             public void onFailure(Call<List<Message>> call, Throwable t) {
-                Snackbar.make(MRootLayout, "Connection to server failed", Snackbar.LENGTH_SHORT).show();
+//                Snackbar.make(MRootLayout, "Connection to server failed", Snackbar.LENGTH_SHORT).show();
             }
         });
     }
@@ -110,17 +110,42 @@ public class AndroidServiceAPI {
                     MsgListAdapter.add(newMessage);
                     MsgListAdapter.notifyDataSetChanged();
                     ChosenValues.getInstance().getWaiting().finished();
+                    TransferMessage(contact,content);
                 } else {
-                    Snackbar.make(MRootLayout, "Message failed to send", Snackbar.LENGTH_SHORT).show();
+//                    Snackbar.make(MRootLayout, "Message failed to send", Snackbar.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<JsonElement> call, Throwable t) {
-                Snackbar.make(MRootLayout, "Connection to server failed", Snackbar.LENGTH_SHORT).show();
+//                Snackbar.make(MRootLayout, "Connection to server failed", Snackbar.LENGTH_SHORT).show();
             }
         });
     }
+
+    public void TransferMessage(Contact contact, String content) {
+        Map<String, String> transferMessageMap = new HashMap<String, String>() {{
+            put("content", content);
+            put("from",ChosenValues.getInstance().getUser().getUsername());
+            put("to", contact.getId());
+        }};
+        Call<Void> call = webServiceAPI.TransferMessage(transferMessageMap, jasonHeader);
+            call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call call, Response response) {
+                if (response.isSuccessful()) {
+//                    Snackbar.make(MRootLayout, "Message Transfer", Snackbar.LENGTH_SHORT).show();
+                } else {
+//                    Snackbar.make(MRootLayout, "Message failed to Transfer", Snackbar.LENGTH_SHORT).show();
+                }
+            }
+            @Override
+            public void onFailure(Call call, Throwable t) {
+//                Snackbar.make(MRootLayout, "Connection to server failed", Snackbar.LENGTH_SHORT).show();
+            }
+        });
+    }
+
 
     public void PostUser(User user) {
         UserPostObject userPostObject = new UserPostObject(user.getUsername(), user.getPassword(), user.getNickname(), String.valueOf(user.getImageId()));

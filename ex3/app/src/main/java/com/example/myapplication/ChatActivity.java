@@ -3,6 +3,7 @@ package com.example.myapplication;
 import android.os.Build;
 import android.os.Bundle;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -20,7 +21,6 @@ public class ChatActivity extends AppCompatActivity implements Listener {
     MessagesListAdapter MsgListAdapter;
     private ListView msg_listview;
     private MessageDao messageDao;
-    private ArrayList<Message> messages = new ArrayList<Message>();
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -28,7 +28,8 @@ public class ChatActivity extends AppCompatActivity implements Listener {
         super.onCreate(savedInstanceState);
         ChosenValues.getInstance().setWaiting(this);
         //HERE CONSTANTS DECLARATION
-        AndroidServiceAPI serviceAPI = new AndroidServiceAPI(findViewById(R.id.linearLayout_Chat));
+        LinearLayout mRootView = (LinearLayout) findViewById(R.id.cl_login_screen);//TODO FIX THIS
+        AndroidServiceAPI serviceAPI = new AndroidServiceAPI(mRootView);
         setContentView(R.layout.activity_chat_screen);
         TextView vtContactName = findViewById(R.id.SelectedContactName);
         FloatingActionButton fabSend = findViewById(R.id.fab_SendMessage);
@@ -51,11 +52,11 @@ public class ChatActivity extends AppCompatActivity implements Listener {
             String inputText = etInputText.getText().toString();
             if (!inputText.equals("")) {
                 etInputText.setText("");
-                serviceAPI.PostMessage(ChosenValues.getInstance().getSelectedContact(),inputText, messageDao,MsgListAdapter);
+                serviceAPI.PostMessage(ChosenValues.getInstance().getSelectedContact(), inputText, messageDao, MsgListAdapter);
             }
         });
 
-        serviceAPI.UpdateMessages(ChosenValues.getInstance().getSelectedContact(), messageDao,MsgListAdapter);
+        serviceAPI.UpdateMessages(ChosenValues.getInstance().getSelectedContact(), messageDao, MsgListAdapter);
 
         //Back Button
         FloatingActionButton fab_backFromChat = findViewById(R.id.btn_backFromChat);

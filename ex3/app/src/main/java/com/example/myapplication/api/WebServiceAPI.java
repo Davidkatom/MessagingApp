@@ -40,6 +40,11 @@ public interface WebServiceAPI {
             @Path("user_id") String user_id
 
     );
+    @POST("Transfer")
+    Call<Void> TransferMessage(
+            @Body Map<String, String> message,
+            @HeaderMap  Map<String, String> headers
+    );
 
 
     @GET("Contacts")
