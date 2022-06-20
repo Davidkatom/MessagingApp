@@ -62,7 +62,7 @@ namespace WhatsdownAPI.Controllers
 
                 if(androidToken!= null)
                 {
-                    AndroidHub.Instance.addToken(androidToken, username);
+                    AndroidHub.Instance.addToken(androidToken, username); 
                 }
 
                 return Ok(new JwtSecurityTokenHandler().WriteToken(token));

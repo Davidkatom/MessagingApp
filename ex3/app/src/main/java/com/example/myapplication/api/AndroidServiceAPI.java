@@ -16,6 +16,7 @@ import com.example.myapplication.R;
 import com.example.myapplication.User;
 import com.example.myapplication.view_models.MyApplication;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
@@ -107,7 +108,7 @@ public class AndroidServiceAPI {
                     MsgListAdapter.add(newMessage);
                     MsgListAdapter.notifyDataSetChanged();
                     ChosenValues.getInstance().getWaiting().finished();
-                    TransferMessage(contact,content);
+                    TransferMessage(contact, content);
                 } else {
 //                    Snackbar.make(MRootLayout, "Message failed to send", Snackbar.LENGTH_SHORT).show();
                 }
@@ -123,11 +124,11 @@ public class AndroidServiceAPI {
     public void TransferMessage(Contact contact, String content) {
         Map<String, String> transferMessageMap = new HashMap<String, String>() {{
             put("content", content);
-            put("from",ChosenValues.getInstance().getUser().getUsername());
+            put("from", ChosenValues.getInstance().getUser().getUsername());
             put("to", contact.getId());
         }};
         Call<Void> call = webServiceAPI.TransferMessage(transferMessageMap, jasonHeader);
-            call.enqueue(new Callback<Void>() {
+        call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call call, Response response) {
                 if (response.isSuccessful()) {
@@ -136,6 +137,7 @@ public class AndroidServiceAPI {
 //                    Snackbar.make(MRootLayout, "Message failed to Transfer", Snackbar.LENGTH_SHORT).show();
                 }
             }
+
             @Override
             public void onFailure(Call call, Throwable t) {
 //                Snackbar.make(MRootLayout, "Connection to server failed", Snackbar.LENGTH_SHORT).show();
@@ -211,7 +213,8 @@ public class AndroidServiceAPI {
             }
         });
     }
-    public void InviteContact(Contact contact){
+
+    public void InviteContact(Contact contact) {
         Map<String, String> inviteContactMap = new HashMap<String, String>() {{
             put("from", ChosenValues.getInstance().getUser().getUsername());
             put("to", contact.getId());
@@ -227,6 +230,7 @@ public class AndroidServiceAPI {
 //                    Snackbar.make(MRootLayout, "Contact already exists", Snackbar.LENGTH_SHORT).show();
                 }
             }
+
             @Override
             public void onFailure(Call call, Throwable t) {
 //                Snackbar.make(MRootLayout, "Connection to server failed", Snackbar.LENGTH_SHORT).show();
@@ -234,27 +238,32 @@ public class AndroidServiceAPI {
         });
 
     }
+
     public void LoginToServer(String username, String password, SharedPreferences prefs) {
-        Call<JsonElement> call = webServiceAPI.login(username, password);
-        call.enqueue(new Callback<JsonElement>() {
-            @Override
-            public void onResponse(Call<JsonElement> call, Response<JsonElement> response) {
-                if (response.isSuccessful()) {
-                    assert response.body() != null;
-                    JsonElement LRO = response.body();
-                    Snackbar.make(MRootLayout, "Login Successful", Snackbar.LENGTH_LONG).show();
-                    ChosenValues.getInstance().setToken(LRO.getAsString());
-                    ChosenValues.getInstance().getWaiting().finished();
+        //Generate FIREBASE TOKEN:
+        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(instanceIdResult -> {
+            String newToken = instanceIdResult.getToken();
+            Call<JsonElement> call = webServiceAPI.login(username, password,newToken);
+            call.enqueue(new Callback<JsonElement>() {
+                @Override
+                public void onResponse(Call<JsonElement> call, Response<JsonElement> response) {
+                    if (response.isSuccessful()) {
+                        assert response.body() != null;
+                        JsonElement LRO = response.body();
+                        Snackbar.make(MRootLayout, "Login Successful", Snackbar.LENGTH_LONG).show();
+                        ChosenValues.getInstance().setToken(LRO.getAsString());
+                        ChosenValues.getInstance().getWaiting().finished();
 
-                } else {
-                    Snackbar.make(MRootLayout, "Username and/or password are incorrect", Snackbar.LENGTH_SHORT).show();
+                    } else {
+                        Snackbar.make(MRootLayout, "Username and/or password are incorrect", Snackbar.LENGTH_SHORT).show();
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<JsonElement> call, Throwable t) {
-                Snackbar.make(MRootLayout, "Connection to server failed", Snackbar.LENGTH_SHORT).show();
-            }
+                @Override
+                public void onFailure(Call<JsonElement> call, Throwable t) {
+                    Snackbar.make(MRootLayout, "Connection to server failed", Snackbar.LENGTH_SHORT).show();
+                }
+            });
         });
     }
 

@@ -1,9 +1,13 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using FirebaseAdmin;
+using FirebaseAdmin.Messaging;
+using Google.Apis.Auth.OAuth2;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using WhatsdownAPI.Data;
 using WhatsdownAPI.Models;
+using System;
 namespace WhatsdownAPI.Controllers
 {
     [Route("api/[controller]")]
@@ -22,7 +26,7 @@ namespace WhatsdownAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> Transfer(Dictionary<string, string> details)
         {
-            Message msg = new Message()
+            WhatsdownAPI.Models.Message msg = new WhatsdownAPI.Models.Message()
             {
                 Sender = details["to"],
                 Reciever = details["from"],
@@ -30,7 +34,7 @@ namespace WhatsdownAPI.Controllers
                 Time = DateTime.Now,
                 isSent = false
             };
-            
+
             Contact cont = await _context.ContactRelation.SingleAsync(c => c.Contacter == details["to"] && c.Contacted == details["from"]);
             cont.LastMessage = msg.Content;
             cont.LastDate = msg.Time;
@@ -40,17 +44,44 @@ namespace WhatsdownAPI.Controllers
             if (msg.Reciever == null)
                 return BadRequest();
             await _context.SaveChangesAsync();
-            await SentMessage(details["from"], details["to"], details["content"]);
+            await SentMessage(details["from"], details["to"], details["content"], msg);
             return Ok();
-
         }
-        public async Task SentMessage(string from, string to, string content)
+        public async Task SentMessage(string from, string to, string content, WhatsdownAPI.Models.Message msg)
         {
+            //SIGNALR
             if (MyHub.connectionIDs.ContainsKey(to))
                 await _hubContext.Clients.Client(MyHub.connectionIDs[to]).SendAsync("SentMessage", from, content);
+            //FIREBASE
             if (AndroidHub.Instance.getToken(to) != null)
             {
-                //send message using firebase 
+                string androidToken = AndroidHub.Instance.getToken(to);
+                // See documentation on defining a message payload.
+                FirebaseApp.Create(new AppOptions() 
+                {
+                    Credential = GoogleCredential.FromFile("Hubs\\private_key.json") //CHECK THIS
+                });
+
+                var testMessage = new FirebaseAdmin.Messaging.Message()
+                {
+                    Data = new Dictionary<string, string>()//for sending extra data
+                        {
+                            { "id", msg.Id.ToString()  },
+                            { "created", msg.Time.ToString() },
+                        },
+                    Token = androidToken,
+                    Notification = new Notification()
+                    {
+                        Title = from,
+                        Body = content
+                    }
+                };
+                // Send a message to the device corresponding to the provided
+                _ = FirebaseMessaging.DefaultInstance.SendAsync(testMessage).Result;
+                // Response is a message ID string.
+                //Console.WriteLine("Successfully sent message: " + response);
+
+
             }
         }
     }

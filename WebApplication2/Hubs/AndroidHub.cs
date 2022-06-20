@@ -10,13 +10,7 @@
         {
             if (instance == null)
             {
-                lock (instance)
-                {
-                    if (instance == null)
-                    {
-                        instance = new AndroidHub();
-                    }
-                }
+                instance = new AndroidHub();
             }
             return instance;
         }

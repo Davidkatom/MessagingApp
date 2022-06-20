@@ -17,7 +17,6 @@ import androidx.room.Room;
 
 import com.example.myapplication.api.AndroidServiceAPI;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.ArrayList;
 
@@ -51,11 +50,7 @@ public class ContactScreen extends AppCompatActivity implements AdapterView.OnIt
         listview.setAdapter(adapter);
         listview.setOnItemClickListener(this);
 
-        //FIREBASE:
-        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(instanceIdResult -> {
-            String newToken = instanceIdResult.getToken();
-//            serviceAPI.UpdateToken(ChosenValues.getInstance().getSelectedContact(), newToken, messageDao);
-        });
+
 
 //        Button btnPopup = findViewById(R.id.fab_addContact);
 //        btnPopup.setOnClickListener(v->{

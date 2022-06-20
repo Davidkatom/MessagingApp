@@ -42,6 +42,5 @@ public class MessagesListAdapter extends ArrayAdapter<Message> {
 
         return convertView;
     }
-
 }
 
