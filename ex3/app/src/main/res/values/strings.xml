@@ -17,6 +17,7 @@
     <string name="server">Server</string>
     <string name="Channel_main_name">Main Channel</string>
     <string name="Channel_main_description">Regular Messages</string>
+    <string name="connected_user">Connected User</string>
 
-    
+
 </resources>

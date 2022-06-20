@@ -3,28 +3,36 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/ContactsRoot"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/login_bg"
+
+    android:isScrollContainer="false"
     android:orientation="vertical">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/CL_contactHeader"
+    <TextView
+        android:id="@+id/connectedUser"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        android:fontFamily="sans-serif-medium"
+        android:text="@string/connected_user"
+        android:textSize="25sp"
+        android:textStyle="bold" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/CL_Contacts"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+
+        android:background="@drawable/layout_background">
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -34,8 +42,13 @@
                 android:id="@+id/contactList"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:divider="@android:color/transparent"
+                android:dividerHeight="1dp"
+                android:drawSelectorOnTop="true"
+                android:footerDividersEnabled="true"
+                android:headerDividersEnabled="false"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:layout_editor_absoluteX="0dp"
                 tools:listitem="@layout/contact">
 
             </ListView>
@@ -48,16 +61,17 @@
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
             android:clickable="true"
+            android:contentDescription="@string/connected_user"
+            android:focusable="true"
+            app:backgroundTint="#8ec5fc"
             app:layout_constraintBottom_toBottomOf="@+id/CL_Contacts"
             app:layout_constraintEnd_toEndOf="@+id/CL_Contacts"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/constraintLayout"
-            app:layout_constraintVertical_bias="1.0"
-            app:srcCompat="@drawable/add_contact"
-            app:backgroundTint="#8ec5fc"
 
-            android:focusable="true" />
+            app:layout_constraintVertical_bias="1.0"
+            app:srcCompat="@drawable/add_contact" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
