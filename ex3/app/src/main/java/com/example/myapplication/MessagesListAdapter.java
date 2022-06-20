@@ -22,17 +22,18 @@ public class MessagesListAdapter extends ArrayAdapter<Message> {
         super(context, R.layout.message_item, messages);
         this.inflater = LayoutInflater.from(context);
     }
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Nullable
     @Override
-    public View getView(int position, @Nullable View convertView, @Nullable ViewGroup parent){
+    public View getView(int position, @Nullable View convertView, @Nullable ViewGroup parent) {
         Message msg = getItem(position);
-        if(convertView == null)
+        if (convertView == null)
             convertView = inflater.inflate(R.layout.message_item, parent, false);
 
         TextView msg_text = convertView.findViewById(R.id.Message_text);
         TextView msg_time = convertView.findViewById(R.id.Message_time);
-        if(!msg.getSent()) {//to change direction of message
+        if (!msg.getSent()) {//to change direction of message
             LinearLayout msg_layout = convertView.findViewById(R.id.LL_messageItem);
             msg_layout.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
         }

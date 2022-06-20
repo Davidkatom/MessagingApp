@@ -91,15 +91,12 @@ public class AndroidServiceAPI {
         String formattedDate = LocalDateTime.now().format(formatter);
         ChosenValues.getInstance().getSelectedContact().setLast(content);
         ChosenValues.getInstance().getSelectedContact().setLastdate(formattedDate);
-
-
         Map<String, String> tokenHeader = new HashMap<String, String>() {{
             put("Authorization", "Bearer " + ChosenValues.getInstance().getToken());
         }};
         Map<String, String> messageMap = new HashMap<String, String>() {{
             put("content", content);
         }};
-
         Call<JsonElement> call = webServiceAPI.CreateMessage(messageMap, tokenHeader, contact.getId());
         call.enqueue(new Callback<JsonElement>() {
             @Override
@@ -145,7 +142,6 @@ public class AndroidServiceAPI {
             }
         });
     }
-
 
     public void PostUser(User user) {
         UserPostObject userPostObject = new UserPostObject(user.getUsername(), user.getPassword(), user.getNickname(), String.valueOf(user.getImageId()));
@@ -214,9 +210,30 @@ public class AndroidServiceAPI {
                 Snackbar.make(MRootLayout, "Connection to server failed", Snackbar.LENGTH_SHORT).show();
             }
         });
+    }
+    public void InviteContact(Contact contact){
+        Map<String, String> inviteContactMap = new HashMap<String, String>() {{
+            put("from", ChosenValues.getInstance().getUser().getUsername());
+            put("to", contact.getId());
+            put("server", contact.getServer());
+        }};
+        Call<Void> call = webServiceAPI.InviteContact(inviteContactMap, jasonHeader);
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call call, Response response) {
+                if (response.isSuccessful()) {
+//                    Snackbar.make(MRootLayout, "Contact Invited", Snackbar.LENGTH_LONG).show();
+                } else {
+//                    Snackbar.make(MRootLayout, "Contact already exists", Snackbar.LENGTH_SHORT).show();
+                }
+            }
+            @Override
+            public void onFailure(Call call, Throwable t) {
+//                Snackbar.make(MRootLayout, "Connection to server failed", Snackbar.LENGTH_SHORT).show();
+            }
+        });
 
     }
-
     public void LoginToServer(String username, String password, SharedPreferences prefs) {
         Call<JsonElement> call = webServiceAPI.login(username, password);
         call.enqueue(new Callback<JsonElement>() {

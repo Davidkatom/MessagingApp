@@ -46,10 +46,15 @@ public interface WebServiceAPI {
             @HeaderMap  Map<String, String> headers
     );
 
-
     @GET("Contacts")
     Call<List<Contact>> getContacts(
             @HeaderMap  Map<String, String> jasonHeader
+    );
+
+    @POST("invitations")
+    Call<Void> InviteContact(
+            @Body Map<String, String> invitation,
+            @HeaderMap  Map<String, String> headers
     );
 
     @GET("Contacts/{user_id}/messages")
