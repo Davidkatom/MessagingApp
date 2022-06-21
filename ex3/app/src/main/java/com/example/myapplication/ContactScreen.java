@@ -66,8 +66,7 @@ public class ContactScreen extends AppCompatActivity implements AdapterView.OnIt
         TextView tvConnectedUser = findViewById(R.id.connectedUser);
         tvConnectedUser.setText(ChosenValues.getInstance().getUser().getNickname());
 
-        FloatingActionButton btnPopup = findViewById(R.id.fab_addContact);
-        btnPopup.setOnClickListener(v->{
+        findViewById(R.id.fab_addContact).setOnClickListener(v->{
             ShowDialogContact();
         });
 

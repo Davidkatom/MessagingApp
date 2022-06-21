@@ -18,6 +18,7 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -57,6 +58,29 @@ public class AndroidServiceAPI {
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
         webServiceAPI = retrofit.create(WebServiceAPI.class);
+    }
+
+    public void updateUserData(){
+        Map<String, String> tokenHeader = new HashMap<String, String>() {{
+            put("Authorization", "Bearer " + ChosenValues.getInstance().getToken());
+        }};
+        Call<JsonElement> call = webServiceAPI.getUserData(tokenHeader);
+        call.enqueue(new Callback<JsonElement>() {
+            @Override
+            public void onResponse(Call<JsonElement> call, Response<JsonElement> response) {
+                if (response.isSuccessful()) {
+                    JsonElement res = response.body();
+                    String nickname = ((JsonObject) res).get("NickName").getAsString();
+                    ChosenValues.getInstance().getUser().setNickname(nickname.replace("\"",""));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonElement> call, Throwable t) {
+                Snackbar.make(MRootLayout, "Connection to server failed", Snackbar.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
     public void UpdateMessages(Contact contact, MessageDao messageDao, MessagesListAdapter MsgListAdapter) {
@@ -185,6 +209,7 @@ public class AndroidServiceAPI {
 
                 assert contacts != null;
                 for (Contact contact : contacts) {
+                    ChosenValues.getInstance().setLastTime(contact.getId(),contact.getLastdate());
                     if (!localContacts.contains(contact)) {
                         contactsDao.insert(contact);
                     }
@@ -212,6 +237,7 @@ public class AndroidServiceAPI {
                     contactsDao.insert(contact);
                     InviteContact(contact);
                     ChosenValues.getInstance().getWaiting().finished();
+                    updateContacts(contactsDao);
                 } else {
                     Snackbar.make(MRootLayout, "Contact already exists", Snackbar.LENGTH_SHORT).show();
                 }
@@ -262,7 +288,7 @@ public class AndroidServiceAPI {
                         Snackbar.make(MRootLayout, "Login Successful", Snackbar.LENGTH_LONG).show();
                         ChosenValues.getInstance().setToken(LRO.getAsString());
                         ChosenValues.getInstance().getWaiting().finished();
-
+                        updateUserData();
                     } else {
                         Snackbar.make(MRootLayout, "Username and/or password are incorrect", Snackbar.LENGTH_SHORT).show();
                     }

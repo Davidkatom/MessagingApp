@@ -1,6 +1,14 @@
 package com.example.myapplication;
 
 import android.content.SharedPreferences;
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ChosenValues {
     private User user = null;
@@ -11,6 +19,8 @@ public class ChosenValues {
     private SharedPreferences sharedPreferences;
     private ContactsDao contactsDao;
     private UserDao userDao;
+
+    private Map<String,String> lastTimes =new HashMap<String, String>();
 
     private ChosenValues() {
 
@@ -58,5 +68,37 @@ public class ChosenValues {
     }
     public ContactsDao getContactsDao() {
         return contactsDao;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public String getLastTime(String userId) {
+        String tempDate = lastTimes.get(userId);
+        DateTimeFormatter dateParser = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+        DateTimeFormatter dateParserFix = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+        DateTimeFormatter dateOnlyFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+        DateTimeFormatter TimeOnlyFormatter = DateTimeFormatter.ofPattern("HH:mm");
+        LocalDateTime dateTime;
+        if (tempDate.contains("T")){
+            dateTime= LocalDateTime.parse(tempDate, dateParser);
+
+        }else{
+            dateTime = LocalDateTime.parse(tempDate, dateParserFix);
+        }
+        String dateOnly = dateTime.format(dateOnlyFormatter);
+        String timeOnly = dateTime.format(TimeOnlyFormatter);
+        if (dateOnly.equals(LocalDateTime.now().format(dateOnlyFormatter))) {
+            return timeOnly;
+        }else{
+            return dateOnly;
+        }
+
+
+
+//        return lastTimes.get(userId);
+
+    }
+
+    public void setLastTime(String userId, String time) {
+        lastTimes.put(userId,time);
     }
 }

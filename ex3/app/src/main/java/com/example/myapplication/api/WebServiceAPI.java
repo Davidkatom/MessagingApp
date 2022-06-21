@@ -18,6 +18,12 @@ import retrofit2.http.Query;
 
 public interface WebServiceAPI {
 
+    @GET("Users/Me")
+    Call<JsonElement> getUserData(
+            @HeaderMap  Map<String, String> headers
+    );
+
+
     @POST("Login")
     Call<JsonElement> login(@Query("username") String username, @Query("password") String password, @Query("androidToken") String androidToken);
 

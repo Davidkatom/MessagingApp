@@ -7,10 +7,6 @@ import androidx.annotation.RequiresApi;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
 
 @Entity
 public class Contact {
@@ -58,14 +54,29 @@ public class Contact {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public String getLastdate() {
-
+        return this.lastdate;
+        /*
+        String tempDate = ChosenValues.getInstance().getLastTime(this.id);
 
         DateTimeFormatter dateParser = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
         DateTimeFormatter dateParserFix = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+        DateTimeFormatter dateOnlyFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+        DateTimeFormatter TimeOnlyFormatter = DateTimeFormatter.ofPattern("HH:mm");
+        LocalDateTime dateTime;
+        if (tempDate.contains("T")){
+            dateTime= LocalDateTime.parse(tempDate, dateParser);
 
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
-
+        }else{
+            dateTime = LocalDateTime.parse(tempDate, dateParserFix);
+        }
+        String dateOnly = dateTime.format(dateOnlyFormatter);
+        String timeOnly = dateTime.format(TimeOnlyFormatter);
+        if (dateOnly.equals(LocalDateTime.now().format(dateOnlyFormatter))) {
+            return timeOnly;
+        }else{
+            return dateOnly;
+        }
+        /*
         if(!lastdate.contains("T")){
             try {
                 lastdate = LocalDateTime.parse(lastdate, dateParserFix).format(dateParser);
@@ -77,14 +88,18 @@ public class Contact {
         String date = LocalDateTime.parse(lastdate, dateParser).format(dateFormatter);
 
         if (date.equals(LocalDateTime.now().format(dateFormatter))){
+
+            String b= LocalDateTime.parse(lastdate, dateParser).format(timeFormatter);
+            return b;
             String a = lastdate;
             LocalDateTime.parse(a, dateParser).format(timeFormatter);
             return LocalDateTime.parse(lastdate, dateParser).format(timeFormatter);
         }
         else{
-            return LocalDateTime.parse(lastdate, dateParser).format(dateFormatter);
+            String a = LocalDateTime.parse(lastdate, dateParser).format(dateFormatter);
+            return a;
         }
-
+*/
     }
 
     public void setLastdate(String lastdate) {
