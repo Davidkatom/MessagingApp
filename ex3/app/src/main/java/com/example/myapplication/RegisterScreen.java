@@ -54,7 +54,7 @@ public class RegisterScreen extends AppCompatActivity {
         btnRegister.setOnClickListener(v -> {
             //Check if user already exists
             LinearLayout mRootView = (LinearLayout) findViewById(R.id.linearLayout_Register);
-            User exists = userDao.getUser(etUserName.getText().toString());
+            User exists = userDao.getUser(etUserName.getText().toString().toLowerCase());
             if (exists != null) {
                 Snackbar.make(mRootView, "Username already exists", Snackbar.LENGTH_SHORT).show();
                 return;
@@ -71,11 +71,10 @@ public class RegisterScreen extends AppCompatActivity {
                 return;
             }
             //register user
-            User user = new User(etUserName.getText().toString(), etPass1.getText().toString(), selectedImageUri.toString(), etNickName.getText().toString());
+            User user = new User(etUserName.getText().toString().toLowerCase(), etPass1.getText().toString(), selectedImageUri.toString(), etNickName.getText().toString());
             userDao.insert(user);
             AndroidServiceAPI androidServiceAPI = new AndroidServiceAPI(mRootView);
             androidServiceAPI.PostUser(user);
-//            finish();
         });
 
     }
