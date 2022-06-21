@@ -5,7 +5,9 @@ import android.os.Build;
 import android.widget.LinearLayout;
 
 import androidx.annotation.RequiresApi;
+import androidx.room.Room;
 
+import com.example.myapplication.AppContactsDB;
 import com.example.myapplication.ChosenValues;
 import com.example.myapplication.Contact;
 import com.example.myapplication.ContactsDao;
@@ -109,6 +111,10 @@ public class AndroidServiceAPI {
                     messageDao.insert(newMessage);//insert new message into local database
                     MsgListAdapter.add(newMessage);
                     MsgListAdapter.notifyDataSetChanged();
+                    contact.setLast(content);
+                    contact.setLastdate(formattedDate);
+
+                    ChosenValues.getInstance().getContactsDao().update(contact);//update contact in local database
                     ChosenValues.getInstance().getWaiting().finished();
                     TransferMessage(contact, content);
                 } else {

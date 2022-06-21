@@ -43,6 +43,8 @@ public class ContactScreen extends AppCompatActivity implements AdapterView.OnIt
         db = Room.databaseBuilder(getApplicationContext(), AppContactsDB.class, ChosenValues.getInstance().getUser().getUsername()).allowMainThreadQueries().fallbackToDestructiveMigration().build();
         contactsDao = db.contactsDao();
 
+        ChosenValues.getInstance().setContactsDao(contactsDao);
+
         LinearLayout mRootView = (LinearLayout) findViewById(R.id.ContactsRoot);
         AndroidServiceAPI serviceAPI = new AndroidServiceAPI(mRootView);
         serviceAPI.updateContacts(contactsDao);
@@ -65,11 +67,7 @@ public class ContactScreen extends AppCompatActivity implements AdapterView.OnIt
     @Override
     public void onResume() {
         super.onResume();
-        adapter.clear();
-        for(Contact contact : contactsDao.index()){
-            adapter.add(contact);
-            adapter.notifyDataSetChanged();
-        }
+        finished();
     }
 
 
@@ -116,7 +114,7 @@ public class ContactScreen extends AppCompatActivity implements AdapterView.OnIt
         adapter.clear();
         for(Contact contact : contactsDao.index()){
             adapter.add(contact);
-            adapter.notifyDataSetChanged();
         }
+        adapter.notifyDataSetChanged();
     }
 }
