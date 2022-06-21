@@ -47,9 +47,11 @@ public class ContactScreen extends AppCompatActivity implements AdapterView.OnIt
         contactsDao = db.contactsDao();
 
         //Get profile picture
-        Uri image = Uri.parse(ChosenValues.getInstance().getUser().getImageId());
-        ImageView profilePicture = findViewById(R.id.connectedUserImage);
-        if(image != null) {
+        String imgSrc = ChosenValues.getInstance().getUser().getImageId();
+        if (imgSrc != null) {
+            Uri image = Uri.parse(imgSrc);
+            ImageView profilePicture = findViewById(R.id.connectedUserImage);
+
             profilePicture.setImageURI(image);
         }
 
@@ -66,7 +68,7 @@ public class ContactScreen extends AppCompatActivity implements AdapterView.OnIt
         TextView tvConnectedUser = findViewById(R.id.connectedUser);
         tvConnectedUser.setText(ChosenValues.getInstance().getUser().getNickname());
 
-        findViewById(R.id.fab_addContact).setOnClickListener(v->{
+        findViewById(R.id.fab_addContact).setOnClickListener(v -> {
             ShowDialogContact();
         });
 
@@ -89,7 +91,7 @@ public class ContactScreen extends AppCompatActivity implements AdapterView.OnIt
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private void ShowDialogContact(){
+    private void ShowDialogContact() {
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
         LayoutInflater inflater = getLayoutInflater();
         View view = inflater.inflate(R.layout.add_contact_popup, null);
@@ -103,8 +105,8 @@ public class ContactScreen extends AppCompatActivity implements AdapterView.OnIt
             String nickname = etNickName.getText().toString();
             String server = etServer.getText().toString();
 
-            if(!(username.isEmpty() || nickname.isEmpty() || server.isEmpty())){
-                if(server.contains("http://") || server.contains("https://")) {
+            if (!(username.isEmpty() || nickname.isEmpty() || server.isEmpty())) {
+                if (server.contains("http://") || server.contains("https://")) {
                     Contact contact = new Contact(username, nickname, "", "", server);
                     LinearLayout mRootView = (LinearLayout) findViewById(R.id.ContactsRoot);
                     AndroidServiceAPI serviceAPI = new AndroidServiceAPI(mRootView);
@@ -127,7 +129,7 @@ public class ContactScreen extends AppCompatActivity implements AdapterView.OnIt
     @Override
     public void finished() {
         adapter.clear();
-        for(Contact contact : contactsDao.index()){
+        for (Contact contact : contactsDao.index()) {
             adapter.add(contact);
         }
         adapter.notifyDataSetChanged();
