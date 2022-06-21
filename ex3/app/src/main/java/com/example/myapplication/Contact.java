@@ -77,6 +77,8 @@ public class Contact {
         String date = LocalDateTime.parse(lastdate, dateParser).format(dateFormatter);
 
         if (date.equals(LocalDateTime.now().format(dateFormatter))){
+            String a = lastdate;
+            LocalDateTime.parse(a, dateParser).format(timeFormatter);
             return LocalDateTime.parse(lastdate, dateParser).format(timeFormatter);
         }
         else{
