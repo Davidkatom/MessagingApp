@@ -159,7 +159,7 @@ public class AndroidServiceAPI {
         }};
         //create its own webservice API
         Retrofit tempRetrofit = new Retrofit.Builder()
-                .baseUrl(contact.getServer())
+                .baseUrl(contact.getServer()+"/api/")
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
         WebServiceAPI tempWebServiceAPI = tempRetrofit.create(WebServiceAPI.class);
@@ -257,7 +257,7 @@ public class AndroidServiceAPI {
             put("server", contact.getServer());
         }};
         Retrofit tempRetrofit = new Retrofit.Builder()
-                .baseUrl(contact.getServer())
+                .baseUrl(contact.getServer()+"/api/")
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
         WebServiceAPI tempWebServiceAPI = tempRetrofit.create(WebServiceAPI.class);
