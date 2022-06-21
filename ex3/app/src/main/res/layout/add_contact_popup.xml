@@ -31,12 +31,4 @@
         android:inputType="textPersonName"
         android:paddingBottom="30dp" />
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/fab_addContact"
-        android:background="@drawable/contact_top"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="20dp"
-        android:text="@string/save_settings" />
-
 </LinearLayout>

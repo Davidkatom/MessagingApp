@@ -191,7 +191,7 @@ public class AndroidServiceAPI {
 
     }
 
-    public void PostContact(Contact contact) {
+    public void PostContact(Contact contact, ContactsDao contactsDao) {
         //UserPostObject userPostObject = new UserPostObject(user.getUsername(), user.getPassword(),user.getNickname(),String.valueOf(user.getImageId()));
         Map<String, String> tokenHeader = new HashMap<String, String>() {{
             put("Authorization", "Bearer " + ChosenValues.getInstance().getToken());
@@ -202,6 +202,8 @@ public class AndroidServiceAPI {
             public void onResponse(Call<JsonElement> call, Response<JsonElement> response) {
                 if (response.isSuccessful()) {
                     Snackbar.make(MRootLayout, "Contact Added", Snackbar.LENGTH_LONG).show();
+                    contactsDao.insert(contact);
+                    ChosenValues.getInstance().getWaiting().finished();
                 } else {
                     Snackbar.make(MRootLayout, "Contact already exists", Snackbar.LENGTH_SHORT).show();
                 }

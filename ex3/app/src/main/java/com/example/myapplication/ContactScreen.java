@@ -83,41 +83,34 @@ public class ContactScreen extends AppCompatActivity implements AdapterView.OnIt
         startActivity(intent);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private void ShowDialogContact(){
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
         LayoutInflater inflater = getLayoutInflater();
         View view = inflater.inflate(R.layout.add_contact_popup, null);
         builder.setView(view);
-        builder.show();
+        builder.setPositiveButton("Add", (dialog, which) -> {
+            EditText etName = view.findViewById(R.id.etContactName);
+            EditText etNickName = view.findViewById(R.id.etNickName);
+            EditText etServer = view.findViewById(R.id.etServer);
 
-        btnAddContact = view.findViewById(R.id.fab_addContact);
-        btnAddContact.setOnClickListener(v->{
-            final EditText etUsername = view.findViewById(R.id.etContactName);
-            final EditText etNickname = view.findViewById(R.id.etNickName);
-            final EditText etServer = view.findViewById(R.id.etServer);
-
-            String username = etUsername.getText().toString();
-            String nickname = etNickname.getText().toString();
+            String username = etName.getText().toString();
+            String nickname = etNickName.getText().toString();
             String server = etServer.getText().toString();
 
-            if (!(username.equals("") || nickname.equals("") || server.equals(""))) {
-                /*
-                etUsername.setText("");
-                Contact contact = new Contact(username, nickname, 1, "", "", server);
-                contactsDao.insert(contact);
-                adapter.add(contact);
-                adapter.notifyDataSetChanged();
-                listview.smoothScrollToPosition(adapter.getCount() - 1);
-                //TODO close dialog
-
-                 */
-            }
-            else{
-                //TODO show error message
-                //LinearLayout mRootView = (LinearLayout) findViewById(R.id.contactList);
-                //Snackbar.make(mRootView, "Please fill in all fields", Snackbar.LENGTH_SHORT).show();
+            if(!(username.isEmpty() || nickname.isEmpty() || server.isEmpty())){
+                Contact contact = new Contact(username, nickname, "", "", server);
+                LinearLayout mRootView = (LinearLayout) findViewById(R.id.ContactsRoot);
+                AndroidServiceAPI serviceAPI = new AndroidServiceAPI(mRootView);
+                serviceAPI.PostContact(contact, contactsDao);
+                ChosenValues.getInstance().setWaiting(this);
             }
         });
+        builder.setNegativeButton("Cancel", (dialog, which) -> {
+        });
+
+        builder.show();
+
     }
 
     @Override

@@ -107,22 +107,23 @@ public class LoginScreen extends AppCompatActivity implements Listener {
     }
 
     private void ShowDialogSettings() {
-        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
         LayoutInflater inflater = getLayoutInflater();
         View view = inflater.inflate(R.layout.settings_popup, null);
+        final EditText save = view.findViewById(R.id.etServer);
+        save.setText(prefs.getString("server", ""));
+
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
         builder.setView(view);
-        builder.show();
-
-        Button btnSaveSettings = view.findViewById(R.id.btnSaveSettings);
-        btnSaveSettings.setOnClickListener(v->{
-            final EditText save = view.findViewById(R.id.etServer);
-
+        builder.setPositiveButton("Save", (dialog, which) -> {
             //save settings
             SharedPreferences.Editor editor = prefs.edit();
             editor.putString("server", save.getText().toString());
             editor.apply();
-
         });
+        builder.setNegativeButton("Cancel", (dialog, which) -> {
+            //do nothing
+        });
+        builder.show();
     }
 
     private void createNotificationChannel() {
