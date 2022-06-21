@@ -73,6 +73,11 @@ public class ChosenValues {
     @RequiresApi(api = Build.VERSION_CODES.O)
     public String getLastTime(String userId) {
         String tempDate = lastTimes.get(userId);
+        if(tempDate == null){
+            return "just now";
+//            Date date = new Date();
+//            tempDate = date.toString();
+        }
         DateTimeFormatter dateParser = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
         DateTimeFormatter dateParserFix = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
         DateTimeFormatter dateOnlyFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
