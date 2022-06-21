@@ -94,8 +94,8 @@ public class AndroidServiceAPI {
 
     public void PostMessage(Contact contact, String content, MessageDao messageDao, MessagesListAdapter MsgListAdapter) {
         String formattedDate = LocalDateTime.now().format(formatter);
-        ChosenValues.getInstance().getSelectedContact().setLast(content);
-        ChosenValues.getInstance().getSelectedContact().setLastdate(formattedDate);
+        //ChosenValues.getInstance().getSelectedContact().setLast(content);
+        //ChosenValues.getInstance().getSelectedContact().setLastdate(formattedDate);
         Map<String, String> tokenHeader = new HashMap<String, String>() {{
             put("Authorization", "Bearer " + ChosenValues.getInstance().getToken());
         }};
@@ -184,6 +184,7 @@ public class AndroidServiceAPI {
             public void onResponse(Call<List<Contact>> call, Response<List<Contact>> response) {
                 List<Contact> contacts = response.body();
                 List<Contact> localContacts = contactsDao.index();
+
                 assert contacts != null;
                 for (Contact contact : contacts) {
                     if (!localContacts.contains(contact)) {

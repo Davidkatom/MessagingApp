@@ -58,11 +58,23 @@ public class Contact {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public String getLastdate() {
+
+
         DateTimeFormatter dateParser = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+        DateTimeFormatter dateParserFix = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
 
-        String date = LocalDate.parse(lastdate, dateParser).format(dateFormatter);
+        if(!lastdate.contains("T")){
+            try {
+                lastdate = LocalDateTime.parse(lastdate, dateParserFix).format(dateParser);
+            }
+            catch (Exception e){
+                lastdate = LocalDateTime.now().format(dateParser);
+            }
+        }
+        String date = LocalDateTime.parse(lastdate, dateParser).format(dateFormatter);
 
         if (date.equals(LocalDateTime.now().format(dateFormatter))){
             return LocalDateTime.parse(lastdate, dateParser).format(timeFormatter);
