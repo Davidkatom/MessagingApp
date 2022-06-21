@@ -1,6 +1,7 @@
 package com.example.myapplication;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -19,6 +21,7 @@ import androidx.room.Room;
 import com.example.myapplication.api.AndroidServiceAPI;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 
@@ -43,6 +46,13 @@ public class ContactScreen extends AppCompatActivity implements AdapterView.OnIt
         db = Room.databaseBuilder(getApplicationContext(), AppContactsDB.class, ChosenValues.getInstance().getUser().getUsername()).allowMainThreadQueries().fallbackToDestructiveMigration().build();
         contactsDao = db.contactsDao();
 
+        //Get profile picture
+        Uri image = Uri.parse(ChosenValues.getInstance().getUser().getImageId());
+        ImageView profilePicture = findViewById(R.id.connectedUserImage);
+        if(image != null) {
+            profilePicture.setImageURI(image);
+        }
+
         ChosenValues.getInstance().setContactsDao(contactsDao);
 
         LinearLayout mRootView = (LinearLayout) findViewById(R.id.ContactsRoot);
@@ -61,9 +71,7 @@ public class ContactScreen extends AppCompatActivity implements AdapterView.OnIt
             ShowDialogContact();
         });
 
-
     }
-
 
 
     @Override
@@ -97,11 +105,17 @@ public class ContactScreen extends AppCompatActivity implements AdapterView.OnIt
             String server = etServer.getText().toString();
 
             if(!(username.isEmpty() || nickname.isEmpty() || server.isEmpty())){
-                Contact contact = new Contact(username, nickname, "", "", server);
-                LinearLayout mRootView = (LinearLayout) findViewById(R.id.ContactsRoot);
-                AndroidServiceAPI serviceAPI = new AndroidServiceAPI(mRootView);
-                serviceAPI.PostContact(contact, contactsDao);
-                ChosenValues.getInstance().setWaiting(this);
+                if(server.contains("http://") || server.contains("https://")) {
+                    Contact contact = new Contact(username, nickname, "", "", server);
+                    LinearLayout mRootView = (LinearLayout) findViewById(R.id.ContactsRoot);
+                    AndroidServiceAPI serviceAPI = new AndroidServiceAPI(mRootView);
+                    serviceAPI.PostContact(contact, contactsDao);
+                    ChosenValues.getInstance().setWaiting(this);
+                }
+                {
+                    LinearLayout mRootView = (LinearLayout) findViewById(R.id.ContactsRoot);
+                    Snackbar.make(mRootView, "Invalid server", Snackbar.LENGTH_SHORT).show();
+                }
             }
         });
         builder.setNegativeButton("Cancel", (dialog, which) -> {

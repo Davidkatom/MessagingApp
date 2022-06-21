@@ -10,6 +10,7 @@ public class ChosenValues {
     private Listener waiting = null;
     private SharedPreferences sharedPreferences;
     private ContactsDao contactsDao;
+    private UserDao userDao;
 
     private ChosenValues() {
 

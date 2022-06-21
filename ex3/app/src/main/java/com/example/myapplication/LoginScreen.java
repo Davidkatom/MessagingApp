@@ -146,8 +146,7 @@ public class LoginScreen extends AppCompatActivity implements Listener {
     public void finished() {
         User user = userDao.getUser(etUserName.getText().toString());
         if(user == null){
-            //TODO HTTP GET request to get user info (Nickname)
-            user = new User(etUserName.getText().toString(), etPass.getText().toString(), 0, etUserName.getText().toString());
+            user = new User(etUserName.getText().toString(), etPass.getText().toString(), null, etUserName.getText().toString());
             userDao.insert(user);
         }
         prefs.edit().putString("username", user.getUsername()).apply();

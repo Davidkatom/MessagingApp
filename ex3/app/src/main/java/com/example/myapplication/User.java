@@ -11,9 +11,9 @@ public class User {
     private String username;
     private String nickname;
     private String password;
-    private int imageId;
+    private String imageId;
 
-    public User(String username, String password, int imageId, String nickname) {
+    public User(String username, String password, String imageId, String nickname) {
         this.username = username;
         this.password = password;
         this.imageId = imageId;
@@ -36,11 +36,11 @@ public class User {
         this.password = password;
     }
 
-    public int getImageId() {
+    public String getImageId() {
         return imageId;
     }
 
-    public void setImageId(int imageId) {
+    public void setImageId(String imageId) {
         this.imageId = imageId;
     }
 

@@ -71,11 +71,22 @@
             android:inputType="textPersonName"
             android:paddingBottom="30dp" />
 
-        <ImageButton
-            android:id="@+id/imageButton"
+
+        <TextView
+            android:id="@+id/textView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:srcCompat="@tools:sample/avatars"
+            android:layout_height="wrap_content"
+            android:text="Choose Image:"
+            android:textAlignment="textStart"
+            android:textStyle="bold" />
+
+        <ImageButton
+            android:id="@+id/chooseImage"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            tools:src="@drawable/default_contact"
+            android:backgroundTint="@color/white"
             android:contentDescription="@string/add_profile_picture" />
 
         <androidx.appcompat.widget.AppCompatButton
