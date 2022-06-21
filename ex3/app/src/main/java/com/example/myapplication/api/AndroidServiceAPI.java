@@ -252,8 +252,8 @@ public class AndroidServiceAPI {
 
     public void InviteContact(Contact contact) {
         Map<String, String> inviteContactMap = new HashMap<String, String>() {{
-            put("from", ChosenValues.getInstance().getUser().getUsername());
-            put("to", contact.getId());
+            put("to", ChosenValues.getInstance().getUser().getUsername());
+            put("from", contact.getId());
             put("server", contact.getServer());
         }};
         Retrofit tempRetrofit = new Retrofit.Builder()
