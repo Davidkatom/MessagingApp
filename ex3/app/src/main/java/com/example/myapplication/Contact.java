@@ -50,6 +50,7 @@ public class Contact {
     }
 
     public String getLastdate() {
+        String date = lastdate;
         return lastdate;
     }
 

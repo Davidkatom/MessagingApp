@@ -49,6 +49,7 @@ public class LoginScreen extends AppCompatActivity implements Listener {
         //get shared preferences to check if user is already logged in
         prefs = this.getSharedPreferences(
                 "com.example.myapplication", Context.MODE_PRIVATE);
+        ChosenValues.getInstance().setSharedPreferences(prefs);
         //Auto login if user is already logged in
         /*
         if(prefs.getString("username", "").length() > 0){

@@ -1,11 +1,14 @@
 package com.example.myapplication;
 
+import android.content.SharedPreferences;
+
 public class ChosenValues {
     private User user = null;
     private Contact contact = null;
     private String token = null;
     private static ChosenValues instance = null;
     private Listener waiting = null;
+    private SharedPreferences sharedPreferences;
 
     private ChosenValues() {
 
@@ -41,5 +44,11 @@ public class ChosenValues {
     }
     public Listener getWaiting() {
         return waiting;
+    }
+    public void setSharedPreferences(SharedPreferences sharedPreferences) {
+        this.sharedPreferences = sharedPreferences;
+    }
+    public SharedPreferences getSharedPreferences() {
+        return sharedPreferences;
     }
 }

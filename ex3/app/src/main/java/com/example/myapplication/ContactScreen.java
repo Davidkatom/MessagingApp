@@ -52,8 +52,6 @@ public class ContactScreen extends AppCompatActivity implements AdapterView.OnIt
         listview.setAdapter(adapter);
         listview.setOnItemClickListener(this);
 
-
-
         FloatingActionButton btnPopup = findViewById(R.id.fab_addContact);
         btnPopup.setOnClickListener(v->{
             ShowDialogContact();

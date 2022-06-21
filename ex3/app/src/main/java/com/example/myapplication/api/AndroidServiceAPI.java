@@ -1,5 +1,6 @@
 package com.example.myapplication.api;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.widget.LinearLayout;
@@ -45,13 +46,16 @@ public class AndroidServiceAPI {
     WebServiceAPI webServiceAPI;
     LinearLayout MRootLayout;
 
+
     public AndroidServiceAPI(LinearLayout mRootView) {
+        SharedPreferences prefs = ChosenValues.getInstance().getSharedPreferences();
+        String server = prefs.getString("server", "");
         MRootLayout = mRootView;
         Gson gson = new GsonBuilder()//https://stackoverflow.com/questions/39918814/use-jsonreader-setlenienttrue-to-accept-malformed-json-at-line-1-column-1-path
                 .setLenient()
                 .create();
         retrofit = new Retrofit.Builder()
-                .baseUrl(MyApplication.context.getString(R.string.BASE_URL))
+                .baseUrl(server)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
         webServiceAPI = retrofit.create(WebServiceAPI.class);
