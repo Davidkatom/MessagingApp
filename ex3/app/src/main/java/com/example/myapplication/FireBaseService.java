@@ -51,6 +51,8 @@ public class FireBaseService extends FirebaseMessagingService {
             AppMessagesDB db = Room.databaseBuilder(getApplicationContext(), AppMessagesDB.class, connectedUser + selectedContact + server).fallbackToDestructiveMigration().allowMainThreadQueries().build();
             MessageDao messageDao = db.messageDao();
             messageDao.insert(newMsg);// adds new messages to local database
+            ChosenValues.getInstance().getMsgAdapter().add(newMsg);
+            ChosenValues.getInstance().getMsgAdapter().notifyDataSetChanged();
 
         }
 //        super.onMessageReceived(remoteMessage);

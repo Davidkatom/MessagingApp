@@ -26,6 +26,10 @@ namespace WhatsdownAPI.Controllers
             string from = details["from"];
             string to = details["to"];
             string server = details["server"];
+            if(server == "http://10.0.2.2:7087")
+            {
+                server = "http://localhost:7087";
+            }
 
             //Check if contact exists
             var exists = await _context.ContactRelation.Where(c => c.Contacter == to).AnyAsync(c => c.Contacted == from);

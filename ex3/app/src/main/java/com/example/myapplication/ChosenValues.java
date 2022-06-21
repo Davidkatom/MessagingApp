@@ -19,6 +19,7 @@ public class ChosenValues {
     private SharedPreferences sharedPreferences;
     private ContactsDao contactsDao;
     private UserDao userDao;
+    private MessagesListAdapter msgAdapter;
 
     private Map<String,String> lastTimes =new HashMap<String, String>();
 
@@ -68,6 +69,14 @@ public class ChosenValues {
     }
     public ContactsDao getContactsDao() {
         return contactsDao;
+    }
+
+    public MessagesListAdapter getMsgAdapter() {
+        return msgAdapter;
+    }
+
+    public void setMsgAdapter(MessagesListAdapter msgAdapter) {
+        this.msgAdapter = msgAdapter;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)

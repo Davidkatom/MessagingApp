@@ -37,6 +37,7 @@ public class ChatActivity extends AppCompatActivity implements Listener {
         //adapter connection to the listview
         msg_listview = findViewById(R.id.listView_messages);
         MsgListAdapter = new MessagesListAdapter(this, new ArrayList<Message>());
+        ChosenValues.getInstance().setMsgAdapter(MsgListAdapter);
         msg_listview.setAdapter(MsgListAdapter);
         msg_listview.setClickable(false);
         //HERE ROOM DB SETTINGS:
@@ -66,5 +67,6 @@ public class ChatActivity extends AppCompatActivity implements Listener {
     @Override
     public void finished() {
         msg_listview.smoothScrollToPosition(MsgListAdapter.getCount() - 1);
+
     }
 }
