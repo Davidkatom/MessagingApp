@@ -12,8 +12,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 
 import com.example.myapplication.api.AndroidServiceAPI;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.ArrayList;
 
@@ -33,7 +31,6 @@ public class ChatActivity extends AppCompatActivity implements Listener {
         AndroidServiceAPI serviceAPI = new AndroidServiceAPI(mRootView);
         setContentView(R.layout.activity_chat_screen);
         TextView vtContactName = findViewById(R.id.SelectedContactName);
-        FloatingActionButton fabSend = findViewById(R.id.fab_SendMessage);
         String connectedUser = ChosenValues.getInstance().getUser().getUsername();
         String selectedContact = ChosenValues.getInstance().getSelectedContact().getId();
         String server = ChosenValues.getInstance().getSelectedContact().getServer().replaceAll("/", "");
@@ -48,7 +45,7 @@ public class ChatActivity extends AppCompatActivity implements Listener {
         messageDao = db.messageDao();
 
         //send message button
-        fabSend.setOnClickListener(v -> {
+        findViewById(R.id.fab_SendMessage).setOnClickListener(v -> {
             EditText etInputText = findViewById(R.id.et_InputText);
             String inputText = etInputText.getText().toString();
             if (!inputText.equals("")) {
@@ -57,16 +54,13 @@ public class ChatActivity extends AppCompatActivity implements Listener {
             }
         });
 
+        //back button:
+        findViewById(R.id.fab_backToContactList).setOnClickListener(v -> {
+            finish();
+        });
+
         serviceAPI.UpdateMessages(ChosenValues.getInstance().getSelectedContact(), messageDao, MsgListAdapter);
 
-
-
-
-
-
-        //Back Button
-        //FloatingActionButton fab_backFromChat = findViewById(R.id.btn_backFromChat);
-        //fab_backFromChat.setOnClickListener(v -> finish());
     }
 
     @Override
