@@ -1,6 +1,5 @@
 package com.example.myapplication.api;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.widget.LinearLayout;
@@ -15,9 +14,7 @@ import com.example.myapplication.ContactsDao;
 import com.example.myapplication.Message;
 import com.example.myapplication.MessageDao;
 import com.example.myapplication.MessagesListAdapter;
-import com.example.myapplication.R;
 import com.example.myapplication.User;
-import com.example.myapplication.view_models.MyApplication;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
@@ -46,6 +43,7 @@ public class AndroidServiceAPI {
 
     Retrofit retrofit;
     WebServiceAPI webServiceAPI;
+    Gson gson;
     LinearLayout MRootLayout;
 
 
@@ -53,7 +51,7 @@ public class AndroidServiceAPI {
         SharedPreferences prefs = ChosenValues.getInstance().getSharedPreferences();
         String server = prefs.getString("server", "") + "/api/";
         MRootLayout = mRootView;
-        Gson gson = new GsonBuilder()//https://stackoverflow.com/questions/39918814/use-jsonreader-setlenienttrue-to-accept-malformed-json-at-line-1-column-1-path
+        gson = new GsonBuilder()//https://stackoverflow.com/questions/39918814/use-jsonreader-setlenienttrue-to-accept-malformed-json-at-line-1-column-1-path
                 .setLenient()
                 .create();
         retrofit = new Retrofit.Builder()
@@ -137,20 +135,21 @@ public class AndroidServiceAPI {
             put("from", ChosenValues.getInstance().getUser().getUsername());
             put("to", contact.getId());
         }};
-        Call<Void> call = webServiceAPI.TransferMessage(transferMessageMap, jasonHeader);
+        //create its own webservice API
+        Retrofit tempRetrofit = new Retrofit.Builder()
+                .baseUrl(contact.getServer())
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .build();
+        WebServiceAPI tempWebServiceAPI = tempRetrofit.create(WebServiceAPI.class);
+
+        Call<Void> call = tempWebServiceAPI.TransferMessage(transferMessageMap, jasonHeader);
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call call, Response response) {
-                if (response.isSuccessful()) {
-//                    Snackbar.make(MRootLayout, "Message Transfer", Snackbar.LENGTH_SHORT).show();
-                } else {
-//                    Snackbar.make(MRootLayout, "Message failed to Transfer", Snackbar.LENGTH_SHORT).show();
-                }
             }
 
             @Override
             public void onFailure(Call call, Throwable t) {
-//                Snackbar.make(MRootLayout, "Connection to server failed", Snackbar.LENGTH_SHORT).show();
             }
         });
     }
@@ -198,7 +197,6 @@ public class AndroidServiceAPI {
             public void onFailure(Call<List<Contact>> call, Throwable t) {
             }
         });
-
     }
 
     public void PostContact(Contact contact, ContactsDao contactsDao) {
@@ -213,6 +211,7 @@ public class AndroidServiceAPI {
                 if (response.isSuccessful()) {
                     Snackbar.make(MRootLayout, "Contact Added", Snackbar.LENGTH_LONG).show();
                     contactsDao.insert(contact);
+                    InviteContact(contact);
                     ChosenValues.getInstance().getWaiting().finished();
                 } else {
                     Snackbar.make(MRootLayout, "Contact already exists", Snackbar.LENGTH_SHORT).show();
@@ -232,20 +231,19 @@ public class AndroidServiceAPI {
             put("to", contact.getId());
             put("server", contact.getServer());
         }};
-        Call<Void> call = webServiceAPI.InviteContact(inviteContactMap, jasonHeader);
+        Retrofit tempRetrofit = new Retrofit.Builder()
+                .baseUrl(contact.getServer())
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .build();
+        WebServiceAPI tempWebServiceAPI = tempRetrofit.create(WebServiceAPI.class);
+        Call<Void> call = tempWebServiceAPI.InviteContact(inviteContactMap, jasonHeader);
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call call, Response response) {
-                if (response.isSuccessful()) {
-//                    Snackbar.make(MRootLayout, "Contact Invited", Snackbar.LENGTH_LONG).show();
-                } else {
-//                    Snackbar.make(MRootLayout, "Contact already exists", Snackbar.LENGTH_SHORT).show();
-                }
             }
 
             @Override
             public void onFailure(Call call, Throwable t) {
-//                Snackbar.make(MRootLayout, "Connection to server failed", Snackbar.LENGTH_SHORT).show();
             }
         });
 
@@ -255,7 +253,7 @@ public class AndroidServiceAPI {
         //Generate FIREBASE TOKEN:
         FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(instanceIdResult -> {
             String newToken = instanceIdResult.getToken();
-            Call<JsonElement> call = webServiceAPI.login(username, password,newToken);
+            Call<JsonElement> call = webServiceAPI.login(username, password, newToken);
             call.enqueue(new Callback<JsonElement>() {
                 @Override
                 public void onResponse(Call<JsonElement> call, Response<JsonElement> response) {
