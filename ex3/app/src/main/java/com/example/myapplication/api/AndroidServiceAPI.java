@@ -5,9 +5,7 @@ import android.os.Build;
 import android.widget.LinearLayout;
 
 import androidx.annotation.RequiresApi;
-import androidx.room.Room;
 
-import com.example.myapplication.AppContactsDB;
 import com.example.myapplication.ChosenValues;
 import com.example.myapplication.Contact;
 import com.example.myapplication.ContactsDao;

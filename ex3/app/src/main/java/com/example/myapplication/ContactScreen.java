@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,7 +19,6 @@ import androidx.room.Room;
 import com.example.myapplication.api.AndroidServiceAPI;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.ArrayList;
 
@@ -53,6 +53,8 @@ public class ContactScreen extends AppCompatActivity implements AdapterView.OnIt
         listview = findViewById(R.id.contactList);
         listview.setAdapter(adapter);
         listview.setOnItemClickListener(this);
+        TextView tvConnectedUser = findViewById(R.id.connectedUser);
+        tvConnectedUser.setText(ChosenValues.getInstance().getUser().getNickname());
 
         FloatingActionButton btnPopup = findViewById(R.id.fab_addContact);
         btnPopup.setOnClickListener(v->{

@@ -69,10 +69,10 @@ public class LoginScreen extends AppCompatActivity implements Listener {
         Button btnSignIn = findViewById(R.id.btnSignIn); //SIGN IN BUTTON
         btnSignIn.setOnClickListener(v -> {
             //for pop up messages
+            ChosenValues.getInstance().setWaiting(this);
             LinearLayout mRootView = (LinearLayout) findViewById(R.id.linearLayout_Login);
             //Login Logic:
             AndroidServiceAPI androidServiceAPI = new AndroidServiceAPI(mRootView);
-            //check if server is entered and if not , user default server for android emulator:
             androidServiceAPI.LoginToServer(etUserName.getText().toString(), etPass.getText().toString(), prefs);
 
         });
