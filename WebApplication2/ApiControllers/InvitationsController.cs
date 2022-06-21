@@ -28,7 +28,7 @@ namespace WhatsdownAPI.Controllers
             string server = details["server"];
 
             //Check if contact exists
-            var exists = await _context.ContactRelation.Where(c => c.Contacter == from).AnyAsync(c => c.Contacted == to);
+            var exists = await _context.ContactRelation.Where(c => c.Contacter == to).AnyAsync(c => c.Contacted == from);
             if (exists)
             {
                 return BadRequest();
