@@ -9,6 +9,7 @@ public class ChosenValues {
     private static ChosenValues instance = null;
     private Listener waiting = null;
     private SharedPreferences sharedPreferences;
+    private ContactsDao contactsDao;
 
     private ChosenValues() {
 
@@ -50,5 +51,11 @@ public class ChosenValues {
     }
     public SharedPreferences getSharedPreferences() {
         return sharedPreferences;
+    }
+    public void setContactsDao(ContactsDao contactsDao) {
+        this.contactsDao = contactsDao;
+    }
+    public ContactsDao getContactsDao() {
+        return contactsDao;
     }
 }

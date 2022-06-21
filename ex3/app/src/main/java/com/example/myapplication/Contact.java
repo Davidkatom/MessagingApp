@@ -1,8 +1,15 @@
 package com.example.myapplication;
 
+import android.os.Build;
+
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 
 @Entity
@@ -49,9 +56,21 @@ public class Contact {
         this.last = last;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public String getLastdate() {
-        String date = lastdate;
-        return lastdate;
+        DateTimeFormatter dateParser = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+
+        String date = LocalDate.parse(lastdate, dateParser).format(dateFormatter);
+
+        if (date.equals(LocalDateTime.now().format(dateFormatter))){
+            return LocalDateTime.parse(lastdate, dateParser).format(timeFormatter);
+        }
+        else{
+            return LocalDateTime.parse(lastdate, dateParser).format(dateFormatter);
+        }
+
     }
 
     public void setLastdate(String lastdate) {
