@@ -18,7 +18,6 @@ import androidx.room.Room;
 
 import com.example.myapplication.api.AndroidServiceAPI;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
@@ -56,8 +55,7 @@ public class ContactScreen extends AppCompatActivity implements AdapterView.OnIt
         TextView tvConnectedUser = findViewById(R.id.connectedUser);
         tvConnectedUser.setText(ChosenValues.getInstance().getUser().getNickname());
 
-        FloatingActionButton btnPopup = findViewById(R.id.fab_addContact);
-        btnPopup.setOnClickListener(v->{
+        findViewById(R.id.fab_addContact).setOnClickListener(v->{
             ShowDialogContact();
         });
 
