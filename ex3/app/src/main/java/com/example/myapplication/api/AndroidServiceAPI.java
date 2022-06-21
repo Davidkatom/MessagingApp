@@ -47,7 +47,7 @@ public class AndroidServiceAPI {
 
     public AndroidServiceAPI(LinearLayout mRootView) {
         SharedPreferences prefs = ChosenValues.getInstance().getSharedPreferences();
-        String server = prefs.getString("server", "");
+        String server = prefs.getString("server", "http://10.0.2.2:7087")+"/api/";
         MRootLayout = mRootView;
         gson = new GsonBuilder()//https://stackoverflow.com/questions/39918814/use-jsonreader-setlenienttrue-to-accept-malformed-json-at-line-1-column-1-path
                 .setLenient()

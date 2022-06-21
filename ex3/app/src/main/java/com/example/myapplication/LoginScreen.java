@@ -21,7 +21,6 @@ import androidx.room.Room;
 
 import com.example.myapplication.api.AndroidServiceAPI;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 public class LoginScreen extends AppCompatActivity implements Listener {
@@ -50,6 +49,7 @@ public class LoginScreen extends AppCompatActivity implements Listener {
         prefs = this.getSharedPreferences(
                 "com.example.myapplication", Context.MODE_PRIVATE);
         ChosenValues.getInstance().setSharedPreferences(prefs);
+
         //Auto login if user is already logged in
         /*
         if(prefs.getString("username", "").length() > 0){
@@ -72,8 +72,9 @@ public class LoginScreen extends AppCompatActivity implements Listener {
             LinearLayout mRootView = (LinearLayout) findViewById(R.id.linearLayout_Login);
             //Login Logic:
             AndroidServiceAPI androidServiceAPI = new AndroidServiceAPI(mRootView);
+            //check if server is entered and if not , user default server for android emulator:
             androidServiceAPI.LoginToServer(etUserName.getText().toString(), etPass.getText().toString(), prefs);
-            ChosenValues.getInstance().setWaiting(this);
+
         });
 
         //notification manager
@@ -111,7 +112,7 @@ public class LoginScreen extends AppCompatActivity implements Listener {
         LayoutInflater inflater = getLayoutInflater();
         View view = inflater.inflate(R.layout.settings_popup, null);
         final EditText save = view.findViewById(R.id.etServer);
-        save.setText(prefs.getString("server", ""));
+        save.setText(prefs.getString("server", "http://"));
 
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
         builder.setView(view);
