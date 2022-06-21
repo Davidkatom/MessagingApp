@@ -49,7 +49,7 @@ public class AndroidServiceAPI {
 
     public AndroidServiceAPI(LinearLayout mRootView) {
         SharedPreferences prefs = ChosenValues.getInstance().getSharedPreferences();
-        String server = prefs.getString("server", "");
+        String server = prefs.getString("server", "") + "/api/";
         MRootLayout = mRootView;
         Gson gson = new GsonBuilder()//https://stackoverflow.com/questions/39918814/use-jsonreader-setlenienttrue-to-accept-malformed-json-at-line-1-column-1-path
                 .setLenient()
@@ -111,6 +111,8 @@ public class AndroidServiceAPI {
                     messageDao.insert(newMessage);//insert new message into local database
                     MsgListAdapter.add(newMessage);
                     MsgListAdapter.notifyDataSetChanged();
+                    contact.setLast(content);
+                    contact.setLastdate(formattedDate);
                     ChosenValues.getInstance().getWaiting().finished();
                     TransferMessage(contact, content);
                 } else {
