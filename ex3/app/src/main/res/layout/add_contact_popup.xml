@@ -6,29 +6,42 @@
     android:orientation="vertical">
 
 
-    <EditText
-        android:id="@+id/etContactName"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="@string/login_etUsername"
-        android:inputType="textPersonName"
-        android:paddingBottom="30dp" />
-    <EditText
-        android:id="@+id/etNickName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="@string/nickname"
-        android:inputType="textPersonName"
-        android:paddingBottom="30dp" />
-    <EditText
-        android:id="@+id/etServer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="@string/server"
-        android:inputType="textPersonName"
-        android:paddingBottom="30dp" />
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <EditText
+                android:id="@+id/etContactName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/login_etUsername"
+                android:inputType="textPersonName"
+                android:paddingBottom="30dp" />
+
+            <EditText
+                android:id="@+id/etServer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/server"
+                android:inputType="textPersonName"
+                android:paddingBottom="30dp" />
+
+            <EditText
+                android:id="@+id/etNickName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/nickname"
+                android:inputType="textPersonName"
+                android:paddingBottom="30dp" />
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

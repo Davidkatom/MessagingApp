@@ -35,7 +35,7 @@ public class ContactListAdapter extends ArrayAdapter<Contact> {
         TextView time = convertView.findViewById(R.id.LastMessage_time);
 
         //imageView.setImageResource(user.getPictureId());
-        contactN.setText(contact.getId());
+        contactN.setText(contact.getName());
         lastMsg.setText(contact.getLast());
         time.setText(ChosenValues.getInstance().getLastTime(contact.getId()));
         return convertView;
