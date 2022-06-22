@@ -20,21 +20,26 @@ public class ChosenValues {
     private ContactsDao contactsDao;
     private UserDao userDao;
     private MessagesListAdapter msgAdapter;
+    private ContactScreen contactScreen;
 
-    private Map<String,String> lastTimes =new HashMap<String, String>();
+    private Map<String, String> lastTimes = new HashMap<String, String>();
+    private Map<String, String> lastMsg = new HashMap<String, String>();
 
     private ChosenValues() {
 
     }
+
     public static ChosenValues getInstance() {
         if (instance == null)
             instance = new ChosenValues();
 
         return instance;
     }
+
     public User getUser() {
         return user;
     }
+
     public void setUser(User user) {
         this.user = user;
     }
@@ -42,6 +47,7 @@ public class ChosenValues {
     public Contact getSelectedContact() {
         return contact;
     }
+
     public void setSelectedContact(Contact contact) {
         this.contact = contact;
     }
@@ -49,24 +55,31 @@ public class ChosenValues {
     public String getToken() {
         return token;
     }
+
     public void setToken(String token) {
         this.token = token;
     }
+
     public void setWaiting(Listener waiting) {
         this.waiting = waiting;
     }
+
     public Listener getWaiting() {
         return waiting;
     }
+
     public void setSharedPreferences(SharedPreferences sharedPreferences) {
         this.sharedPreferences = sharedPreferences;
     }
+
     public SharedPreferences getSharedPreferences() {
         return sharedPreferences;
     }
+
     public void setContactsDao(ContactsDao contactsDao) {
         this.contactsDao = contactsDao;
     }
+
     public ContactsDao getContactsDao() {
         return contactsDao;
     }
@@ -79,40 +92,63 @@ public class ChosenValues {
         this.msgAdapter = msgAdapter;
     }
 
+
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public String getLastTime(String userId) {
-        String tempDate = lastTimes.get(userId);
-        if(tempDate == null){
+    public String CalcTimeFromString(String tempDate) {
+        if (tempDate == null) {
             return "just now";
-//            Date date = new Date();
-//            tempDate = date.toString();
         }
         DateTimeFormatter dateParser = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
         DateTimeFormatter dateParserFix = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
         DateTimeFormatter dateOnlyFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
         DateTimeFormatter TimeOnlyFormatter = DateTimeFormatter.ofPattern("HH:mm");
         LocalDateTime dateTime;
-        if (tempDate.contains("T")){
-            dateTime= LocalDateTime.parse(tempDate, dateParser);
+        if (tempDate.contains("T")) {
+            dateTime = LocalDateTime.parse(tempDate, dateParser);
 
-        }else{
+        } else {
             dateTime = LocalDateTime.parse(tempDate, dateParserFix);
         }
         String dateOnly = dateTime.format(dateOnlyFormatter);
         String timeOnly = dateTime.format(TimeOnlyFormatter);
         if (dateOnly.equals(LocalDateTime.now().format(dateOnlyFormatter))) {
             return timeOnly;
-        }else{
+        } else {
             return dateOnly;
         }
+    }
 
 
-
-//        return lastTimes.get(userId);
-
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public String getLastTime(String userId) {
+        String tempDate = lastTimes.get(userId);
+        if (tempDate == null) {
+            return "";
+        }
+        return CalcTimeFromString(tempDate);
     }
 
     public void setLastTime(String userId, String time) {
-        lastTimes.put(userId,time);
+        lastTimes.put(userId, time);
+    }
+
+    public ContactScreen getContactScreen() {
+        return contactScreen;
+    }
+
+    public void setContactScreen(ContactScreen contactScreen) {
+        this.contactScreen = contactScreen;
+    }
+
+    public String getLastMsg(String userId) {
+        if (lastMsg.get(userId) == null) {
+            return "empty chat";
+        } else {
+            return lastMsg.get(userId);
+        }
+    }
+
+    public void setLastMsg(String userId, String text) {
+        lastMsg.put(userId, text);
     }
 }

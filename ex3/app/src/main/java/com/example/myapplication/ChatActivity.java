@@ -13,17 +13,15 @@ import androidx.room.Room;
 
 import com.example.myapplication.api.AndroidServiceAPI;
 
-import java.util.ArrayList;
-
 public class ChatActivity extends AppCompatActivity implements Listener {
 
-    MessagesListAdapter MsgListAdapter;
     private ListView msg_listview;
     private MessageDao messageDao;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         ChosenValues.getInstance().setWaiting(this);
         //HERE CONSTANTS DECLARATION
@@ -36,9 +34,9 @@ public class ChatActivity extends AppCompatActivity implements Listener {
         String server = ChosenValues.getInstance().getSelectedContact().getServer().replaceAll("/", "");
         //adapter connection to the listview
         msg_listview = findViewById(R.id.listView_messages);
-        MsgListAdapter = new MessagesListAdapter(this, new ArrayList<Message>());
-        ChosenValues.getInstance().setMsgAdapter(MsgListAdapter);
-        msg_listview.setAdapter(MsgListAdapter);
+//        MsgListAdapter = new MessagesListAdapter(this, new ArrayList<Message>());
+//        ChosenValues.getInstance().setMsgAdapter(MsgListAdapter);
+        msg_listview.setAdapter(ChosenValues.getInstance().getMsgAdapter());
         msg_listview.setClickable(false);
         //HERE ROOM DB SETTINGS:
         vtContactName.setText(selectedContact);
@@ -51,7 +49,7 @@ public class ChatActivity extends AppCompatActivity implements Listener {
             String inputText = etInputText.getText().toString();
             if (!inputText.equals("")) {
                 etInputText.setText("");
-                serviceAPI.PostMessage(ChosenValues.getInstance().getSelectedContact(), inputText, messageDao, MsgListAdapter);
+                serviceAPI.PostMessage(ChosenValues.getInstance().getSelectedContact(), inputText, messageDao, ChosenValues.getInstance().getMsgAdapter());
             }
         });
 
@@ -60,13 +58,13 @@ public class ChatActivity extends AppCompatActivity implements Listener {
             finish();
         });
 
-        serviceAPI.UpdateMessages(ChosenValues.getInstance().getSelectedContact(), messageDao, MsgListAdapter);
+        serviceAPI.UpdateMessages(ChosenValues.getInstance().getSelectedContact(), messageDao, ChosenValues.getInstance().getMsgAdapter());
 
     }
 
     @Override
     public void finished() {
-        msg_listview.smoothScrollToPosition(MsgListAdapter.getCount() - 1);
+        msg_listview.smoothScrollToPosition(ChosenValues.getInstance().getMsgAdapter().getCount() - 1);
 
     }
 }

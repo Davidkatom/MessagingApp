@@ -35,6 +35,7 @@
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
     <string name="save_settings">Save settings</string>
+    <string name="choose_image">Choose Image:</string>
 
 
 </resources>

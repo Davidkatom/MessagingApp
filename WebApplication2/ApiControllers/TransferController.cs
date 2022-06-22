@@ -44,10 +44,10 @@ namespace WhatsdownAPI.Controllers
             if (msg.Reciever == null)
                 return BadRequest();
             await _context.SaveChangesAsync();
-            await SentMessage(details["from"], details["to"], details["content"], msg);
+            await SentMessage(details["from"], cont.Server, details["to"], details["content"], msg);
             return Ok();
         }
-        public async Task SentMessage(string from, string to, string content, WhatsdownAPI.Models.Message msg)
+        public async Task SentMessage(string from, string fromServer, string to, string content, WhatsdownAPI.Models.Message msg)
         {
             //SIGNALR
             if (MyHub.connectionIDs.ContainsKey(to))
@@ -57,16 +57,20 @@ namespace WhatsdownAPI.Controllers
             {
                 string androidToken = AndroidHub.Instance.getToken(to);
                 // See documentation on defining a message payload.
-                FirebaseApp.Create(new AppOptions() 
+                if (FirebaseApp.DefaultInstance == null)
                 {
-                    Credential = GoogleCredential.FromFile("Hubs\\private_key.json") //CHECK THIS
-                });
+                    FirebaseApp.Create(new AppOptions()
+                    {
+                        Credential = GoogleCredential.FromFile("Hubs\\private_key.json") //CHECK THIS
+                    });
+                }
 
                 var testMessage = new FirebaseAdmin.Messaging.Message()
                 {
                     Data = new Dictionary<string, string>()//for sending extra data
                         {
-                            { "id", msg.Id.ToString()  },
+                            { "id", msg.Id.ToString()},
+                            {"fromServer", fromServer},
                             { "created", msg.Time.ToString() },
                         },
                     Token = androidToken,

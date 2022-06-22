@@ -1,11 +1,9 @@
 package com.example.myapplication;
 
-import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -41,7 +39,6 @@ public class RegisterScreen extends AppCompatActivity {
         //room from here:
         db = Room.databaseBuilder(getApplicationContext(), AppUsersDB.class, "UsersDB").fallbackToDestructiveMigration().allowMainThreadQueries().build();
         userDao = db.userDao();
-        Button btnRegister = findViewById(R.id.btnSignUp);
 
         ImageButton btnChooseImage = findViewById(R.id.chooseImage);
         btnChooseImage.setOnClickListener(v -> {
@@ -51,7 +48,7 @@ public class RegisterScreen extends AppCompatActivity {
             startActivityForResult(Intent.createChooser(intent, "Select Picture"), SELECT_PICTURE);
         });
 
-        btnRegister.setOnClickListener(v -> {
+        findViewById(R.id.btnSignUp).setOnClickListener(v -> {
             //Check if user already exists
             LinearLayout mRootView = (LinearLayout) findViewById(R.id.linearLayout_Register);
             User exists = userDao.getUser(etUserName.getText().toString().toLowerCase());
@@ -59,6 +56,12 @@ public class RegisterScreen extends AppCompatActivity {
                 Snackbar.make(mRootView, "Username already exists", Snackbar.LENGTH_SHORT).show();
                 return;
             }
+            //check if password contains at least one number and one letter
+            if (!etPass1.getText().toString().matches(".*[a-zA-Z].*") || !etPass1.getText().toString().matches(".*[0-9].*")) {
+                Snackbar.make(mRootView, "Password must contain at least one letter and one number", Snackbar.LENGTH_SHORT).show();
+                return;
+            }
+
             //Check if passwords match
             if (!etPass1.getText().toString().equals(etPass2.getText().toString())) {
                 Snackbar.make(mRootView, "Passwords do not match", Snackbar.LENGTH_SHORT).show();
@@ -71,10 +74,21 @@ public class RegisterScreen extends AppCompatActivity {
                 return;
             }
             //register user
-            User user = new User(etUserName.getText().toString().toLowerCase(), etPass1.getText().toString(), selectedImageUri.toString(), etNickName.getText().toString());
+//            if (selectedImageUri == null) {
+//                selectedImageUri = R.drawable.default_contact;
+//            }
+            String imageSrc;
+            if (selectedImageUri == null) {
+                imageSrc = ("android.resource://com.example.myapplication/drawable/default_contact.png");
+            }else{
+                imageSrc = selectedImageUri.toString();
+            }
+
+            User user = new User(etUserName.getText().toString().toLowerCase(), etPass1.getText().toString(), imageSrc, etNickName.getText().toString());
             userDao.insert(user);
             AndroidServiceAPI androidServiceAPI = new AndroidServiceAPI(mRootView);
             androidServiceAPI.PostUser(user);
+            finish();
         });
 
     }

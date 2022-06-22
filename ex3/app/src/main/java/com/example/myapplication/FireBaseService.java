@@ -4,19 +4,28 @@ import android.app.NotificationChannel;
 import android.os.Build;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.room.Room;
 
+import com.example.myapplication.api.AndroidServiceAPI;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import java.util.Date;
 import java.util.Objects;
 
 public class FireBaseService extends FirebaseMessagingService {
     public FireBaseService() {
     }
 
+    @Override
+    public void onNewToken(@NonNull String s) {
+        super.onNewToken(s);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         if (remoteMessage.getNotification() != null) {
@@ -40,23 +49,31 @@ public class FireBaseService extends FirebaseMessagingService {
             notificationManager.notify(1, builder.build());//TODO ADD OPTION FOR MANY NOTIFICATIONS
 
             //add the new notification to the database
-            int newID = Integer.parseInt(Objects.requireNonNull(remoteMessage.getData().get("id")));
-            Message newMsg = new Message(newID, from, false, remoteMessage.getData().get("created"));
+            int newID;
+            try {
+                newID = Integer.parseInt(Objects.requireNonNull(remoteMessage.getData().get("id")));
+            }catch (Exception e){
+                newID= (int)(new Date()).getTime();
+                return;
+            }
+            String fromServer = remoteMessage.getData().get("fromServer");
+            Message newMsg = new Message(newID, content, false, remoteMessage.getData().get("created"));
 
 
             //TODO MAKE THIS CLEANER:
             String connectedUser = ChosenValues.getInstance().getUser().getUsername();
-            String selectedContact = ChosenValues.getInstance().getSelectedContact().getId();
-            String server = ChosenValues.getInstance().getSelectedContact().getServer().replaceAll("/", "");
-            AppMessagesDB db = Room.databaseBuilder(getApplicationContext(), AppMessagesDB.class, connectedUser + selectedContact + server).fallbackToDestructiveMigration().allowMainThreadQueries().build();
+//            String selectedContact = from;
+//            String server = ChosenValues.getInstance().getSelectedContact().getServer().replaceAll("/", "");
+            AppMessagesDB db = Room.databaseBuilder(getApplicationContext(), AppMessagesDB.class, connectedUser + from + fromServer.replaceAll("/", "")).fallbackToDestructiveMigration().allowMainThreadQueries().build();
             MessageDao messageDao = db.messageDao();
             messageDao.insert(newMsg);// adds new messages to local database
-            ChosenValues.getInstance().getMsgAdapter().add(newMsg);
-            ChosenValues.getInstance().getMsgAdapter().notifyDataSetChanged();
+
+            AndroidServiceAPI serviceAPI = new AndroidServiceAPI(null);
+            serviceAPI.addMessageToListAdapter(newMsg,ChosenValues.getInstance().getMsgAdapter());
+
+
 
         }
-//        super.onMessageReceived(remoteMessage);
-        int a = 1;
     }
 
     private void createNotificationChannel() {

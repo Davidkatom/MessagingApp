@@ -36,7 +36,12 @@ public class ContactListAdapter extends ArrayAdapter<Contact> {
 
         //imageView.setImageResource(user.getPictureId());
         contactN.setText(contact.getName());
-        lastMsg.setText(contact.getLast());
+        String lastMsgText = ChosenValues.getInstance().getLastMsg(contact.getId());
+        int allowedLength = 30;
+        if (lastMsgText.length() > allowedLength) {
+            lastMsgText = lastMsgText.substring(0, allowedLength) + "...";
+        }
+        lastMsg.setText(lastMsgText);
         time.setText(ChosenValues.getInstance().getLastTime(contact.getId()));
         return convertView;
     }

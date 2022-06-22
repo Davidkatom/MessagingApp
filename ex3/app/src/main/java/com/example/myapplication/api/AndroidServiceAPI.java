@@ -93,15 +93,18 @@ public class AndroidServiceAPI {
             public void onResponse(Call<List<Message>> call, Response<List<Message>> response) {
                 if (response.isSuccessful()) {
                     List<Message> messages = response.body();
-                    assert messages != null;
-                    for (Message message : messages) {
-                        if (!messageDao.index().contains(message)) {
-                            messageDao.insert(message);// adds new messages to local database
+
+                    if(messages!=null) {
+                        for (Message message : messages) {
+                            if (!messageDao.index().contains(message)) {
+                                messageDao.insert(message);// adds new messages to local database
+                            }
                         }
-                    }
+                    MsgListAdapter.clear();
                     MsgListAdapter.addAll(messages);//adds all messages to the list adapter
                     MsgListAdapter.notifyDataSetChanged();
                     ChosenValues.getInstance().getWaiting().finished();
+                    }
                 } else {
                     //Snackbar.make(MRootLayout, "failed to receive messages from server", Snackbar.LENGTH_SHORT).show();
                 }
@@ -112,6 +115,20 @@ public class AndroidServiceAPI {
 //                Snackbar.make(MRootLayout, "Connection to server failed", Snackbar.LENGTH_SHORT).show();
             }
         });
+    }
+
+    public void addMessageToListAdapter(Message newMessage, MessagesListAdapter MsgListAdapter){
+        ChosenValues.getInstance().getContactScreen().updateMSGAdapter( newMessage, MsgListAdapter);
+
+//        MsgListAdapter = ChosenValues.getInstance().getMsgAdapter();
+//
+//                MsgListAdapter.add(newMessage);
+//                MsgListAdapter.notifyDataSetChanged();
+
+//        contact.setLast(content);
+//        contact.setLastdate(formattedDate);
+//        ChosenValues.getInstance().getContactsDao().update(contact);//update contact in local database
+
     }
 
     public void PostMessage(Contact contact, String content, MessageDao messageDao, MessagesListAdapter MsgListAdapter) {
@@ -131,12 +148,13 @@ public class AndroidServiceAPI {
                 if (response.isSuccessful()) {
                     Message newMessage = new Message(Integer.parseInt(response.body().toString()), content, true, formattedDate);
                     messageDao.insert(newMessage);//insert new message into local database
-                    MsgListAdapter.add(newMessage);
-                    MsgListAdapter.notifyDataSetChanged();
-                    contact.setLast(content);
-                    contact.setLastdate(formattedDate);
-
-                    ChosenValues.getInstance().getContactsDao().update(contact);//update contact in local database
+                    addMessageToListAdapter(newMessage, MsgListAdapter);
+//                    messageDao.insert(newMessage);//insert new message into local database
+//                    MsgListAdapter.add(newMessage);
+//                    MsgListAdapter.notifyDataSetChanged();
+//                    contact.setLast(content);
+//                    contact.setLastdate(formattedDate);
+//                    ChosenValues.getInstance().getContactsDao().update(contact);//update contact in local database
                     ChosenValues.getInstance().getWaiting().finished();
                     TransferMessage(contact, content);
                 } else {
@@ -210,6 +228,7 @@ public class AndroidServiceAPI {
                 assert contacts != null;
                 for (Contact contact : contacts) {
                     ChosenValues.getInstance().setLastTime(contact.getId(),contact.getLastdate());
+                    ChosenValues.getInstance().setLastMsg(contact.getId(),contact.getLast());
                     if (!localContacts.contains(contact)) {
                         contactsDao.insert(contact);
                     }

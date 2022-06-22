@@ -20,7 +20,6 @@ import androidx.room.Room;
 
 import com.example.myapplication.api.AndroidServiceAPI;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
@@ -29,6 +28,7 @@ public class ContactScreen extends AppCompatActivity implements AdapterView.OnIt
     private ArrayList<Contact> contacts = new ArrayList<>();
     private ContactListAdapter adapter;
     private ListView listview;
+    private AndroidServiceAPI serviceAPI;
 
     private AppContactsDB db;
     private ContactsDao contactsDao;
@@ -40,6 +40,9 @@ public class ContactScreen extends AppCompatActivity implements AdapterView.OnIt
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_screen);
+        ChosenValues.getInstance().setContactScreen(this);
+        MessagesListAdapter MsgListAdapter = new MessagesListAdapter(this, new ArrayList<Message>());
+        ChosenValues.getInstance().setMsgAdapter(MsgListAdapter);
 
         ChosenValues.getInstance().setWaiting(this);
         //room from here:
@@ -58,7 +61,7 @@ public class ContactScreen extends AppCompatActivity implements AdapterView.OnIt
         ChosenValues.getInstance().setContactsDao(contactsDao);
 
         LinearLayout mRootView = (LinearLayout) findViewById(R.id.ContactsRoot);
-        AndroidServiceAPI serviceAPI = new AndroidServiceAPI(mRootView);
+        serviceAPI = new AndroidServiceAPI(mRootView);
         serviceAPI.updateContacts(contactsDao);
 
         adapter = new ContactListAdapter(this, contacts);
@@ -74,6 +77,15 @@ public class ContactScreen extends AppCompatActivity implements AdapterView.OnIt
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void updateMSGAdapter(Message newMessage, MessagesListAdapter MsgListAdapter) {
+        runOnUiThread(() -> {
+            MsgListAdapter.add(newMessage);
+            MsgListAdapter.notifyDataSetChanged();
+            serviceAPI.updateContacts(contactsDao);
+            ChosenValues.getInstance().getWaiting().finished();
+        });
+    }
 
     @Override
     public void onResume() {
@@ -112,8 +124,7 @@ public class ContactScreen extends AppCompatActivity implements AdapterView.OnIt
                     AndroidServiceAPI serviceAPI = new AndroidServiceAPI(mRootView);
                     serviceAPI.PostContact(contact, contactsDao);
                     ChosenValues.getInstance().setWaiting(this);
-                }
-                {
+                } else {
                     LinearLayout mRootView = (LinearLayout) findViewById(R.id.ContactsRoot);
                     Snackbar.make(mRootView, "Invalid server", Snackbar.LENGTH_SHORT).show();
                 }

@@ -15,13 +15,11 @@ import android.widget.LinearLayout;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.room.Room;
 
 import com.example.myapplication.api.AndroidServiceAPI;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.snackbar.Snackbar;
 
 public class LoginScreen extends AppCompatActivity implements Listener {
     private static final String CHANNEL_ID = "1";
@@ -34,8 +32,12 @@ public class LoginScreen extends AppCompatActivity implements Listener {
     private SharedPreferences prefs;
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+
         context = getApplicationContext();
         setContentView(R.layout.activity_login_screen);
 
@@ -49,16 +51,6 @@ public class LoginScreen extends AppCompatActivity implements Listener {
         prefs = this.getSharedPreferences(
                 "com.example.myapplication", Context.MODE_PRIVATE);
         ChosenValues.getInstance().setSharedPreferences(prefs);
-
-        //Auto login if user is already logged in
-        /*
-        if(prefs.getString("username", "").length() > 0){
-            System.out.println("Logged in as " + prefs.getString("username", ""));
-            ChosenValues.getInstance().setUser(userDao.getUser(prefs.getString("username", "")));
-            Intent i = new Intent(this, ContactScreen.class);
-            startActivity(i);
-        }         */
-
 
         Button btnSignUp = findViewById(R.id.btnSignUp);
         btnSignUp.setOnClickListener(v -> {
@@ -80,26 +72,6 @@ public class LoginScreen extends AppCompatActivity implements Listener {
         //notification manager
         createNotificationChannel();
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-
-        Button btnPushNotification = findViewById(R.id.tempPushNotification);
-        btnPushNotification.setOnClickListener(v -> {
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
-                    .setSmallIcon(R.drawable.ic_launcher_foreground)
-                    .setContentTitle("My notification")
-                    .setContentText("Hello World!")
-                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                    .setAutoCancel(true);//makes the notification disappear when clicked
-            int notificationId = 1; // id of notification (unique) - can be used to cancel or update notification
-            notificationManager.notify(notificationId, builder.build());
-            //16:40 how to use notification manager to go to new intent
-            //22:00 updating notification
-
-
-            // retrofit
-            LinearLayout mRootView = (LinearLayout) findViewById(R.id.linearLayout_Login);
-            Snackbar.make(mRootView, "Username already exists", Snackbar.LENGTH_SHORT).show();
-
-        });
 
         Button btnSettings = findViewById(R.id.btnSettings);
         btnSettings.setOnClickListener(v->{

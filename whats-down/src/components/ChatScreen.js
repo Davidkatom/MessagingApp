@@ -117,9 +117,9 @@ const ChatScreen = ({ token }) => {
 
     //fetch contacts to contact list
     async function fetchContactList(){
-        console.log('fetch Contacts')
-        console.log(token)
-        console.log(full_token)
+        // console.log('fetch Contacts')
+        // console.log(token)
+        // console.log(full_token)
         $.ajax({
             url: local_server+'/api/Contacts',
             type: 'GET',

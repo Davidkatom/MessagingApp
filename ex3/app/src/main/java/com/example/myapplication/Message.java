@@ -7,10 +7,6 @@ import androidx.annotation.RequiresApi;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
 @Entity
 public class Message {
 
@@ -61,19 +57,7 @@ public class Message {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public String getTimeForChat(){
-        String formattedTime = created.split("\\.", 2)[0];
-        DateTimeFormatter dateParser = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
-
-        String date = LocalDate.parse(formattedTime, dateParser).format(dateFormatter);
-
-        if (date.equals(LocalDateTime.now().format(dateFormatter))){
-            return LocalDateTime.parse(formattedTime, dateParser).format(timeFormatter);
-        }
-        else{
-            return LocalDateTime.parse(formattedTime, dateParser).format(dateFormatter);
-        }
+        return ChosenValues.getInstance().CalcTimeFromString(created.split("\\.", 2)[0]);
     }
 
     @Override
