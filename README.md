@@ -40,3 +40,14 @@ Installation guide:
 8. don't forget to leave an honest reveiw :)
  -Make sure the server is running on https://localhost:7087:
 
+# Android App
+note the server port we talk to by default is 7087.
+
+1. make sure the server is running as mentioned above.
+2. start android studio and run the app on the simulator.
+3. the app is provided with empty data base, so first register unless existing contact in the database.
+4. login to the server.
+5. add a new contact using the add contact button - inside the emulator you can type for the server field: http://10.0.2.2:7087 to talk to our .net server.
+6. press on a specific contact to start chat with him (using firebase api).
+7. enjoy!
+
